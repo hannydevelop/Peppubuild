@@ -1,15 +1,17 @@
 #!/usr/bin/env node
-
+// Import dependencies
 import * as fs from 'fs';
 import { fileURLToPath } from 'url'
 import * as path from 'path';
 import * as inquirer from 'inquirer';
 import chalk from 'chalk';
 
+// Declare const for template directory 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const CHOICES = fs.readdirSync(path.join(__dirname, 'templates'));
 
+// Dummy questions to choose template and name
 const QUESTIONS = [
     {
         name: 'template',
@@ -22,18 +24,24 @@ const QUESTIONS = [
         type: 'input',
         message: 'Project name:'
     }];
+
+// Get current directory
 const CURR_DIR = process.cwd();
 
+// Create project folder with path
 function createProject(projectPath) {
+    // Check if project path already exists
     if (fs.existsSync(projectPath)) {
         console.log(chalk.red(`Folder ${projectPath} exists. Delete or use another name.`));
         return false;
     }
+    // Create folder if path doesn't exist
     fs.mkdirSync(projectPath);
 
     return true;
 }
 
+// Add contents into the directory
 function createDirectoryContents(templatePath, projectName) {
     // read all files/folders (1 level) from template folder
     const filesToCreate = fs.readdirSync(templatePath);
@@ -58,6 +66,7 @@ function createDirectoryContents(templatePath, projectName) {
     })
 }
 
+// Create prompt questions with inquirer
 const inquirerPrecss = inquirer.createPromptModule();
 inquirerPrecss(QUESTIONS).then(answers => {
     const projectChoice = answers['template'];
@@ -65,8 +74,11 @@ inquirerPrecss(QUESTIONS).then(answers => {
     const templatePath = path.join(__dirname, 'templates', projectChoice);
     const tartgetPath = path.join(CURR_DIR, projectName);
 
+    // Call createProject in inquirerPrecss
     if (!createProject(tartgetPath)) {
         return;
     }
+
+    // Call createDirectoryContents
     createDirectoryContents(templatePath, projectName);
 });
