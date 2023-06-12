@@ -66,6 +66,16 @@ function createDirectoryContents(templatePath, projectName) {
     })
 }
 
+// Add postProcess to inject Grapesjs code
+function postProcess(path) {
+    fs.appendFile(`${path}/message.txt`, 'data to append', (err) => {
+        if (err) throw err;
+        console.log('The "data to append" was appended to file!');
+    });
+    
+    return true;
+}
+
 // Create prompt questions with inquirer
 const inquirerPrecss = inquirer.createPromptModule();
 inquirerPrecss(QUESTIONS).then(answers => {
@@ -81,4 +91,6 @@ inquirerPrecss(QUESTIONS).then(answers => {
 
     // Call createDirectoryContents
     createDirectoryContents(templatePath, projectName);
+
+    postProcess(tartgetPath);
 });
