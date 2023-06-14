@@ -5,7 +5,6 @@ import { fileURLToPath } from 'url'
 import * as path from 'path';
 import * as inquirer from 'inquirer';
 import chalk from 'chalk';
-import peppu from '../packages/core'
 
 // Declare const for template directory 
 const __filename = fileURLToPath(import.meta.url)
