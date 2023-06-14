@@ -1,15 +1,28 @@
 {
-  "name": "core",
+  "name": "peppu-core",
   "version": "1.0.0",
-  "description": "Peppubuild core",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "description": "peppu-core",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hannydevelop/peppu-core.git"
   },
-  "author": "",
-  "license": "ISC",
-  "type": "module",
-  "dependencies": {
-    "grapesjs": "^0.21.2"
-  }
+  "scripts": {
+    "start": "grapesjs-cli serve",
+    "build": "grapesjs-cli build",
+    "bump": "npm version patch -m 'Bump v%s'"
+  },
+  "keywords": [
+    "grapesjs",
+    "plugin"
+  ],
+  "devDependencies": {
+    "fs": "^0.0.1-security",
+    "grapesjs": "^0.21.2",
+    "grapesjs-cli": "^4.1.1"
+  },
+  "browser": {
+    "fs": false
+},
+  "license": "MIT"
 }
