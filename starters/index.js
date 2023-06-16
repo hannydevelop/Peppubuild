@@ -75,7 +75,7 @@ function createDirectoryContents(templatePath, projectName) {
 // Add postProcess to inject Grapesjs code
 function postProcess(tempath) {
     let dataPath = JSON.parse(fs.readFileSync(path.resolve(__dirname, path.join(CURR_DIR, 'peppubuild', 'peppubuild.json')), 'utf8'));
-    // this dummy value works now. come back to editing this.
+    // this dummy value works now to append one page.
     let editor = grapesjs.init({ headless: true });
     editor.loadData(dataPath.pageOne)
     let mainPage = `<template>${editor.getHtml()}</template> <style></style>`
@@ -83,9 +83,36 @@ function postProcess(tempath) {
         if (err) throw err;
         console.log('The "data to append" was appended to file!');
     });
-    
+
+    // write import into router's index.js
+    var data = fs.readFileSync(`${tempath}/src/router/index.js`).toString().split("\n");
+    let name = 'About'
+    data.splice(0, 0, `import ${name}` + ` from '../views/${name}'`);
+    var text = data.join("\n");
+
+    fs.writeFileSync(`${tempath}/src/router/index.js`, text, function (err) {
+        if (err) return err;
+    });
+
+    // write routes into router's index.js
+    var data = fs.readFileSync(`${tempath}/src/router/index.js`).toString().split("\n");
+    let value = 
+    `
+    {
+        path: '/',
+        name: ${name},
+        component: ${name}
+    },
+    `
+    data.splice(6, 0, value);
+    var text = data.join("\n");
+
+    fs.writeFileSync(`${tempath}/src/router/index.js`, text, function (err) {
+        if (err) return err;
+    });
+
     // this will be useful https://stackoverflow.com/questions/23036918/in-node-js-how-to-read-a-file-append-a-string-at-a-specified-line-or-delete-a
-    
+
 
     return true;
 }
