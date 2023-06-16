@@ -13,6 +13,19 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const CHOICES = fs.readdirSync(path.join(__dirname, 'templates'));
 
+const QUESTIONS = [
+    {
+        name: 'template',
+        type: 'list',
+        message: 'What project template would you like to generate?',
+        choices: CHOICES
+    },
+    {
+        name: 'name',
+        type: 'input',
+        message: 'Project name:'
+    }];
+
 // path to package.json to pick version and other information
 const packageJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'package.json'), 'utf8'));
 
@@ -57,6 +70,19 @@ function createDirectoryContents(templatePath, projectName) {
     })
 }
 
+// Add postProcess to inject Grapesjs code
+function postProcess(tempath) {
+    let dataPath = JSON.parse(fs.readFileSync(path.resolve(__dirname, path.join(CURR_DIR, 'peppubuild', 'peppubuild.json')), 'utf8'));
+    // this dummy value works now. come back to editing this.
+    let dataValue = JSON.stringify(dataPath.pageOne);
+    fs.appendFile(`${tempath}/message.txt`, dataValue, (err) => {
+        if (err) throw err;
+        console.log('The "data to append" was appended to file!');
+    });
+
+    return true;
+}
+
 program
     .description('CLI to manage Peppubuild visual editor')
     .version(packageJson.version)
@@ -74,7 +100,30 @@ program
 
         // Call createDirectoryContents
         createDirectoryContents(templatePath, 'peppubuild');
-    })
+    });
+
+program
+    .command('publish')
+    .description('Publish new repository')
+    .action(() => {
+        const inquirerPrecss = inquirer.createPromptModule();
+        inquirerPrecss(QUESTIONS).then(answers => {
+            const projectChoice = answers['template'];
+            const projectName = answers['name'];
+            const templatePath = path.join(__dirname, 'templates', projectChoice);
+            const tartgetPath = path.join(CURR_DIR, projectName);
+
+            // Call createProject in inquirerPrecss
+            if (!createProject(tartgetPath)) {
+                return;
+            }
+
+            // Call createDirectoryContents
+            createDirectoryContents(templatePath, projectName);
+
+            postProcess(tartgetPath);
+        });
+    });
 
 program.parse();
 /* 
