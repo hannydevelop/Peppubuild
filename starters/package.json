@@ -19,5 +19,8 @@
   },
   "bin": {
     "peppubuild": "index.js"
+  },
+  "devDependencies": {
+    "grapesjs": "^0.21.2"
   }
 }

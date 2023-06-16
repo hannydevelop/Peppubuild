@@ -6,6 +6,8 @@ import * as path from 'path';
 import * as inquirer from 'inquirer';
 import chalk from 'chalk';
 import { Command } from 'commander';
+import grapesjs from 'grapesjs'
+
 const program = new Command();
 
 // Declare const for template directory 
@@ -74,11 +76,16 @@ function createDirectoryContents(templatePath, projectName) {
 function postProcess(tempath) {
     let dataPath = JSON.parse(fs.readFileSync(path.resolve(__dirname, path.join(CURR_DIR, 'peppubuild', 'peppubuild.json')), 'utf8'));
     // this dummy value works now. come back to editing this.
-    let dataValue = JSON.stringify(dataPath.pageOne);
-    fs.appendFile(`${tempath}/message.txt`, dataValue, (err) => {
+    let editor = grapesjs.init({ headless: true });
+    editor.loadData(dataPath.pageOne)
+    let mainPage = `<template>${editor.getHtml()}</template> <style></style>`
+    fs.appendFileSync(`${tempath}/src/views/Home.vue`, mainPage, (err) => {
         if (err) throw err;
         console.log('The "data to append" was appended to file!');
     });
+    
+    // this will be useful https://stackoverflow.com/questions/23036918/in-node-js-how-to-read-a-file-append-a-string-at-a-specified-line-or-delete-a
+    
 
     return true;
 }
