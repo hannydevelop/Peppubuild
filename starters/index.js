@@ -5,25 +5,16 @@ import { fileURLToPath } from 'url'
 import * as path from 'path';
 import * as inquirer from 'inquirer';
 import chalk from 'chalk';
+import { Command } from 'commander';
+const program = new Command();
 
 // Declare const for template directory 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const CHOICES = fs.readdirSync(path.join(__dirname, 'templates'));
 
-// Dummy questions to choose template and name
-const QUESTIONS = [
-    {
-        name: 'template',
-        type: 'list',
-        message: 'What project template would you like to generate?',
-        choices: CHOICES
-    },
-    {
-        name: 'name',
-        type: 'input',
-        message: 'Project name:'
-    }];
+// path to package.json to pick version and other information
+const packageJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'package.json'), 'utf8'));
 
 // Get current directory
 const CURR_DIR = process.cwd();
@@ -66,6 +57,41 @@ function createDirectoryContents(templatePath, projectName) {
     })
 }
 
+program
+    .description('CLI to manage Peppubuild visual editor')
+    .version(packageJson.version)
+
+program
+    .command('install')
+    .description('Install Peppubuild user interface')
+    .action(() => {
+        let tartgetPath = path.join(CURR_DIR, 'peppubuild');
+        let templatePath = path.join(__dirname, 'webpack');
+        // Call createProject in inquirerPrecss
+        if (!createProject(tartgetPath)) {
+            return;
+        }
+
+        // Call createDirectoryContents
+        createDirectoryContents(templatePath, 'peppubuild');
+    })
+
+program.parse();
+/* 
+// Dummy questions to choose template and name
+const QUESTIONS = [
+    {
+        name: 'template',
+        type: 'list',
+        message: 'What project template would you like to generate?',
+        choices: CHOICES
+    },
+    {
+        name: 'name',
+        type: 'input',
+        message: 'Project name:'
+    }];
+
 // Add postProcess to inject Grapesjs code
 function postProcess(path) {
     fs.appendFile(`${path}/message.txt`, 'data to append', (err) => {
@@ -94,3 +120,4 @@ inquirerPrecss(QUESTIONS).then(answers => {
 
     postProcess(tartgetPath);
 });
+*/
