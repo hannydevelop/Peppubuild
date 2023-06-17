@@ -1,6 +1,6 @@
 {
   "name": "peppubuild",
-  "version": "1.0.2-beta",
+  "version": "1.0.3-beta",
   "description": "This repository works you through creating a codegen for SPAs.",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "postinstall": "node config.js"
   },
   "author": "Ukpai Ugochi",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "type": "module",
   "dependencies": {
     "chalk": "^5.2.0",
