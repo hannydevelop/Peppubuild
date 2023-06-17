@@ -85,7 +85,7 @@ function postProcess(tempath) {
     });
 
     // write import into router's index.js
-    var data = fs.readFileSync(`${tempath}/src/router/index.js`).toString().split("\n");
+    var data = fs.readFileSync(`${tempath}/src/router/index.js`).toString().split("\n")
     let name = 'About'
     data.splice(0, 0, `import ${name}` + ` from '../views/${name}'`);
     var text = data.join("\n");
@@ -95,16 +95,25 @@ function postProcess(tempath) {
     });
 
     // write routes into router's index.js
+    // make this a function and return line number
+    let file = fs.readFileSync(`${tempath}/src/router/index.js`, "utf8");
+    let arr = file.split(/\r?\n/);
+    let lineNum = 0;
+    arr.forEach((line, idx) => {
+        if (line.includes("routes: [")) {
+            lineNum = idx + 1;
+        }
+    });
     var data = fs.readFileSync(`${tempath}/src/router/index.js`).toString().split("\n");
-    let value = 
-    `
+    let value =
+        `
     {
         path: '/',
         name: ${name},
         component: ${name}
     },
     `
-    data.splice(6, 0, value);
+    data.splice(lineNum, 0, value);
     var text = data.join("\n");
 
     fs.writeFileSync(`${tempath}/src/router/index.js`, text, function (err) {
