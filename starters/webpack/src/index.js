@@ -1,5 +1,12 @@
 import grapesjs from 'grapesjs'
 
+let data = await fetch('peppubuild.json').then(response => {return response.json()})
+/*
+data.pageOne prints
+  "assets": "[]",
+  "pages": "[]",
+  "styles": "[]",
+*/
 /* 
 function component() {
     const element = document.createElement('div');
@@ -17,6 +24,6 @@ function component() {
 
 var editor = grapesjs.init({
     container : '#gjs',
-    components: '<div class="txt-red">Hello world!</div>',
-    style: '.txt-red{color: red}',
 });
+
+editor.loadProjectData(data.pageOne)
