@@ -4,7 +4,8 @@
   "description": "This repository works you through creating a codegen for SPAs.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "postinstall": "node config.js"
   },
   "author": "Ukpai Ugochi",
   "license": "ISC",
