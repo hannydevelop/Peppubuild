@@ -26,7 +26,11 @@ Start with installing the Peppubuild CLI globally on your local machine:
 ```sh
 $ npm install -g peppubuild
 ```
-This will generate the Peppubuild folder in your local machine. Please note that the Peppubuild folder will be created in the directory where you run the install command.
+This will generate the Peppubuild folder in your local machine. Please note that the Peppubuild folder will be created in the directory where you run the install command. If this folder wasn't created successfully, run the command below:
+
+```sh
+$ peppubuild install
+```
 
 Now, navigate to the Peppubuild folder and run the build command to serve Peppubuild's user interface.
 

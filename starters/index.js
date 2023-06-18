@@ -117,4 +117,20 @@ program
         });
     });
 
+program
+    .command('install')
+    .description('Install the peppubuild folder')
+    .action(() => {
+        let tartgetPath = path.join(CURR_DIR, 'peppubuild');
+        let templatePath = path.join(__dirname, 'webpack');
+
+        // Call createProject in inquirerPrecss
+        if (!createProject(tartgetPath)) {
+            return;
+        }
+
+        // Call createDirectoryContents
+        createDirectoryContents(templatePath, 'peppubuild');
+    });
+
 program.parse();

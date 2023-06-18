@@ -1,6 +1,6 @@
 {
   "name": "peppubuild",
-  "version": "1.0.3-beta",
+  "version": "1.0.4-beta",
   "description": "This repository works you through creating a codegen for SPAs.",
   "main": "index.js",
   "scripts": {
