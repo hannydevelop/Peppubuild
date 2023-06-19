@@ -1,12 +1,217 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Getting Started</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/grapesjs@0.21.2/dist/css/grapes.min.css">
-  </head>
-  <body>
-    <div id="gjs"></div>
-   <script src="main.js"></script>
-  </body>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Peppubuild</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="assets/favicon.png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/grapesjs@0.21.2/dist/css/grapes.min.css">
+  
+    <style>
+      .button,
+.button:hover {
+  background-color: #4caf50;
+  /* Green */
+  border: none;
+  color: white;
+  padding: 5px 30px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  overflow: scroll;
+  overflow-x: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.sidenav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 20%;
+  height: 100%;
+  overflow: scroll;
+  overflow-x: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  background-color: rgba(255, 255, 255, 0.95);
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.sidenav .logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
+}
+
+.sidenav .pages {
+  height: 100px;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.main-content {
+  position: relative;
+  width: 80%;
+  left: 20%;
+}
+
+.main-content .navbar {
+  padding: 0;
+}
+
+.main-content .navbar .container-fluid {
+  padding: 0;
+}
+
+
+
+.nav {
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.gjs-pn-panel {
+  position: relative;
+}
+
+.gjs-cv-canvas {
+  width: 100%;
+  height: 100%;
+  top: 0;
+}
+
+.tab-content {
+  display: contents;
+}
+
+#block {
+  height: 100%;
+}
+
+#block #blocks {
+  height: 100%;
+}
+
+#block #blocks .gjs-blocks-c {
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+#block #blocks .gjs-block {
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+#block #blocks .gjs-block-label {
+  display: none;
+}
+
+/* Theming */
+.gjs-one-bg {
+  background-color: #fff !important;
+  ;
+}
+
+.gjs-two-color {
+  color: #9ca8bb;
+}
+
+.gjs-three-bg {
+  background-color: #1df205;
+  color: white;
+}
+
+.gjs-four-color,
+.gjs-four-color-h:hover {
+  color: #1df205;
+}
+    </style>
+</head>
+
+<body>
+  <div id="navbar" class="sidenav d-flex flex-column overflow-scroll">
+    <nav class="navbar navbar-light">
+      <div class="container-fluid">
+        <img class="navbar-brand mb-0 h3 logo" src="https://www.linkpicture.com/q/IMG_2437-1.png" />
+      </div>
+    </nav>
+    <div class="my-2 d-flex flex-column">
+      <button type="button" class="btn btn-outline-secondary btn-sm mb-2 mx-2" @click="addPage">
+        <i class="fa fa-file-earmark-plus"></i> Add Page
+      </button>
+      <ul class="list-group pages">
+      </ul>
+    </div>
+    <div class="">
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#block" type="button"
+            role="tab" aria-controls="block" aria-selected="true">
+            <i class="fa fa-bars"></i>
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="trait-tab" data-bs-toggle="tab" data-bs-target="#trait" type="button" role="tab"
+            aria-controls="trait" aria-selected="false">
+            <i class="fa fa-cog"></i>
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="style-tab" data-bs-toggle="tab" data-bs-target="#style" type="button" role="tab"
+            aria-controls="style" aria-selected="false">
+            <i class="fa fa-paint-brush"></i>
+          </button>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="block" role="tabpanel" aria-labelledby="block-tab">
+          <div id="blocks"></div>
+        </div>
+        <div class="tab-pane fade" id="trait" role="tabpanel" aria-labelledby="trait-tab">
+          <div id="layers-container"></div>
+        </div>
+        <div class="tab-pane fade" id="style" role="tabpanel" aria-labelledby="style-tab">
+          <div id="traits-container"></div>
+          <div id="style-manager-container"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="main-content">
+    <nav class="navbar navbar-light">
+      <div class="container-fluid">
+        <div class="panel__devices"></div>
+        <div class="panel__basic-actions"></div>
+      </div>
+    </nav>
+    <div id="editor"></div>
+    </div>
+  <script src="main.js"></script>
+</body>
+
 </html>
