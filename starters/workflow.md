@@ -9,6 +9,6 @@ Jun 23 - Jun 25 (Multi Page)
 - Manage multi-page 
 
 Jun 26 - Jun 30
-
+- Add docker integration or github container.
 - Add very minimal backend (NodeJS)
 - Launch Beta on Product Hunt, Reddit, Twitter Ads etc.

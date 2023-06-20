@@ -8,7 +8,8 @@ const ful = "fullscreen";
 const prv = "preview";
 const cmdClear = 'canvas-clear';
 
-let data = await fetch('peppubuild.json').then(response => { return response.json() })
+// we'll charge users to get their project from our database.
+let data = await fetch('http://localhost:3000/pageOne').then(response => { return response.json() })
 /*
 data.pageOne prints
   "assets": "[]",
@@ -197,6 +198,8 @@ editor.Commands.add('set-device-tablet', {
   run: editor => editor.setDevice('Tablet')
 });
 
+editor.loadProjectData(data)
+
 // Add Save Button
 editor.Panels.addButton('options', [
   {
@@ -215,7 +218,25 @@ editor.Panels.addButton('options', [
   }
 ])
 
-function saveFile() {}
-function publishFile() {}
+async function saveFile() {
+  let projectData = editor.getProjectData();
+  // we'll charge users to save their project into our database.
+  let data = projectData;
+    try {
+      const response = await fetch("http://localhost:3000/pageOne", {
+        method: "PUT", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+  
+      const result = await response.json();
+      console.log("Success:", result);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+}
+function publishFile() {
 
-editor.loadProjectData(data.pageOne)
+}

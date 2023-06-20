@@ -1,6 +1,6 @@
 {
   "name": "peppubuild",
-  "version": "1.0.4-beta",
+  "version": "1.0.6-beta",
   "description": "This repository works you through creating a codegen for SPAs.",
   "main": "index.js",
   "scripts": {
@@ -14,14 +14,13 @@
     "chalk": "^5.2.0",
     "commander": "^11.0.0",
     "fs": "^0.0.1-security",
+    "grapesjs": "^0.21.2",
     "inquirer": "^9.2.7",
+    "node-fetch": "^3.3.1",
     "path": "^0.12.7",
     "url": "^0.11.1"
   },
   "bin": {
     "peppubuild": "index.js"
-  },
-  "devDependencies": {
-    "grapesjs": "^0.21.2"
   }
 }

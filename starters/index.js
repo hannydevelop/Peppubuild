@@ -6,9 +6,9 @@ import createDirectoryContents  from './utils/directory.js'
 import createProject from './utils/project.js'
 import * as path from 'path';
 import * as inquirer from 'inquirer';
-import chalk from 'chalk';
 import { Command } from 'commander';
 import grapesjs from 'grapesjs'
+import fetch from 'node-fetch';
 
 const program = new Command();
 
@@ -37,11 +37,11 @@ const packageJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'package.
 const CURR_DIR = process.cwd();
 
 // Add postProcess to inject Grapesjs code
-function postProcess(tempath) {
-    let dataPath = JSON.parse(fs.readFileSync(path.resolve(__dirname, path.join(CURR_DIR, 'peppubuild', 'dist', 'peppubuild.json')), 'utf8'));
-    // this dummy value works now to append one page.
+async function postProcess(tempath) {
+    let dataVal = await fetch('http://localhost:3000/pageOne').then(response => { return response.json() })    // this dummy value works now to append one page.
     let editor = grapesjs.init({ headless: true });
-    editor.loadData(dataPath.pageOne)
+    console.log(dataVal)
+    editor.loadData(dataVal)
     let mainPage = `<template>${editor.getHtml()}</template> <style></style>`
     fs.appendFileSync(`${tempath}/src/views/Home.vue`, mainPage, (err) => {
         if (err) throw err;
