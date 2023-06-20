@@ -197,4 +197,25 @@ editor.Commands.add('set-device-tablet', {
   run: editor => editor.setDevice('Tablet')
 });
 
+// Add Save Button
+editor.Panels.addButton('options', [
+  {
+    id: 'save',
+    label: '<i class="fa fa-save"></i>',
+    command: saveFile
+  }
+])
+
+// Add Save Button
+editor.Panels.addButton('options', [
+  {
+    id: 'publish',
+    label: '<i class="fa fa-upload"></i>',
+    command: publishFile
+  }
+])
+
+function saveFile() {}
+function publishFile() {}
+
 editor.loadProjectData(data.pageOne)
