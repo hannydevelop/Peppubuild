@@ -238,5 +238,6 @@ async function saveFile() {
     }
 }
 function publishFile() {
-
+  // we need a backend for this.
+  // document.createElement('')
 }
