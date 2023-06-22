@@ -237,6 +237,16 @@ async function saveFile() {
       console.error("Error:", error);
     }
 }
-function publishFile() {
-  
+async function publishFile() {
+  try {
+    const response = await fetch("http://localhost:4000/publish", {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log("Success:");
+  } catch (error) {
+    console.error("Error:", error);
+  }
 }

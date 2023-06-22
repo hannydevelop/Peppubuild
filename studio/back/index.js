@@ -24,7 +24,7 @@ const CURR_DIR = process.cwd();
 
 // Add postProcess to inject Grapesjs code
 async function postProcess(tempath) {
-    let dataVal = await fetch('http://localhost:3000/pageOne').then(response => { return response.json() })    // this dummy value works now to append one page.
+    let dataVal = await fetch('http://localhost:4000/projects').then(response => { return response.json() })    // this dummy value works now to append one page.
     let editor = grapesjs.init({ headless: true });
     console.log(dataVal)
     editor.loadData(dataVal)
@@ -109,8 +109,10 @@ app.delete('/delete', (req, res) => {
 })
 
 app.post('/publish', (req, res) => {
-    let projectName = req.body.projectName;
-    let projectType = req.body.projectType;
+    let projectName = 'Vue';
+    // let projectName = req.body.projectName;
+    let projectType = 'Vue';
+    // let projectType = req.body.projectType;
     let tartgetPath = path.join(CURR_DIR, projectName);
     let templatePath = path.join(__dirname, 'templates', projectType);
 
