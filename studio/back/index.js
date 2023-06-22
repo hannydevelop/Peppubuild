@@ -6,17 +6,14 @@ import createProject from './utils/project.js'
 import * as path from 'path';
 import grapesjs from 'grapesjs'
 import fetch from 'node-fetch';
-import { Low }  from 'lowdb';
-import { JSONFile } from 'lowdb/node'
-import asyncHandler from 'express-async-handler';
+import  low   from 'lowdb';
+import FileSync from 'lowdb/adapters/FileSync.js'
 import bodyParser from 'body-parser';
 import express from 'express'
+import cors from 'cors'
 
-const adapter = new JSONFile('./db.json');
-const db = new Low(adapter, { posts: [] });
-await db.read();
-
-const { posts } = db.data;
+const adapter = new FileSync('db.json')
+const db = low(adapter)
 
 // Declare const for template directory 
 const __filename = fileURLToPath(import.meta.url)
@@ -83,20 +80,33 @@ var app = express();
 
 /* CRUD Request for db */
 app.use(bodyParser.json());
+app.use(cors ({origin: "http://localhost:9000"}));
 
-app.post('/save', asyncHandler(async (req, res) => {
-    const data = req.body;
-    data.id = String(posts.length + 1)
-    //this can be tested with postman
-    posts.push(data);
-    await db.write();
-    res.json(data)
-}));
+// Get a single project with its id.
+app.get('/projects', (req, res) => {
+    const projects = db.get("projects").find((p) => p.id === 1)
+    res.send(projects)
+})
 
-app.get('/db/:id', asyncHandler(async (req, res) => {
-    const post = posts.find((p) => p.id === req.params.id)
-    res.send(post)
-}))
+// Add a project
+app.post('/add', (req, res) => {
+    const project = req.body;
+    project.id = 1;
+    db.get("projects").push(project).write();
+    res.send(project);
+})
+
+// Edit a post
+app.put('/save', (req, res) => {
+    db.get("projects").find({id: 1}).assign(req.body).write();
+    res.json("successfully edited project")
+})
+
+// Delete a post
+app.delete('/delete', (req, res) => {
+    db.get("projects").remove({id: 1}).write();
+    res.json("successfully deleted project")
+})
 
 app.post('/publish', (req, res) => {
     let projectName = req.body.projectName;
