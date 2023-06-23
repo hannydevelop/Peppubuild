@@ -82,18 +82,17 @@ var app = express();
 app.use(bodyParser.json());
 app.use(cors ({origin: "*"}));
 
-// Get a single project with its id.
+// Get all pages in an existing project.
 app.get('/projects', (req, res) => {
-    const projects = db.get("projects").find((p) => p.id === 1)
+    const projects = db.get("pages").value()
     res.send(projects)
 })
 
-// Add a project
+// Add a new page to existing project.
 app.post('/add', (req, res) => {
     const project = req.body;
-    project.id = 1;
-    db.get("projects").push(project).write();
-    res.send(project);
+    db.get("pages").push(project).write();
+    res.json("successfully added page")
 })
 
 // Edit a post
@@ -102,9 +101,10 @@ app.put('/save', (req, res) => {
     res.json("successfully edited project")
 })
 
-// Delete a post
-app.delete('/delete', (req, res) => {
-    db.get("projects").remove({id: 1}).write();
+// Delete a page from an existing project
+app.delete('/delete/:id', (req, res) => {
+    let id = req.params.id;
+    db.get("pages").remove({id: id}).write();
     res.json("successfully deleted project")
 })
 

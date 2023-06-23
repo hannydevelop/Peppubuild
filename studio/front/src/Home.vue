@@ -8,13 +8,13 @@
       </nav>
       <div class="my-2 d-flex flex-column">
         <button type="button" class="btn btn-outline-secondary btn-sm mb-2 mx-2" @click="addPage()">
-          Add Page <i class="fa fa-plus"></i> 
+          New Page <i class="fa fa-plus"></i>
         </button>
         <div class="pages-sec">Pages</div>
         <button type="button" class="btn btn-outline-secondary btn-sm mb-2 mx-2" v-for="page in pages" :key="page.id"
-            :class="{ page: 1, selected: isSelected(page) }" @click="selectPage(page.id)">
-            {{ page.get('name') || page.id }} <span v-if="!isSelected(page)" @click="removePage(page.id)"
-              class="page-close"><i class="fa fa-trash"></i></span>
+          :class="{ page: 1, selected: isSelected(page) }" @click="selectPage(page.id)">
+          {{ page.get('name') || page.id }} <span v-if="!isSelected(page)" @click="removePage(page.id)"
+            class="page-close"><i class="fa fa-trash"></i></span>
         </button>
       </div>
       <div class="">
@@ -237,8 +237,7 @@ export default {
     }
   },
   async mounted() {
-    let data = await fetch('http://localhost:4000/projects').then(response => { return response.json() });
-    this.pages = data.pages;
+    this.pages = await fetch('http://localhost:4000/projects').then(response => { return response.json() });
     this.editor = grapesjs.init({
       showOffsets: 1,
       noticeOnUnload: 0,
@@ -482,25 +481,46 @@ export default {
       }
     },
     setPages(pages) {
-    this.pages = [...pages];
-  },
-  isSelected(page) {
-    return this.pm.getSelected().id == page.id;
-  },
-  selectPage(pageId) {
-    return this.pm.select(pageId);
-  },
-  removePage(pageId) {
-    return this.pm.remove(pageId);
-  },
-  addPage() {
-    const { pm } = this;
-    const len = pm.getAll().length;
-    pm.add({
-      id: `Page`
-    });
-    // call the save method here for the empty page.
-  }
+      this.pages = [...pages];
+    },
+    isSelected(page) {
+      return this.pm.getSelected().id == page.id;
+    },
+    selectPage(pageId) {
+      return this.pm.select(pageId);
+    },
+    async removePage(pageId) {
+      this.pm.remove(pageId);
+      console.log(pageId)
+      try {
+        await fetch(`http://localhost:4000/delete/${pageId}`, {
+          method: "DELETE", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    },
+    async addPage() {
+      const { pm } = this;
+      let pageName = prompt('What would you like to name this page?')
+      pm.add({
+        id: pageName
+      });
+      try {
+        await fetch("http://localhost:4000/add", {
+          method: "POST", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({id: pageName})
+        });
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
   },
 };
 </script>
