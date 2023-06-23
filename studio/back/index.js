@@ -80,7 +80,7 @@ var app = express();
 
 /* CRUD Request for db */
 app.use(bodyParser.json());
-app.use(cors ({origin: "http://localhost:9000"}));
+app.use(cors ({origin: "*"}));
 
 // Get a single project with its id.
 app.get('/projects', (req, res) => {

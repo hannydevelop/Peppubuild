@@ -38,12 +38,17 @@ const CURR_DIR = process.cwd();
 
 // Add postProcess to inject Grapesjs code
 async function postProcess(tempath) {
-    let dataVal = await fetch('http://localhost:3000/pageOne').then(response => { return response.json() })    // this dummy value works now to append one page.
+    let dataVal = await fetch('http://localhost:4000/projects').then(response => { return response.json() })    // this dummy value works now to append one page.
     let editor = grapesjs.init({ headless: true });
     console.log(dataVal)
     editor.loadData(dataVal)
-    let mainPage = `<template>${editor.getHtml()}</template> <style></style>`
-    fs.appendFileSync(`${tempath}/src/views/Home.vue`, mainPage, (err) => {
+    let mainPage = 
+    `
+    <template>${editor.getHtml()}</template>
+    <script></script>
+    <style>${editor.getCss()}</style>
+    `
+    fs.appendFileSync(`${tempath}/src/views/About.vue`, mainPage, (err) => {
         if (err) throw err;
         console.log('The "data to append" was appended to file!');
     });
@@ -51,7 +56,7 @@ async function postProcess(tempath) {
     // write import into router's index.js
     var data = fs.readFileSync(`${tempath}/src/router/index.js`).toString().split("\n")
     let name = 'About'
-    data.splice(0, 0, `import ${name}` + ` from '../views/${name}'`);
+    data.splice(0, 0, `import ${name}` + ` from '../views/${name}.vue'`);
     var text = data.join("\n");
 
     fs.writeFileSync(`${tempath}/src/router/index.js`, text, function (err) {

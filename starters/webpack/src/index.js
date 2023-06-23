@@ -9,7 +9,7 @@ const prv = "preview";
 const cmdClear = 'canvas-clear';
 
 // we'll charge users to get their project from our database.
-let data = await fetch('http://localhost:3000/pageOne').then(response => { return response.json() })
+let data = await fetch('http://localhost:4000/projects').then(response => { return response.json() })
 /*
 data.pageOne prints
   "assets": "[]",
@@ -39,6 +39,7 @@ var editor = grapesjs.init({
   fromElement: true,
   allowScripts: true,
   mediaCondition: 'min-width', // default is `max-width`
+  pageManager: {},
   deviceManager: {
     devices: [{
       name: 'Mobile',
@@ -223,7 +224,7 @@ async function saveFile() {
   // we'll charge users to save their project into our database.
   let data = projectData;
     try {
-      const response = await fetch("http://localhost:3000/pageOne", {
+      const response = await fetch("http://localhost:4000/save", {
         method: "PUT", // or 'PUT'
         headers: {
           "Content-Type": "application/json",
@@ -237,7 +238,26 @@ async function saveFile() {
       console.error("Error:", error);
     }
 }
-function publishFile() {
-  // we need a backend for this.
-  // document.createElement('')
+async function publishFile() {
+  try {
+    const response = await fetch("http://localhost:4000/publish", {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log("Success:");
+  } catch (error) {
+    console.error("Error:", error);
+  }
 }
+
+const pageManager = editor.Pages;
+
+async function addPage(pageName) {
+  pageManager.add({id: pageName});
+  await saveFile();
+  pageManager.select(pageName);
+}
+
+window.addPage = addPage;

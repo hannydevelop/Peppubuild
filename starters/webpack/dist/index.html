@@ -6,7 +6,7 @@
   <title>Peppubuild</title>
   <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="assets/favicon.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/grapesjs@0.21.2/dist/css/grapes.min.css">
-  
+
     <style>
       .button,
 .button:hover {
@@ -161,8 +161,8 @@ html {
       </div>
     </nav>
     <div class="my-2 d-flex flex-column">
-      <button type="button" class="btn btn-outline-secondary btn-sm mb-2 mx-2" @click="addPage">
-        <i class="fa fa-plus"></i> Add Page
+      <button type="button" class="btn btn-outline-secondary btn-sm mb-2 mx-2" onclick="addPage('home')">
+        <i class="fa fa-file-earmark-plus"></i> Add Page
       </button>
       <ul class="list-group pages">
       </ul>
@@ -211,7 +211,7 @@ html {
     </nav>
     <div id="editor"></div>
     </div>
-  <script src="main.js"></script>
+    <script type="text/javascript" src="main.js"></script>
 </body>
 
 </html>

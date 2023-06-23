@@ -1,32 +1,42 @@
-const path = require('path');
-const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
+const webpack = require('webpack');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const env = process.env.NODE_ENV;
 
 module.exports = {
-  entry: './src/index.js',
+  mode: env == 'production' || env == 'none' ? env : 'development',
+  entry: ['./src/app.js'],
+  devServer: {
+    hot: true,
+    watchOptions: {
+      poll: true
+    }
+  },
   module: {
     rules: [
       {
+        test: /\.vue$/,
+        use: 'vue-loader'
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader'
+      },
+      {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: ['vue-style-loader', 'css-loader']
       }
     ]
   },
-  mode: 'development',
-  output: {
-    filename: 'main.js',
-    path: path.resolve(__dirname, 'dist'),
-  },
-  devServer: {
-    static: {
-      directory: path.join(__dirname, 'dist'),
-    },
-    compress: true,
-    port: 9000,
-    open: true,
-  },
   plugins: [
-    new FaviconsWebpackPlugin({
-      logo: "favicon.png"
+    new webpack.HotModuleReplacementPlugin(),
+    new VueLoaderPlugin(),
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: 'index.html',
+      inject: true
     })
   ]
 };
