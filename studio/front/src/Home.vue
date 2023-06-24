@@ -311,6 +311,10 @@ export default {
       layerManager: {
         appendTo: "#layers-container",
       },
+      plugins: ["gjs-blocks-basic"],
+      pluginsOpts: {
+        "gjs-blocks-basic": { blocks: "image, video, map, text, link" },
+      },
     });
 
     this.editor.Panels.getPanels().reset([
@@ -428,7 +432,7 @@ export default {
 
     async function publishFile() {
       try {
-        const response = await fetch("http://localhost:4000/publish", {
+        await fetch("http://localhost:4000/publish", {
           method: "POST", // or 'PUT'
           headers: {
             "Content-Type": "application/json",
@@ -462,29 +466,23 @@ export default {
   },
   methods: {
     async saveFile() {
-      let mmm = JSON.st(this.editor.Pages.getSelected().toJSON())
-      localStorage.setItem('dey', mmm)
-
-      /* 
-      let projectData = this.editor.getProjectData();
       // we'll charge users to save their project into our database.
-      let data = projectData;
+      let component = this.editor.Pages.getSelected().getMainComponent();
+      let styles = this.editor.getStyle();
       try {
         let PageId = this.pm.getSelected().id
-        const response = await fetch(`http://localhost:4000/save${PageId}`, {
+        await fetch(`http://localhost:4000/save/${PageId}`, {
           method: "PUT", // or 'PUT'
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(data),
+          body: JSON.stringify({ component: component, styles: styles }),
         });
 
-        const result = await response.json();
-        console.log("Success:", result);
+        console.log("Success:");
       } catch (error) {
         console.error("Error:", error);
       }
-      */
     },
     setPages(pages) {
       this.pages = [...pages];
@@ -513,7 +511,9 @@ export default {
       const { pm } = this;
       let pageName = prompt('What would you like to name this page?')
       pm.add({
-        id: pageName
+        id: pageName,
+        component: {},
+        styles: []
       });
       try {
         await fetch("http://localhost:4000/add", {
@@ -521,7 +521,7 @@ export default {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({id: pageName})
+          body: JSON.stringify({ id: pageName, component: {}, styles: [] })
         });
       } catch (error) {
         console.error("Error:", error);

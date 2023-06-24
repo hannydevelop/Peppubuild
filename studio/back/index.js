@@ -6,7 +6,7 @@ import createProject from './utils/project.js'
 import * as path from 'path';
 import grapesjs from 'grapesjs'
 import fetch from 'node-fetch';
-import  low   from 'lowdb';
+import low from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync.js'
 import bodyParser from 'body-parser';
 import express from 'express'
@@ -80,7 +80,7 @@ var app = express();
 
 /* CRUD Request for db */
 app.use(bodyParser.json());
-app.use(cors ({origin: "*"}));
+app.use(cors({ origin: "*" }));
 
 // Get all pages in an existing project.
 app.get('/projects', (req, res) => {
@@ -98,14 +98,14 @@ app.post('/add', (req, res) => {
 // Edit a post
 app.put('/save/:id', (req, res) => {
     let id = req.params.id;
-    db.get("projects").find({id: id}).assign(req.body).write();
+    db.get("pages").find({ id: id }).assign({ styles: req.body.styles, component: req.body.component }).write();
     res.json("successfully saved project")
 })
 
 // Delete a page from an existing project
 app.delete('/delete/:id', (req, res) => {
     let id = req.params.id;
-    db.get("pages").remove({id: id}).write();
+    db.get("pages").remove({ id: id }).write();
     res.json("successfully deleted project")
 })
 
