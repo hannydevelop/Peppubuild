@@ -96,9 +96,10 @@ app.post('/add', (req, res) => {
 })
 
 // Edit a post
-app.put('/save', (req, res) => {
-    db.get("projects").find({id: 1}).assign(req.body).write();
-    res.json("successfully edited project")
+app.put('/save/:id', (req, res) => {
+    let id = req.params.id;
+    db.get("projects").find({id: id}).assign(req.body).write();
+    res.json("successfully saved project")
 })
 
 // Delete a page from an existing project

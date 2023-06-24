@@ -462,11 +462,16 @@ export default {
   },
   methods: {
     async saveFile() {
+      let mmm = JSON.st(this.editor.Pages.getSelected().toJSON())
+      localStorage.setItem('dey', mmm)
+
+      /* 
       let projectData = this.editor.getProjectData();
       // we'll charge users to save their project into our database.
       let data = projectData;
       try {
-        const response = await fetch("http://localhost:4000/save", {
+        let PageId = this.pm.getSelected().id
+        const response = await fetch(`http://localhost:4000/save${PageId}`, {
           method: "PUT", // or 'PUT'
           headers: {
             "Content-Type": "application/json",
@@ -479,6 +484,7 @@ export default {
       } catch (error) {
         console.error("Error:", error);
       }
+      */
     },
     setPages(pages) {
       this.pages = [...pages];
