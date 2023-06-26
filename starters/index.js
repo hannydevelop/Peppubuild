@@ -95,6 +95,23 @@ async function postProcess(tempath) {
     return true;
 }
 
+async function getData() {
+    let pagesd = await fetch('http://localhost:4000/projects').then(response => { return response.json() })   // this dummy value works now to append one page.
+    let editor = grapesjs.init({ headless: true, pageManager: {
+        pages: pagesd
+    }});
+    editor.Pages.getAll().forEach(e => {
+        const component = e.getMainComponent()
+        const html = editor.getHtml({ component });
+        const css = editor.getCss({ component });
+        console.log(`
+        <template>${html})}</template>
+        <script></script>
+        <style>${css}</style>
+        `)
+    }) 
+}
+
 program
     .description('CLI to manage Peppubuild visual editor')
     .version(packageJson.version)
@@ -103,6 +120,8 @@ program
     .command('publish')
     .description('Publish new repository')
     .action(() => {
+        getData()
+        /*
         const inquirerPrecss = inquirer.createPromptModule();
         inquirerPrecss(QUESTIONS).then(answers => {
             const projectChoice = answers['template'];
@@ -120,6 +139,8 @@ program
 
             postProcess(tartgetPath);
         });
+         */
+        
     });
 
 program
