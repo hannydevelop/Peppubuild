@@ -38,56 +38,61 @@ const CURR_DIR = process.cwd();
 
 // Add postProcess to inject Grapesjs code
 async function postProcess(tempath) {
-    let dataVal = await fetch('http://localhost:4000/projects').then(response => { return response.json() })    // this dummy value works now to append one page.
-    let editor = grapesjs.init({ headless: true });
-    console.log(dataVal)
-    editor.loadData(dataVal)
-    let mainPage = 
-    `
-    <template>${editor.getHtml()}</template>
-    <script></script>
-    <style>${editor.getCss()}</style>
-    `
-    fs.appendFileSync(`${tempath}/src/views/About.vue`, mainPage, (err) => {
-        if (err) throw err;
-        console.log('The "data to append" was appended to file!');
-    });
-
-    // write import into router's index.js
-    var data = fs.readFileSync(`${tempath}/src/router/index.js`).toString().split("\n")
-    let name = 'About'
-    data.splice(0, 0, `import ${name}` + ` from '../views/${name}.vue'`);
-    var text = data.join("\n");
-
-    fs.writeFileSync(`${tempath}/src/router/index.js`, text, function (err) {
-        if (err) return err;
-    });
-
-    // write routes into router's index.js
-    // make this a function and return line number
-    let file = fs.readFileSync(`${tempath}/src/router/index.js`, "utf8");
-    let arr = file.split(/\r?\n/);
-    let lineNum = 0;
-    arr.forEach((line, idx) => {
-        if (line.includes("routes: [")) {
-            lineNum = idx + 1;
-        }
-    });
-    var data = fs.readFileSync(`${tempath}/src/router/index.js`).toString().split("\n");
-    let value =
+    let pagesd = await fetch('http://localhost:4000/projects').then(response => { return response.json() })   // this dummy value works now to append one page.
+    let editor = grapesjs.init({ headless: true, pageManager: {
+        pages: pagesd
+    }});
+    editor.Pages.getAll().forEach(e => {
+        const name = e.id
+        const component = e.getMainComponent()
+        const html = editor.getHtml({ component });
+        const css = editor.getCss({ component });
+        let mainPage =  `
+        <template>${html})}</template>
+        <script></script>
+        <style>${css}</style>
         `
-    {
-        path: '/',
-        name: ${name},
-        component: ${name}
-    },
-    `
-    data.splice(lineNum, 0, value);
-    var text = data.join("\n");
-
-    fs.writeFileSync(`${tempath}/src/router/index.js`, text, function (err) {
-        if (err) return err;
-    });
+        fs.appendFileSync(`${tempath}/src/views/${name}.vue`, mainPage, (err) => {
+            if (err) throw err;
+            console.log('The "data to append" was appended to file!');
+        });
+    
+        // write import into router's index.js
+        var data = fs.readFileSync(`${tempath}/src/router/index.js`).toString().split("\n")
+        data.splice(0, 0, `import ${name}` + ` from '../views/${name}.vue'`);
+        var text = data.join("\n");
+    
+        fs.writeFileSync(`${tempath}/src/router/index.js`, text, function (err) {
+            if (err) return err;
+        });
+    
+        // write routes into router's index.js
+        // make this a function and return line number
+        let file = fs.readFileSync(`${tempath}/src/router/index.js`, "utf8");
+        let arr = file.split(/\r?\n/);
+        let lineNum = 0;
+        arr.forEach((line, idx) => {
+            if (line.includes("routes: [")) {
+                lineNum = idx + 1;
+            }
+        });
+        var data = fs.readFileSync(`${tempath}/src/router/index.js`).toString().split("\n");
+        let value =
+            `
+        {
+            path: '/',
+            name: ${name},
+            component: ${name}
+        },
+        `
+        data.splice(lineNum, 0, value);
+        var text = data.join("\n");
+    
+        fs.writeFileSync(`${tempath}/src/router/index.js`, text, function (err) {
+            if (err) return err;
+        });
+    }) 
+    
 
     // this will be useful https://stackoverflow.com/questions/23036918/in-node-js-how-to-read-a-file-append-a-string-at-a-specified-line-or-delete-a
 
@@ -95,22 +100,6 @@ async function postProcess(tempath) {
     return true;
 }
 
-async function getData() {
-    let pagesd = await fetch('http://localhost:4000/projects').then(response => { return response.json() })   // this dummy value works now to append one page.
-    let editor = grapesjs.init({ headless: true, pageManager: {
-        pages: pagesd
-    }});
-    editor.Pages.getAll().forEach(e => {
-        const component = e.getMainComponent()
-        const html = editor.getHtml({ component });
-        const css = editor.getCss({ component });
-        console.log(`
-        <template>${html})}</template>
-        <script></script>
-        <style>${css}</style>
-        `)
-    }) 
-}
 
 program
     .description('CLI to manage Peppubuild visual editor')
@@ -120,8 +109,6 @@ program
     .command('publish')
     .description('Publish new repository')
     .action(() => {
-        getData()
-        /*
         const inquirerPrecss = inquirer.createPromptModule();
         inquirerPrecss(QUESTIONS).then(answers => {
             const projectChoice = answers['template'];
@@ -138,9 +125,7 @@ program
             createDirectoryContents(templatePath, projectName);
 
             postProcess(tartgetPath);
-        });
-         */
-        
+        });        
     });
 
 program
