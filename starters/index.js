@@ -80,7 +80,7 @@ async function postProcess(tempath) {
         let value =
             `
         {
-            path: '/',
+            path: '/${name}',
             name: ${name},
             component: ${name}
         },
