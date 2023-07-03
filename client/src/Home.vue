@@ -32,6 +32,12 @@
             </button>
           </li>
           <li class="nav-item" role="presentation">
+            <button class="nav-link"  data-bs-toggle="tab" type="button" role="tab"
+              aria-controls="trait" aria-selected="false">
+              <i class="fa fa-level-up"></i>
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
             <button class="nav-link" id="style-tab" data-bs-toggle="tab" data-bs-target="#style" type="button" role="tab"
               aria-controls="style" aria-selected="false">
               <i class="fa fa-paint-brush"></i>
@@ -50,6 +56,22 @@
             <div id="style-manager-container"></div>
           </div>
         </div>
+      </div>
+      <div>
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" type="button"
+              role="tab" aria-selected="true">
+              <i class="fa fa-database"></i>
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link"  data-bs-toggle="tab" type="button" role="tab"
+              aria-controls="trait" aria-selected="false">
+              <i class="fa fa-level-up"></i>
+            </button>
+          </li>
+        </ul>
       </div>
     </div>
     <div class="main-content">
@@ -509,7 +531,8 @@ export default {
     },
     async addPage() {
       const { pm } = this;
-      let pageName = prompt('What would you like to name this page?')
+      let text = prompt('What would you like to name this page?');
+      let pageName = text.replace(/ /g,'');
       pm.add({
         id: pageName,
         component: {},
