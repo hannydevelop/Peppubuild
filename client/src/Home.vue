@@ -32,8 +32,8 @@
             </button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link"  data-bs-toggle="tab" type="button" role="tab"
-              aria-controls="trait" aria-selected="false">
+            <button class="nav-link" data-bs-toggle="tab" type="button" role="tab" aria-controls="trait"
+              aria-selected="false">
               <i class="fa fa-level-up"></i>
             </button>
           </li>
@@ -60,14 +60,14 @@
       <div>
         <ul class="nav nav-tabs" id="myTab" role="tablist">
           <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" type="button"
-              role="tab" aria-selected="true">
+            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" type="button" role="tab"
+              aria-selected="true">
               <i class="fa fa-database"></i>
             </button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link"  data-bs-toggle="tab" type="button" role="tab"
-              aria-controls="trait" aria-selected="false">
+            <button class="nav-link" data-bs-toggle="tab" type="button" role="tab" aria-controls="trait"
+              aria-selected="false">
               <i class="fa fa-level-up"></i>
             </button>
           </li>
@@ -240,6 +240,8 @@ html {
 import grapesjs from 'grapesjs'
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import JSZip from 'jszip';
+import FileSaver from 'file-saver';
 
 const swv = "sw-visibility";
 const expt = "export-template";
@@ -452,15 +454,64 @@ export default {
       }
     ])
 
+
     async function publishFile() {
       try {
-        await fetch("http://localhost:4000/publish", {
-          method: "POST", // or 'PUT'
-          headers: {
-            "Content-Type": "application/json",
-          },
+        const zip = new JSZip();
+        // gen package.json()
+        const package_json = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/package.json');
+        // Get the Blob data
+        const json = await package_json.text()
+        zip.file("package.json", json)
+
+        // gen webpack config
+        const webpack_config = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack.config.js');
+        // Get the Blob data
+        const webpack = await webpack_config.text()
+        zip.file("webpack.config.js", webpack)
+
+        // gen gitignore
+        const gitignore_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/.gitignore');
+        // Get the Blob data
+        const gitignore = await gitignore_file.text()
+        zip.file(".gitignore", gitignore)
+
+        // gen index.js
+        let index_content = "";
+        zip.file("src/index.js", index_content)
+        let pages = await fetch('http://localhost:4000/projects').then(response => { return response.json() })   // this dummy value works now to append one page.
+        let editor = grapesjs.init({
+          headless: true, pageManager: {
+            pages: pages
+          }
         });
-        console.log("Success:");
+        var myCss = ''
+        editor.Pages.getAll().forEach(e => {
+          const name = e.id
+          const component = e.getMainComponent()
+          const html = editor.getHtml({ component });
+          const css = editor.getCss({ component });
+          let htmlContent = `
+          <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Document</title>
+                <link rel="stylesheet" type="text/css" href="./css/style.css">
+            </head>
+            ${html}
+          </html>`
+          zip.file(`dist/${name}.html`, htmlContent)
+          zip.file(`dist/css/style.css`, myCss += css)
+        })
+        let folder_name = prompt('What will you name your file')
+
+        zip.generateAsync({ type: "blob" }).then(function (blob) {
+          FileSaver.saveAs(blob, folder_name);
+        })
+        
       } catch (error) {
         console.error("Error:", error);
       }
@@ -532,7 +583,7 @@ export default {
     async addPage() {
       const { pm } = this;
       let text = prompt('What would you like to name this page?');
-      let pageName = text.replace(/ /g,'');
+      let pageName = text.replace(/ /g, '');
       pm.add({
         id: pageName,
         component: {},
