@@ -251,6 +251,7 @@ const cmdClear = 'canvas-clear';
 
 // we'll charge users to get their project from our database.
 export default {
+  name: 'Home',
   data: () => ({
     editor: null,
     pages: []

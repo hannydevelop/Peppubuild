@@ -1,5 +1,6 @@
 const webpack = require('webpack');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
+var path = require('path')
+const { VueLoaderPlugin } = require('vue-loader');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const env = process.env.NODE_ENV;
@@ -11,7 +12,7 @@ module.exports = {
     hot: true,
     watchOptions: {
       poll: true
-    }
+    },
   },
   module: {
     rules: [
@@ -27,6 +28,11 @@ module.exports = {
       {
         test: /\.css$/,
         use: ['vue-style-loader', 'css-loader']
+      },
+      {
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: "javascript/auto"
       }
     ]
   },
