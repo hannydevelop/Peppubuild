@@ -9,6 +9,7 @@ module.exports = {
   mode: env == 'production' || env == 'none' ? env : 'development',
   entry: ['./src/app.js'],
   devServer: {
+    historyApiFallback: true,
     hot: true,
     watchOptions: {
       poll: true
