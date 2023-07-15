@@ -16,6 +16,8 @@
         "file-saver": "^2.0.5",
         "grapesjs": "^0.21.2",
         "jszip": "^3.10.1",
+        "prompt-checkbox": "^2.2.0",
+        "sweetalert": "^2.1.2",
         "vue": "^3.0.2",
         "vue-router": "^4.1.6"
     },

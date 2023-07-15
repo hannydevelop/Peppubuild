@@ -240,6 +240,7 @@ html {
 import grapesjs from 'grapesjs'
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import swal from 'sweetalert';
 import JSZip from 'jszip';
 import FileSaver from 'file-saver';
 
@@ -457,65 +458,70 @@ export default {
 
 
     async function publishFile() {
-      try {
-        const zip = new JSZip();
-        // gen package.json()
-        const package_json = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/package.json');
-        // Get the Blob data
-        const json = await package_json.text()
-        zip.file("package.json", json)
+      // This is the setup button. Users can hit it to bootstrap their
+      // Project. A popup to choose frontend, backend or fullstack should be presented.
+      // Users can setup frontend only and choose backend et al later.
+      let name = prompt('what will you name your project')
+      swal("What type of project will you like to create", {
+        buttons: {
+          front: {
+            text: "Frontend",
+            value: "front",
+          },
+          back: {
+            text: "Backend",
+            value: "back",
+          },
+          defeat: {
+            text: "Fullstack",
+            value: "full",
+          }
+        },
+      })
+        .then((value) => {
+          switch (value) {
 
-        // gen webpack config
-        const webpack_config = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack.config.js');
-        // Get the Blob data
-        const webpack = await webpack_config.text()
-        zip.file("webpack.config.js", webpack)
+            case "front":
+              try {
+                fetch(`http://localhost:4000/publish/${name}`, {
+                  method: "POST", // or 'PUT'
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                });
+                swal("Successfully!", "Frontend bootstrapped", "success");
+              } catch (error) {
+                swal("Error", "An error occurred", "error");
+              }
+              break;
 
-        // gen gitignore
-        const gitignore_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/.gitignore');
-        // Get the Blob data
-        const gitignore = await gitignore_file.text()
-        zip.file(".gitignore", gitignore)
+            case "back":
+              swal("Successful!", "Backend bootstrapped", "success");
+              break;
 
-        // gen index.js
-        let index_content = "";
-        zip.file("src/index.js", index_content)
-        let pages = await fetch('http://localhost:4000/projects').then(response => { return response.json() })   // this dummy value works now to append one page.
-        let editor = grapesjs.init({
-          headless: true, pageManager: {
-            pages: pages
+            case "full":
+              swal("Successful!", "Fullstack bootstrapped", "success");
+              break;
+
+            default:
+
           }
         });
-        var myCss = ''
-        editor.Pages.getAll().forEach(e => {
-          const name = e.id
-          const component = e.getMainComponent()
-          const html = editor.getHtml({ component });
-          const css = editor.getCss({ component });
-          let htmlContent = `
-          <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta http-equiv="X-UA-Compatible" content="IE=edge">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Document</title>
-                <link rel="stylesheet" type="text/css" href="./css/style.css">
-            </head>
-            ${html}
-          </html>`
-          zip.file(`dist/${name}.html`, htmlContent)
-          zip.file(`dist/css/style.css`, myCss += css)
-        })
-        let folder_name = prompt('What will you name your file')
 
-        zip.generateAsync({ type: "blob" }).then(function (blob) {
-          FileSaver.saveAs(blob, folder_name);
-        })
-        
+      /* 
+      let name = prompt('what will you name your project')
+
+      try {
+        await fetch(`http://localhost:4000/publish/${name}`, {
+          method: "POST", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
       } catch (error) {
         console.error("Error:", error);
       }
+      */
     }
 
     /* 
@@ -539,6 +545,14 @@ export default {
     });
   },
   methods: {
+    popup() {
+      var popwindow = document.getElementById("checkBundle");
+      if (popwindow.style.display === "none") {
+        popwindow.style.display = "block";
+      } else {
+        popwindow.style.display = "none";
+      }
+    },
     async saveFile() {
       // we'll charge users to save their project into our database.
       let component = this.editor.Pages.getSelected().getMainComponent();
