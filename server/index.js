@@ -23,18 +23,92 @@ const __dirname = path.dirname(__filename)
 // Get current directory
 const CURR_DIR = process.cwd();
 
-// Add postProcess to inject Grapesjs code
-async function postProcess(tempath) {
-    let pagesd = await fetch('http://localhost:4000/projects').then(response => { return response.json() })   // this dummy value works now to append one page.
-    let editor = grapesjs.init({ headless: true, pageManager: {
-        pages: pagesd
-    }});
+// Bootstrap Frontend Structure.
+
+// Save Frontend changes.
+async function createBootstrap(tempath) {
+    // gen package.json()
+    const package_json = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/package.json');
+    // Get the Blob data
+    const json = await package_json.text()
+    fs.writeFileSync(`${tempath}/package.json`, json, function (err) {
+        if (err) return err;
+    });
+
+    // gen webpack config
+    const webpack_config = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/webpack.config.js');
+    // Get the Blob data
+    const webpack = await webpack_config.text()
+    fs.writeFileSync(`${tempath}/webpack.config.js`, webpack, function (err) {
+        if (err) return err;
+    });
+
+    // gen gitignore
+    const gitignore_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/.gitignore');
+    // Get the Blob data
+    const gitignore = await gitignore_file.text()
+    fs.writeFileSync(`${tempath}/.gitignore`, gitignore, function (err) {
+        if (err) return err;
+    });
+
+    // gen index.js
+    fs.mkdirSync(`${tempath}/dist`)
+    fs.mkdirSync(`${tempath}/dist/css`)
+    fs.mkdirSync(`${tempath}/src`)
+    let index_content = "";
+    fs.writeFileSync(`${tempath}/src/index.js`, index_content, function (err) {
+        if (err) return err;
+    });
+
+ 
+    // gen html and css files.
+    let pages = await fetch('http://localhost:4000/projects').then(response => { return response.json() })   // this dummy value works now to append one page.
+    let editor = grapesjs.init({
+        headless: true, pageManager: {
+            pages: pages
+        }
+    });
+    var myCss = ''
     editor.Pages.getAll().forEach(e => {
         const name = e.id
         const component = e.getMainComponent()
         const html = editor.getHtml({ component });
         const css = editor.getCss({ component });
-        let mainPage =  `
+        let htmlContent = `
+          <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Document</title>
+                <link rel="stylesheet" type="text/css" href="./css/style.css">
+            </head>
+            ${html}
+          </html>`
+        fs.writeFileSync(`${tempath}/dist/${name}.html`, htmlContent, function (err) {
+            if (err) return err;
+        });
+        fs.writeFileSync(`${tempath}/dist/css/style.css`, myCss += css, function (err) {
+            if (err) return err;
+        });
+    })
+}
+
+// Add postProcess to inject Grapesjs code
+async function postProcess(tempath) {
+    let pagesd = await fetch('http://localhost:4000/projects').then(response => { return response.json() })   // this dummy value works now to append one page.
+    let editor = grapesjs.init({
+        headless: true, pageManager: {
+            pages: pagesd
+        }
+    });
+    editor.Pages.getAll().forEach(e => {
+        const name = e.id
+        const component = e.getMainComponent()
+        const html = editor.getHtml({ component });
+        const css = editor.getCss({ component });
+        let mainPage = `
         <template>${html})}</template>
         <script></script>
         <style>${css}</style>
@@ -43,16 +117,16 @@ async function postProcess(tempath) {
             if (err) throw err;
             console.log('The "data to append" was appended to file!');
         });
-    
+
         // write import into router's index.js
         var data = fs.readFileSync(`${tempath}/src/router/index.js`).toString().split("\n")
         data.splice(0, 0, `import ${name}` + ` from '../views/${name}.vue'`);
         var text = data.join("\n");
-    
+
         fs.writeFileSync(`${tempath}/src/router/index.js`, text, function (err) {
             if (err) return err;
         });
-    
+
         // write routes into router's index.js
         // make this a function and return line number
         let file = fs.readFileSync(`${tempath}/src/router/index.js`, "utf8");
@@ -74,12 +148,12 @@ async function postProcess(tempath) {
         `
         data.splice(lineNum, 0, value);
         var text = data.join("\n");
-    
+
         fs.writeFileSync(`${tempath}/src/router/index.js`, text, function (err) {
             if (err) return err;
         });
-    }) 
-    
+    })
+
 
     return true;
 }
@@ -172,8 +246,8 @@ app.get("/github-callback", async (req, res) => {
 */
 
 
-app.post('/publish', (req, res) => {
-    let projectName = 'Vue';
+app.post('/publish/:name', (req, res) => {
+    let projectName = req.params.name;
     // let projectName = req.body.projectName;
     let projectType = 'Vue';
     // let projectType = req.body.projectType;
@@ -186,9 +260,9 @@ app.post('/publish', (req, res) => {
     }
 
     // Call createDirectoryContents
-    createDirectoryContents(templatePath, projectName);
+    // createDirectoryContents(templatePath, projectName);
 
-    postProcess(tartgetPath);
+    createBootstrap(tartgetPath);
 })
 
 app.listen(4000, () => console.log('server started successfully at port : 4000....'));
