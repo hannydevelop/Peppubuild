@@ -26,7 +26,44 @@ const CURR_DIR = process.cwd();
 // Bootstrap Frontend Structure.
 
 // Save Frontend changes.
-async function createBootstrap(tempath) {
+async function createBackend(tempath) {
+    // gen package.json()
+    const package_json = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/package.json');
+    // Get the Blob data
+    const json = await package_json.text()
+    fs.writeFileSync(`${tempath}/package.json`, json, function (err) {
+        if (err) return err;
+    });
+
+    // gen gitignore
+    const gitignore_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/.gitignore');
+    // Get the Blob data
+    const gitignore = await gitignore_file.text()
+    fs.writeFileSync(`${tempath}/.gitignore`, gitignore, function (err) {
+        if (err) return err;
+    });
+
+    // gen index.js
+    const index_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/index.js');
+    // Get the Blob data
+    const index = await index_file.text()
+    fs.writeFileSync(`${tempath}/index.js`, index, function (err) {
+        if (err) return err;
+    });
+
+    // gen index.js
+    fs.mkdirSync(`${tempath}/controllers`)
+  
+    // Gen welcome controller
+    let welcome_content = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/controllers/welcome.js');
+    const welcome = await welcome_content.text()
+    fs.writeFileSync(`${tempath}/controllers/welcome.js`, welcome, function (err) {
+        if (err) return err;
+    });
+}
+
+// Save Frontend changes.
+async function createFrontend(tempath) {
     // gen package.json()
     const package_json = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/package.json');
     // Get the Blob data
@@ -245,14 +282,12 @@ app.get("/github-callback", async (req, res) => {
 });
 */
 
-
-app.post('/publish/:name', (req, res) => {
+// publish front
+app.post('/publishfront/:name', (req, res) => {
     let projectName = req.params.name;
     // let projectName = req.body.projectName;
-    let projectType = 'Vue';
     // let projectType = req.body.projectType;
     let tartgetPath = path.join(CURR_DIR, projectName);
-    let templatePath = path.join(__dirname, 'templates', projectType);
 
     // Call createProject in inquirerPrecss
     if (!createProject(tartgetPath)) {
@@ -262,7 +297,43 @@ app.post('/publish/:name', (req, res) => {
     // Call createDirectoryContents
     // createDirectoryContents(templatePath, projectName);
 
-    createBootstrap(tartgetPath);
+    createFrontend(tartgetPath);
+})
+
+// publish back
+app.post('/publishfront/:name', (req, res) => {
+    let projectName = req.params.name;
+    // let projectName = req.body.projectName;
+    // let projectType = req.body.projectType;
+    let tartgetPath = path.join(CURR_DIR, projectName);
+
+    // Call createProject in inquirerPrecss
+    if (!createProject(tartgetPath)) {
+        return;
+    }
+
+    // Call createDirectoryContents
+    // createDirectoryContents(templatePath, projectName);
+
+    createBackend(tartgetPath);
+})
+
+// publish full
+app.post('/publishfull/:name', (req, res) => {
+    let projectName = req.params.name;
+    // let projectName = req.body.projectName;
+    // let projectType = req.body.projectType;
+    let tartgetPath = path.join(CURR_DIR, projectName);
+
+    // Call createProject in inquirerPrecss
+    if (!createProject(tartgetPath)) {
+        return;
+    }
+
+    // Call createDirectoryContents
+    // createDirectoryContents(templatePath, projectName);
+    createFrontend(tartgetPath);
+    createBackend(tartgetPath);
 })
 
 app.listen(4000, () => console.log('server started successfully at port : 4000....'));
