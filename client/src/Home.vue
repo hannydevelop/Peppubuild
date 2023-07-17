@@ -483,7 +483,7 @@ export default {
 
             case "front":
               try {
-                fetch(`http://localhost:4000/publish/${name}`, {
+                fetch(`http://localhost:4000/publishfront/${name}`, {
                   method: "POST", // or 'PUT'
                   headers: {
                     "Content-Type": "application/json",
@@ -496,11 +496,31 @@ export default {
               break;
 
             case "back":
-              swal("Successful!", "Backend bootstrapped", "success");
+            try {
+                fetch(`http://localhost:4000/publishback/${name}`, {
+                  method: "POST", // or 'PUT'
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                });
+                swal("Successful!", "Backend bootstrapped", "success");
+              } catch (error) {
+                swal("Error", "An error occurred", "error");
+              }
               break;
 
             case "full":
-              swal("Successful!", "Fullstack bootstrapped", "success");
+            try {
+                fetch(`http://localhost:4000/publishfull/${name}`, {
+                  method: "POST", // or 'PUT'
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                });
+                swal("Successful!", "Fullstack bootstrapped", "success");
+              } catch (error) {
+                swal("Error", "An error occurred", "error");
+              }
               break;
 
             default:
