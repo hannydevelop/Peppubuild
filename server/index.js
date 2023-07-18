@@ -64,11 +64,21 @@ async function createBackend(tempath) {
 
 // Save Frontend changes.
 async function createFrontend(tempath) {
+    // create client folder.
+    fs.mkdirSync(`${tempath}/client`)
     // gen package.json()
     const package_json = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/package.json');
     // Get the Blob data
     const json = await package_json.text()
-    fs.writeFileSync(`${tempath}/package.json`, json, function (err) {
+    fs.writeFileSync(`${tempath}/client/package.json`, json, function (err) {
+        if (err) return err;
+    });
+
+    // gen outer package.json()
+    const package_json_outer = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/package.json');
+    // Get the Blob data
+    const json_file = await package_json_outer.text()
+    fs.writeFileSync(`${tempath}/package.json`, json_file, function (err) {
         if (err) return err;
     });
 
@@ -76,7 +86,7 @@ async function createFrontend(tempath) {
     const webpack_config = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/webpack.config.js');
     // Get the Blob data
     const webpack = await webpack_config.text()
-    fs.writeFileSync(`${tempath}/webpack.config.js`, webpack, function (err) {
+    fs.writeFileSync(`${tempath}/client/webpack.config.js`, webpack, function (err) {
         if (err) return err;
     });
 
@@ -84,16 +94,16 @@ async function createFrontend(tempath) {
     const gitignore_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/.gitignore');
     // Get the Blob data
     const gitignore = await gitignore_file.text()
-    fs.writeFileSync(`${tempath}/.gitignore`, gitignore, function (err) {
+    fs.writeFileSync(`${tempath}/client/.gitignore`, gitignore, function (err) {
         if (err) return err;
     });
 
     // gen index.js
-    fs.mkdirSync(`${tempath}/dist`)
-    fs.mkdirSync(`${tempath}/dist/css`)
-    fs.mkdirSync(`${tempath}/src`)
+    fs.mkdirSync(`${tempath}/client/dist`)
+    fs.mkdirSync(`${tempath}/client/dist/css`)
+    fs.mkdirSync(`${tempath}/client/src`)
     let index_content = "";
-    fs.writeFileSync(`${tempath}/src/index.js`, index_content, function (err) {
+    fs.writeFileSync(`${tempath}/client/src/index.js`, index_content, function (err) {
         if (err) return err;
     });
 
@@ -123,10 +133,10 @@ async function createFrontend(tempath) {
             </head>
             ${html}
           </html>`
-        fs.writeFileSync(`${tempath}/dist/${name}.html`, htmlContent, function (err) {
+        fs.writeFileSync(`${tempath}/client/dist/${name}.html`, htmlContent, function (err) {
             if (err) return err;
         });
-        fs.writeFileSync(`${tempath}/dist/css/style.css`, myCss += css, function (err) {
+        fs.writeFileSync(`${tempath}/client/dist/css/style.css`, myCss += css, function (err) {
             if (err) return err;
         });
     })
