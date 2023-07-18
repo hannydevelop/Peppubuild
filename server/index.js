@@ -27,11 +27,23 @@ const CURR_DIR = process.cwd();
 
 // Save Frontend changes.
 async function createBackend(tempath) {
+    // gen server folder
+    // gen index.js
+    fs.mkdirSync(`${tempath}/server`)
+
     // gen package.json()
     const package_json = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/package.json');
     // Get the Blob data
     const json = await package_json.text()
-    fs.writeFileSync(`${tempath}/package.json`, json, function (err) {
+    fs.writeFileSync(`${tempath}/server/package.json`, json, function (err) {
+        if (err) return err;
+    });
+
+    // gen outer package.json()
+    const package_json_outer = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/package.json');
+    // Get the Blob data
+    const json_file = await package_json_outer.text()
+    fs.writeFileSync(`${tempath}/package.json`, json_file, function (err) {
         if (err) return err;
     });
 
@@ -39,7 +51,7 @@ async function createBackend(tempath) {
     const gitignore_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/.gitignore');
     // Get the Blob data
     const gitignore = await gitignore_file.text()
-    fs.writeFileSync(`${tempath}/.gitignore`, gitignore, function (err) {
+    fs.writeFileSync(`${tempath}/server/.gitignore`, gitignore, function (err) {
         if (err) return err;
     });
 
@@ -47,17 +59,17 @@ async function createBackend(tempath) {
     const index_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/index.js');
     // Get the Blob data
     const index = await index_file.text()
-    fs.writeFileSync(`${tempath}/index.js`, index, function (err) {
+    fs.writeFileSync(`${tempath}/server/index.js`, index, function (err) {
         if (err) return err;
     });
 
     // gen index.js
-    fs.mkdirSync(`${tempath}/controllers`)
+    fs.mkdirSync(`${tempath}/server/controllers`)
   
     // Gen welcome controller
     let welcome_content = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/controllers/welcome.js');
     const welcome = await welcome_content.text()
-    fs.writeFileSync(`${tempath}/controllers/welcome.js`, welcome, function (err) {
+    fs.writeFileSync(`${tempath}/server/controllers/welcome.js`, welcome, function (err) {
         if (err) return err;
     });
 }
@@ -311,7 +323,7 @@ app.post('/publishfront/:name', (req, res) => {
 })
 
 // publish back
-app.post('/publishfront/:name', (req, res) => {
+app.post('/publishback/:name', (req, res) => {
     let projectName = req.params.name;
     // let projectName = req.body.projectName;
     // let projectType = req.body.projectType;
