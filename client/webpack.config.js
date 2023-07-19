@@ -9,6 +9,21 @@ module.exports = {
   mode: env == 'production' || env == 'none' ? env : 'development',
   entry: ['./src/app.js'],
   devServer: {
+    proxy: {
+      '/appfront': {
+        target: 'http://localhost:9000',
+        pathRewrite: { '^/appfront': '' },
+      },
+      '/appback': {
+        target: 'http://localhost:3000',
+        pathRewrite: { '^/appback': '' },
+      },
+      '/peppuback': {
+        target: 'http://localhost:4000',
+        pathRewrite: { '^/peppuback': '' },
+      },
+    },
+    
     historyApiFallback: true,
     hot: true,
     watchOptions: {
