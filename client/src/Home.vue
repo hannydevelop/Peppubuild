@@ -357,13 +357,6 @@ export default {
             attributes: { title: 'View components' },
           },
           {
-            id: prv,
-            className: 'fa fa-eye',
-            command: prv,
-            context: prv,
-            attributes: { title: 'Preview' },
-          },
-          {
             id: ful,
             className: 'fa fa-arrows-alt',
             command: ful,
@@ -446,6 +439,11 @@ export default {
         command: () => this.editor.runCommand(this.saveFile())
       }
     ])
+    this.editor.Panels.addButton('options', [{
+      id: prv,
+      label: '<i class="fa fa-eye"></i>',
+      command: () => this.editor.runCommand(this.preview())
+    }])
 
     // Add Save Button
     this.editor.Panels.addButton('options', [
@@ -565,12 +563,14 @@ export default {
     });
   },
   methods: {
-    popup() {
-      var popwindow = document.getElementById("checkBundle");
-      if (popwindow.style.display === "none") {
-        popwindow.style.display = "block";
+    preview() {
+      let page_name = this.pm.getSelected().id;
+      if (page_name == 'index') {
+        let url = `http://localhost:8080/appfront`;
+        window.open(url, "_blank");
       } else {
-        popwindow.style.display = "none";
+        let url = `http://localhost:8080/appfront/${page_name}.html`;
+        window.open(url, "_blank");
       }
     },
     async saveFile() {
