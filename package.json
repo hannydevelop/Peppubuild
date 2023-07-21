@@ -7,12 +7,14 @@
         "front-build": "webpack",
         "back-start": "cd server; node index.js",
         "front-start": "cd client; webpack-dev-server",
-        "start": "concurrently \"npm run back-start\" \"npm run front-start\""
+        "start": "concurrently \"npm run back-start\" \"npm run front-start\"",
+        "projectf-start": "cd shin/client; webpack-dev-server"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@npmcli/package-json": "^4.0.1",
         "@popperjs/core": "^2.11.8",
         "axios": "^1.4.0",
         "bootstrap": "^5.3.0",

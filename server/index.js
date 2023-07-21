@@ -12,6 +12,7 @@ import bodyParser from 'body-parser';
 import express from 'express'
 import cors from 'cors'
 import axios from 'axios';
+import PackageJson from '@npmcli/package-json'
 
 const adapter = new FileSync('db.json')
 const db = low(adapter)
@@ -21,9 +22,31 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 // Get current directory
-const CURR_DIR = process.cwd();
-
+const CURR_DIR = path.join(process.cwd(), '..');
 // Bootstrap Frontend Structure.
+const pkgJson = await PackageJson.load(`${CURR_DIR}`)
+
+async function updateScriptfront(name) {
+    pkgJson.update({
+        scripts: {
+          ...pkgJson.content.scripts,
+          'projectf-start': `cd ${name}/client; webpack-dev-server`,
+        }
+      })
+      
+    await pkgJson.save();
+}
+
+async function updateScriptserver(name) {
+    pkgJson.update({
+        scripts: {
+          ...pkgJson.content.scripts,
+          "projectb-start": `cd ${name}/server; node index.js`,
+        }
+      })
+      
+    await pkgJson.save();
+}
 
 // Save Frontend changes.
 async function createBackend(tempath) {
@@ -122,7 +145,7 @@ async function createFrontend(tempath) {
  
     // gen html and css files.
     let pages = await fetch('http://localhost:4000/projects').then(response => { return response.json() })   // this dummy value works now to append one page.
-    let editor = grapesjs.init({
+    let editor = grapesjs.grapesjs.init({
         headless: true, pageManager: {
             pages: pages
         }
@@ -157,7 +180,7 @@ async function createFrontend(tempath) {
 // Add postProcess to inject Grapesjs code
 async function postProcess(tempath) {
     let pagesd = await fetch('http://localhost:4000/projects').then(response => { return response.json() })   // this dummy value works now to append one page.
-    let editor = grapesjs.init({
+    let editor = grapesjs.grapesjs.init({
         headless: true, pageManager: {
             pages: pagesd
         }
@@ -320,6 +343,7 @@ app.post('/publishfront/:name', (req, res) => {
     // createDirectoryContents(templatePath, projectName);
 
     createFrontend(tartgetPath);
+    updateScriptfront(projectName);
 })
 
 // publish back
@@ -338,6 +362,7 @@ app.post('/publishback/:name', (req, res) => {
     // createDirectoryContents(templatePath, projectName);
 
     createBackend(tartgetPath);
+    updateScriptserver(projectName);
 })
 
 // publish full
@@ -356,6 +381,21 @@ app.post('/publishfull/:name', (req, res) => {
     // createDirectoryContents(templatePath, projectName);
     createFrontend(tartgetPath);
     createBackend(tartgetPath);
+    updateScriptfront(projectName);
+    updateScriptserver(projectName);
+})
+
+app.get('/test', (req, res) => {
+    let name = 'meer'
+    pkgJson.update({
+        scripts: {
+          ...pkgJson.content.scripts,
+          'projectf-start': `cd ${name}; webpack-dev-server`,
+          "projectb-start": `cd ${name}; node index.js`,
+        }
+      })
+      
+    pkgJson.save();
 })
 
 app.listen(4000, () => console.log('server started successfully at port : 4000....'));

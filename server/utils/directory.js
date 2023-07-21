@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-const CURR_DIR = process.cwd();
+const CURR_DIR = path.join(process.cwd(), '..');
 
 // Add contents into the directory
 export default function createDirectoryContents(templatePath, projectName) {
