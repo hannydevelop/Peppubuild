@@ -1,0 +1,52 @@
+{
+    "name": "webpack-part-9",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "front-build": "webpack",
+        "back-start": "cd server; node index.js",
+        "front-start": "cd client; webpack-dev-server",
+        "start": "concurrently \"npm run back-start\" \"npm run front-start\""
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@popperjs/core": "^2.11.8",
+        "axios": "^1.4.0",
+        "bootstrap": "^5.3.0",
+        "chalk": "^5.2.0",
+        "commander": "^11.0.0",
+        "cors": "^2.8.5",
+        "express": "^4.18.2",
+        "express-async-handler": "^1.2.0",
+        "file-saver": "^2.0.5",
+        "fs": "^0.0.1-security",
+        "grapesjs": "^0.21.2",
+        "inquirer": "^9.2.7",
+        "jszip": "^3.10.1",
+        "lowdb": "^1.0.0",
+        "node-fetch": "^3.3.1",
+        "path": "^0.12.7",
+        "prompt-checkbox": "^2.2.0",
+        "sweetalert": "^2.1.2",
+        "url": "^0.11.1",
+        "vue": "^3.0.2",
+        "vue-router": "^4.1.6"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.2.2",
+        "@babel/preset-env": "^7.2.3",
+        "@vue/compiler-sfc": "^3.0.2",
+        "babel-loader": "^8.0.5",
+        "concurrently": "^8.2.0",
+        "css-loader": "^2.1.0",
+        "html-webpack-plugin": "^3.2.0",
+        "vue-loader": "^16.0.0-rc.1",
+        "vue-style-loader": "^4.1.2",
+        "webpack": "^4.28.4",
+        "webpack-cli": "^3.2.1",
+        "webpack-dev-server": "^3.1.14"
+    }
+}

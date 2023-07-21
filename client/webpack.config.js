@@ -25,6 +25,7 @@ module.exports = {
     },
     
     historyApiFallback: true,
+    port: 9000,
     hot: true,
     watchOptions: {
       poll: true
@@ -52,6 +53,7 @@ module.exports = {
       }
     ]
   },
+  stats: { children: false }, //to fix the error-Entrypoint undefined=index.html
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new VueLoaderPlugin(),
