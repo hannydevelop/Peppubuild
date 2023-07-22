@@ -25,11 +25,10 @@ module.exports = {
     },
     
     historyApiFallback: true,
-    port: 9000,
     hot: true,
-    watchOptions: {
-      poll: true
-    },
+    //watchOptions: {
+      //poll: true
+    //},
   },
   module: {
     rules: [
