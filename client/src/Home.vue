@@ -32,12 +32,6 @@
             </button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link" data-bs-toggle="tab" type="button" role="tab" aria-controls="trait"
-              aria-selected="false">
-              <i class="fa fa-level-up"></i>
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
             <button class="nav-link" id="style-tab" data-bs-toggle="tab" data-bs-target="#style" type="button" role="tab"
               aria-controls="style" aria-selected="false">
               <i class="fa fa-paint-brush"></i>
@@ -66,12 +60,19 @@
             </button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link" data-bs-toggle="tab" type="button" role="tab" aria-controls="trait"
-              aria-selected="false">
-              <i class="fa fa-level-up"></i>
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#requests" type="button" role="tab"
+              aria-controls="trait" aria-selected="false">
+              <i class="fa fa-arrows"></i>
             </button>
           </li>
         </ul>
+        <div class="collapse" id="requests">
+          <div class="card card-body">
+            <button class="btn btn-primary requestbtn" @click="createRequest()">Create Request</button>
+            <button class="btn btn-warning requestbtn" @click="updateRequest()">Update Request</button>
+            <button class="btn btn-success requestbtn" @click="listRequest()">Requests List</button>
+          </div>
+        </div>
       </div>
     </div>
     <div class="main-content">
@@ -88,6 +89,10 @@
   
 <style>
 .button,
+.requestbtn {
+  margin: 10px;
+  font-size: 12px;
+}
 .button:hover {
   background-color: #4caf50;
   /* Green */
@@ -494,7 +499,7 @@ export default {
               break;
 
             case "back":
-            try {
+              try {
                 fetch(`http://localhost:4000/publishback/${name}`, {
                   method: "POST", // or 'PUT'
                   headers: {
@@ -508,7 +513,7 @@ export default {
               break;
 
             case "full":
-            try {
+              try {
                 fetch(`http://localhost:4000/publishfull/${name}`, {
                   method: "POST", // or 'PUT'
                   headers: {
