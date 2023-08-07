@@ -68,10 +68,128 @@
         </ul>
         <div class="collapse" id="requests">
           <div class="card card-body">
-            <button class="btn btn-primary requestbtn" @click="createRequest()">Create Request</button>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary requestbtn" data-bs-toggle="modal"
+              data-bs-target="#exampleModal">
+              Create New Request
+            </button>
+
             <button class="btn btn-warning requestbtn" @click="updateRequest()">Update Request</button>
             <button class="btn btn-success requestbtn" @click="listRequest()">Requests List</button>
           </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Create New Request</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form @submit.prevent="createNewReq">
+              <div class="form-group col-md-12 input">
+                <label for="exampleInputEmail">API name</label>
+                <input type="Text" class="form-control" name="exampleInputEmail" id="exampleInputEmail"
+                  placeholder="Describe Feature of design" v-model="title" />
+              </div>
+              <div class="form-group col-md-12 input">
+                <label for="exampleInputEmail">Description</label>
+                <input type="Text" class="form-control" name="exampleInputEmail" id="exampleInputEmail"
+                  placeholder="Describe Feature of design" v-model="description" />
+              </div>
+              <div class="form-group col-md-12">
+                <label for="exampleInputEmail">Request</label>
+                <div>
+                  <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                      <button class="nav-link active" data-bs-target="#params" id="home-tab" data-bs-toggle="tab"
+                        type="button" role="tab" aria-selected="true">
+                        Params
+                      </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#body" type="button" role="tab"
+                        aria-controls="trait" aria-selected="false">
+                        Body
+                      </button>
+                    </li>
+                  </ul>
+                  <div class="collapse fade" id="body">
+                    <div class="card card-body">
+                      <button class="btn btn-primary requestbtn" @click="createRequest()">Create Request</button>
+                    </div>
+                  </div>
+                  <div class="collapse fade show active" id="params">
+                    <div class="form-check-inline col-4 col-sm-3 col-md-3 col-lg-4 col-xl-4 input">
+                      <select class="form-select" aria-label="Default select example" v-model="paramType">
+                        <option value="Parameter Type">Parameter Type</option>
+                        <option value="String">String</option>
+                        <option value="Integer">Integer</option>
+                      </select>
+                    </div>
+                    <div class="form-check-inline col-6 col-sm-8 col-md-8 col-lg-8 col-xl-8 input">
+                      <input type="Text" class="form-control" name="exampleInputEmail" id="exampleInputEmail"
+                        placeholder="Parameter Name" v-model="paramName" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-md-12">
+                <label for="exampleInputEmail">Response</label>
+                <div>
+                  <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                      <button class="nav-link active" data-bs-target="#status" data-bs-toggle="tab" type="button"
+                        role="tab" aria-selected="true">
+                        Status
+                      </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#send" type="button" role="tab"
+                        aria-controls="trait" aria-selected="false">
+                        Send
+                      </button>
+                    </li>
+                  </ul>
+                  <div class="collapse fade" id="send">
+                    <div class="card card-body">
+                      <button class="btn btn-primary requestbtn" @click="createRequest()">Create Request</button>
+                    </div>
+                  </div>
+                  <div class="collapse fade show active" id="status">
+                    <div class="form-check-inline col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 input">
+                      <select class="form-select" aria-label="Default select example" v-model="paramStatus">
+                        <option value="200">200 (Sucess)</option>
+                        <option value="404">404 (Error)</option>
+                        <option value="403">403 (Forbidden)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-check-inline col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 input">
+                <label>Create Request</label>
+                <select class="form-select" aria-label="Default select example" v-model="reqType">
+                  <option value="GET">GET</option>
+                  <option value="POST">POST</option>
+                  <option value="PUT" selected>PUT</option>
+                  <option value="DELETE">DELETE</option>
+                </select>
+              </div>
+              <div class="form-check-inline col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 input">
+                <input type="Text" class="form-control" name="exampleInputEmail" id="exampleInputEmail"
+                  placeholder="API Path" v-model="path" />
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" @click="createNewReq()">Create</button>
+              </div>
+            </form>
+          </div>
+
         </div>
       </div>
     </div>
@@ -93,6 +211,7 @@
   margin: 10px;
   font-size: 12px;
 }
+
 .button:hover {
   background-color: #4caf50;
   /* Green */
@@ -248,6 +367,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import swal from 'sweetalert';
 import JSZip from 'jszip';
 import FileSaver from 'file-saver';
+import { left } from '@popperjs/core';
 
 const swv = "sw-visibility";
 const expt = "export-template";
@@ -260,7 +380,14 @@ export default {
   name: 'Home',
   data: () => ({
     editor: null,
-    pages: []
+    pages: [],
+    title: "",
+    description: "",
+    reqType: "",
+    path: "",
+    paramType: "",
+    paramName: "",
+    paramStatus: ""
   }),
   computed: {
     pm() {
@@ -640,6 +767,28 @@ export default {
       } catch (error) {
         console.error("Error:", error);
       }
+    },
+    createNewReq() {
+      // collect request type.
+      // get values and store them as an array.
+      // turn reqType to smallerAlphabets
+      // add values using forEach or so..
+      /*
+      `app.{{reqType}}({{path}}, (req, res) => {
+          {{values.forEach}}
+      })
+      `
+       */
+      let paramStatus = this.paramStatus;
+      // `res.status(${this.title})`;
+      let type = this.reqType.toLowerCase();
+      let reqPath = this.path;
+      let finalValue =
+        `app.${type}('${reqPath}', (req, res) => {
+                ${paramStatus}
+            })
+            `
+      alert(finalValue)
     }
   },
 };
