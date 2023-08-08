@@ -183,6 +183,9 @@
                 <input type="Text" class="form-control" name="exampleInputEmail" id="exampleInputEmail"
                   placeholder="API Path" v-model="path" />
               </div>
+              <label for="accept">
+                  <input type="checkbox" v-model="accept"> Create all API Routes
+                </label>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" @click="createNewReq()">Create</button>
@@ -387,7 +390,8 @@ export default {
     path: "",
     paramType: "",
     paramName: "",
-    paramStatus: ""
+    paramStatus: "",
+    accept: ""
   }),
   computed: {
     pm() {
@@ -779,16 +783,54 @@ export default {
       })
       `
        */
-      let paramStatus = this.paramStatus;
-      // `res.status(${this.title})`;
       let type = this.reqType.toLowerCase();
       let reqPath = this.path;
-      let finalValue =
-        `app.${type}('${reqPath}', (req, res) => {
-                ${paramStatus}
-            })
-            `
-      alert(finalValue)
+      alert(this.accept)
+      if (this.accept == 1) {
+        alert(`app.get('${reqPath}', (req, res) => {
+          const { data, error } = await supabase
+            .from('${this.title}')
+            .select()
+        })
+
+        app.post('${reqPath}', (req, res) => {
+          const { data, error } = await supabase
+            .from('${this.title}')
+            .insert({ id: 1, name: 'Denmark' })
+        })
+
+        app.delete('${reqPath}', (req, res) => {
+          const { data, error } = await supabase
+            .from('${this.title}')
+            .delete()
+            .eq('id', 1)
+        })
+
+        app.put('${reqPath}', (req, res) => {
+          const { data, error } = await supabase
+            .from('${this.title}')
+            .update({ name: 'Australia' })
+            .eq('id', 1)
+        })
+        `)
+      } else if (type == 'get') {
+        alert(
+          `app.get('${reqPath}', (req, res) => {
+          const { data, error } = await supabase
+            .from('${this.title}')
+            .select()
+        })`
+        )
+      } else if (type == 'post') {
+
+      } else if (type == 'update') {
+        
+      } else if (type == 'delete') {
+        
+      }
+      let paramStatus = this.paramStatus;
+      // `res.status(${this.title})`;
+      
     }
   },
 };

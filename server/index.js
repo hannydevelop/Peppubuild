@@ -398,4 +398,10 @@ app.get('/test', (req, res) => {
     pkgJson.save();
 })
 
+/*
+// create server api.
+// search for api name in controller. If not found, create filename in controller.
+// now, initialise supabase and add api into it.
+ */
+
 app.listen(4000, () => console.log('server started successfully at port : 4000....'));
