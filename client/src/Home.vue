@@ -184,8 +184,8 @@
                   placeholder="API Path" v-model="path" />
               </div>
               <label for="accept">
-                  <input type="checkbox" v-model="accept"> Create all API Routes
-                </label>
+                <input type="checkbox" v-model="accept"> Create all API Routes
+              </label>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" @click="createNewReq()">Create</button>
@@ -785,9 +785,9 @@ export default {
        */
       let type = this.reqType.toLowerCase();
       let reqPath = this.path;
-      alert(this.accept)
       if (this.accept == 1) {
-        alert(`app.get('${reqPath}', (req, res) => {
+        try {
+          let data = `app.get('${reqPath}', (req, res) => {
           const { data, error } = await supabase
             .from('${this.title}')
             .select()
@@ -812,25 +812,103 @@ export default {
             .update({ name: 'Australia' })
             .eq('id', 1)
         })
-        `)
+        `
+          
+          fetch(`http://localhost:4000/creapi/${this.title}`, {
+            method: "POST", // or 'PUT'
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({data: data})
+          });
+        } catch (error) {
+          console.log(`${error}, "An error occurred", "error`);
+        }
       } else if (type == 'get') {
-        alert(
-          `app.get('${reqPath}', (req, res) => {
+        try {
+          let data = `
+          app.get('${reqPath}', (req, res) => {
           const { data, error } = await supabase
             .from('${this.title}')
             .select()
-        })`
-        )
+        })
+        `
+          fetch(`http://localhost:4000/creapi/${this.title}`, {
+            method: "POST", // or 'PUT'
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({data: data})
+          });
+        } catch (error) {
+          console.log(`${error}, "An error occurred", "error`);
+        }
       } else if (type == 'post') {
-
-      } else if (type == 'update') {
-        
+        try {
+          let data = `
+        app.post('${reqPath}', (req, res) => {
+          const { data, error } = await supabase
+            .from('${this.title}')
+            .insert({ id: 1, name: 'Denmark' })
+        })
+        `
+          
+          fetch(`http://localhost:4000/creapi/${this.title}`, {
+            method: "POST", // or 'PUT'
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({data: data})
+          });
+        } catch (error) {
+          console.log(`${error}, "An error occurred", "error`);
+        }
+      } else if (type == 'put') {
+        try {
+          let data = `
+        app.put('${reqPath}', (req, res) => {
+          const { data, error } = await supabase
+            .from('${this.title}')
+            .update({ name: 'Australia' })
+            .eq('id', 1)
+        })
+        `
+          
+          fetch(`http://localhost:4000/creapi/${this.title}`, {
+            method: "POST", // or 'PUT'
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({data: data})
+          });
+        } catch (error) {
+          console.log(`${error}, "An error occurred", "error`);
+        }
       } else if (type == 'delete') {
-        
+        try {
+          let data = `
+        app.delete('${reqPath}', (req, res) => {
+          const { data, error } = await supabase
+            .from('${this.title}')
+            .delete()
+            .eq('id', 1)
+        })
+        `
+          
+          fetch(`http://localhost:4000/creapi/${this.title}`, {
+            method: "POST", // or 'PUT'
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({data: data})
+          });
+        } catch (error) {
+          console.log(`${error}, "An error occurred", "error`);
+        }
       }
       let paramStatus = this.paramStatus;
       // `res.status(${this.title})`;
-      
+
     }
   },
 };

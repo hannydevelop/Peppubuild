@@ -29,22 +29,22 @@ const pkgJson = await PackageJson.load(`${CURR_DIR}`)
 async function updateScriptfront(name) {
     pkgJson.update({
         scripts: {
-          ...pkgJson.content.scripts,
-          'projectf-start': `cd ${name}/client; webpack-dev-server`,
+            ...pkgJson.content.scripts,
+            'projectf-start': `cd ${name}/client; webpack-dev-server`,
         }
-      })
-      
+    })
+
     await pkgJson.save();
 }
 
 async function updateScriptserver(name) {
     pkgJson.update({
         scripts: {
-          ...pkgJson.content.scripts,
-          "projectb-start": `cd ${name}/server; node index.js`,
+            ...pkgJson.content.scripts,
+            "projectb-start": `cd ${name}/server; node index.js`,
         }
-      })
-      
+    })
+
     await pkgJson.save();
 }
 
@@ -88,7 +88,7 @@ async function createBackend(tempath) {
 
     // gen index.js
     fs.mkdirSync(`${tempath}/server/controllers`)
-  
+
     // Gen welcome controller
     let welcome_content = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/controllers/welcome.js');
     const welcome = await welcome_content.text()
@@ -142,7 +142,7 @@ async function createFrontend(tempath) {
         if (err) return err;
     });
 
- 
+
     // gen html and css files.
     let pages = await fetch('http://localhost:4000/projects').then(response => { return response.json() })   // this dummy value works now to append one page.
     let editor = grapesjs.grapesjs.init({
@@ -377,7 +377,7 @@ app.post('/publishfull/:name', (req, res) => {
         return;
     }
 
-    // Call createDirectoryContents
+    // Call createDirectoryContents         
     // createDirectoryContents(templatePath, projectName);
     createFrontend(tartgetPath);
     createBackend(tartgetPath);
@@ -385,23 +385,37 @@ app.post('/publishfull/:name', (req, res) => {
     updateScriptserver(projectName);
 })
 
-app.get('/test', (req, res) => {
-    let name = 'meer'
-    pkgJson.update({
-        scripts: {
-          ...pkgJson.content.scripts,
-          'projectf-start': `cd ${name}; webpack-dev-server`,
-          "projectb-start": `cd ${name}; node index.js`,
-        }
-      })
-      
-    pkgJson.save();
-})
 
 /*
 // create server api.
 // search for api name in controller. If not found, create filename in controller.
 // now, initialise supabase and add api into it.
  */
+
+app.post('/creapi/:apiname', (req, res) => {
+    // get project name
+    let projectName = 'myplay';
+    // get server targetpath
+    let tartgetPath = path.join(CURR_DIR, projectName);
+    // get controller folder-file path.
+    let controllerFile = req.params.apiname;
+    let apiPath = path.join(CURR_DIR, projectName, 'server', 'controllers', `${controllerFile}.js`);
+    let text = req.body.data;
+    if (fs.existsSync(apiPath)) {
+        fs.appendFileSync(apiPath, req.body.data, function (err) {
+            if (err) return err;
+        });
+    } else {
+        let createPath = fs.createWriteStream(apiPath);
+        createPath.write(req.body.data, function (err) {
+            if (err) return err;
+        });
+        // write into file.
+        // createPath.write(text)
+        // write into index.js   
+    }
+
+    // search if path is already present. If not, create file. else, just push changes into file
+})
 
 app.listen(4000, () => console.log('server started successfully at port : 4000....'));
