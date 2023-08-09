@@ -368,6 +368,7 @@ app.post('/publishback/:name', (req, res) => {
 // publish full
 app.post('/publishfull/:name', (req, res) => {
     let projectName = req.params.name;
+    // store project name to db.
     // let projectName = req.body.projectName;
     // let projectType = req.body.projectType;
     let tartgetPath = path.join(CURR_DIR, projectName);
@@ -376,7 +377,9 @@ app.post('/publishfull/:name', (req, res) => {
     if (!createProject(tartgetPath)) {
         return;
     }
-
+    db.defaults({ project: {} })
+        .write()
+    db.set('project.name', projectName).write()
     // Call createDirectoryContents         
     // createDirectoryContents(templatePath, projectName);
     createFrontend(tartgetPath);
@@ -394,13 +397,12 @@ app.post('/publishfull/:name', (req, res) => {
 
 app.post('/creapi/:apiname', (req, res) => {
     // get project name
-    let projectName = 'myplay';
+    let projectName = db.get("project.name").value();
+
     // get server targetpath
-    let tartgetPath = path.join(CURR_DIR, projectName);
     // get controller folder-file path.
     let controllerFile = req.params.apiname;
     let apiPath = path.join(CURR_DIR, projectName, 'server', 'controllers', `${controllerFile}.js`);
-    let text = req.body.data;
     if (fs.existsSync(apiPath)) {
         fs.appendFileSync(apiPath, req.body.data, function (err) {
             if (err) return err;
@@ -415,7 +417,16 @@ app.post('/creapi/:apiname', (req, res) => {
         // write into index.js   
     }
 
-    // search if path is already present. If not, create file. else, just push changes into file
+    // go to index.js file and add path to the controller file.
+    let indexPath = path.join(CURR_DIR, projectName, 'server', 'index.js');
+    let indexText = `
+    const ${controllerFile}controller = require('./controllers/${controllerFile}');
+    app.use('/${controllerFile}', ${controllerFile}controller);
+    `
+    fs.appendFileSync(indexPath, indexText, function (err) {
+        if (err) return err;
+    });
+    
 })
 
 app.listen(4000, () => console.log('server started successfully at port : 4000....'));
