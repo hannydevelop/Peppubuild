@@ -419,14 +419,19 @@ app.post('/creapi/:apiname', (req, res) => {
 
     // go to index.js file and add path to the controller file.
     let indexPath = path.join(CURR_DIR, projectName, 'server', 'index.js');
+    var data = fs.readFileSync(indexPath).toString().split("\n");
+    data.splice(0, 0, `const ${controllerFile}controller = require('./controllers/${controllerFile}');`);
+    var text = data.join("\n");
+    fs.writeFileSync(indexPath, text, function (err) {
+        if (err) return err;
+    })
     let indexText = `
-    const ${controllerFile}controller = require('./controllers/${controllerFile}');
     app.use('/${controllerFile}', ${controllerFile}controller);
     `
     fs.appendFileSync(indexPath, indexText, function (err) {
         if (err) return err;
     });
-    
+
 })
 
 app.listen(4000, () => console.log('server started successfully at port : 4000....'));

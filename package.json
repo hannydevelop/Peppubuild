@@ -8,7 +8,9 @@
         "back-start": "cd server; node index.js",
         "front-start": "cd client; webpack-dev-server",
         "start": "concurrently \"npm run back-start\" \"npm run front-start\" \"npm run projectf-start\" \"npm run projectb-start\"",
-        "watch": "watch 'npm run start' ./"
+        "watch": "watch 'npm run start' ./",
+        "projectf-start": "cd sapa/client; webpack-dev-server",
+        "projectb-start": "cd sapa/server; node index.js"
     },
     "keywords": [],
     "author": "",
