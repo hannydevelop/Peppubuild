@@ -787,26 +787,26 @@ export default {
       let reqPath = this.path;
       if (this.accept == 1) {
         try {
-          let data = `app.get('${reqPath}', (req, res) => {
+          let data = `${this.title}controller.get('${reqPath}', (req, res) => {
           const { data, error } = await supabase
             .from('${this.title}')
             .select()
         })
 
-        app.post('${reqPath}', (req, res) => {
+        ${this.title}controller.post('${reqPath}', (req, res) => {
           const { data, error } = await supabase
             .from('${this.title}')
             .insert({ id: 1, name: 'Denmark' })
         })
 
-        app.delete('${reqPath}', (req, res) => {
+        ${this.title}controller.delete('${reqPath}', (req, res) => {
           const { data, error } = await supabase
             .from('${this.title}')
             .delete()
             .eq('id', 1)
         })
 
-        app.put('${reqPath}', (req, res) => {
+        ${this.title}controller.put('${reqPath}', (req, res) => {
           const { data, error } = await supabase
             .from('${this.title}')
             .update({ name: 'Australia' })
@@ -827,7 +827,7 @@ export default {
       } else if (type == 'get') {
         try {
           let data = `
-          app.get('${reqPath}', (req, res) => {
+          ${this.title}controller.get('${reqPath}', (req, res) => {
           const { data, error } = await supabase
             .from('${this.title}')
             .select()
@@ -846,7 +846,7 @@ export default {
       } else if (type == 'post') {
         try {
           let data = `
-        app.post('${reqPath}', (req, res) => {
+          ${this.title}controller.post('${reqPath}', (req, res) => {
           const { data, error } = await supabase
             .from('${this.title}')
             .insert({ id: 1, name: 'Denmark' })
@@ -866,7 +866,7 @@ export default {
       } else if (type == 'put') {
         try {
           let data = `
-        app.put('${reqPath}', (req, res) => {
+          ${this.title}controller.put('${reqPath}', (req, res) => {
           const { data, error } = await supabase
             .from('${this.title}')
             .update({ name: 'Australia' })
@@ -887,7 +887,7 @@ export default {
       } else if (type == 'delete') {
         try {
           let data = `
-        app.delete('${reqPath}', (req, res) => {
+          ${this.title}controller.delete('${reqPath}', (req, res) => {
           const { data, error } = await supabase
             .from('${this.title}')
             .delete()

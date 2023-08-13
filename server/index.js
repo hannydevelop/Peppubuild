@@ -13,6 +13,7 @@ import express from 'express'
 import cors from 'cors'
 import axios from 'axios';
 import PackageJson from '@npmcli/package-json'
+import { setFlagsFromString } from 'v8';
 
 const adapter = new FileSync('db.json')
 const db = low(adapter)
@@ -409,9 +410,29 @@ app.post('/creapi/:apiname', (req, res) => {
         });
     } else {
         let createPath = fs.createWriteStream(apiPath);
-        createPath.write(req.body.data, function (err) {
+        let url = 'blah';
+        let apikey = 'blaq';
+        let controllerData = `
+        const express = require('express');
+
+        var supabase = require('@supabase/supabase-js')
+
+        // Create a single supabase client for interacting with your database
+        const supabase = createClient('${url}', '${apikey}')
+
+        const express = require('express');
+
+        //set variable users as expressRouter
+        var ${controllerFile}controller = express.Router();
+    
+        ${req.body.data}
+
+        module.exports = ${controllerFile}controller;
+        `
+
+        createPath.write(controllerData, function (err) {
             if (err) return err;
-        });
+        })
         // write into file.
         // createPath.write(text)
         // write into index.js   
