@@ -340,6 +340,10 @@ app.post('/publishfront/:name', (req, res) => {
         return;
     }
 
+    db.defaults({ project: {} })
+    .write()
+    db.set('project.name', projectName).write()
+
     // Call createDirectoryContents
     // createDirectoryContents(templatePath, projectName);
 
@@ -358,6 +362,10 @@ app.post('/publishback/:name', (req, res) => {
     if (!createProject(tartgetPath)) {
         return;
     }
+
+    db.defaults({ project: {} })
+    .write()
+    db.set('project.name', projectName).write()
 
     // Call createDirectoryContents
     // createDirectoryContents(templatePath, projectName);
@@ -415,12 +423,10 @@ app.post('/creapi/:apiname', (req, res) => {
         let controllerData = `
         const express = require('express');
 
-        var supabase = require('@supabase/supabase-js')
+        var supabaseClient = require('@supabase/supabase-js')
 
         // Create a single supabase client for interacting with your database
-        const supabase = createClient('${url}', '${apikey}')
-
-        const express = require('express');
+        const supabase = supabaseClient.createClient('${url}', '${apikey}')
 
         //set variable users as expressRouter
         var ${controllerFile}controller = express.Router();

@@ -371,6 +371,7 @@ import swal from 'sweetalert';
 import JSZip from 'jszip';
 import FileSaver from 'file-saver';
 import { left } from '@popperjs/core';
+import * as bootstrap from 'bootstrap';
 
 const swv = "sw-visibility";
 const expt = "export-template";
@@ -788,39 +789,49 @@ export default {
       if (this.accept == 1) {
         try {
           let data = `${this.title}controller.get('${reqPath}', (req, res) => {
-          const { data, error } = await supabase
+          const { data, error } = supabase
             .from('${this.title}')
-            .select()
+            .select().then(data => {
+            res.send(data)
+          })
         })
 
         ${this.title}controller.post('${reqPath}', (req, res) => {
-          const { data, error } = await supabase
+          const { data, error } = supabase
             .from('${this.title}')
-            .insert({ id: 1, name: 'Denmark' })
+            .insert({ id: 1, name: 'Denmark' }).then(data => {
+            res.send(data)
+          })
         })
 
         ${this.title}controller.delete('${reqPath}', (req, res) => {
-          const { data, error } = await supabase
+          const { data, error } = supabase
             .from('${this.title}')
             .delete()
-            .eq('id', 1)
+            .eq('id', 1).then(data => {
+            res.send(data)
+          })
         })
 
         ${this.title}controller.put('${reqPath}', (req, res) => {
-          const { data, error } = await supabase
+          const { data, error } = supabase
             .from('${this.title}')
             .update({ name: 'Australia' })
-            .eq('id', 1)
+            .eq('id', 1).then(data => {
+            res.send(data)
+          })
         })
         `
-          
+
           fetch(`http://localhost:4000/creapi/${this.title}`, {
             method: "POST", // or 'PUT'
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({data: data})
-          });
+            body: JSON.stringify({ data: data })
+          })
+          new bootstrap.Modal(document.getElementById('exampleModal'))._hideModal();
+          swal("Successful!", "API created", "success");
         } catch (error) {
           console.log(`${error}, "An error occurred", "error`);
         }
@@ -828,9 +839,11 @@ export default {
         try {
           let data = `
           ${this.title}controller.get('${reqPath}', (req, res) => {
-          const { data, error } = await supabase
+          const { data, error } = supabase
             .from('${this.title}')
-            .select()
+            .select().then(data => {
+            res.send(data)
+          })
         })
         `
           fetch(`http://localhost:4000/creapi/${this.title}`, {
@@ -838,7 +851,7 @@ export default {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({data: data})
+            body: JSON.stringify({ data: data })
           });
         } catch (error) {
           console.log(`${error}, "An error occurred", "error`);
@@ -847,18 +860,20 @@ export default {
         try {
           let data = `
           ${this.title}controller.post('${reqPath}', (req, res) => {
-          const { data, error } = await supabase
+          const { data, error } = supabase
             .from('${this.title}')
-            .insert({ id: 1, name: 'Denmark' })
+            .insert({ id: 1, name: 'Denmark' }).then(data => {
+            res.send(data)
+          })
         })
         `
-          
+
           fetch(`http://localhost:4000/creapi/${this.title}`, {
             method: "POST", // or 'PUT'
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({data: data})
+            body: JSON.stringify({ data: data })
           });
         } catch (error) {
           console.log(`${error}, "An error occurred", "error`);
@@ -867,19 +882,21 @@ export default {
         try {
           let data = `
           ${this.title}controller.put('${reqPath}', (req, res) => {
-          const { data, error } = await supabase
+          const { data, error } = supabase
             .from('${this.title}')
             .update({ name: 'Australia' })
-            .eq('id', 1)
+            .eq('id', 1).then(data => {
+            res.send(data)
+          })
         })
         `
-          
+
           fetch(`http://localhost:4000/creapi/${this.title}`, {
             method: "POST", // or 'PUT'
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({data: data})
+            body: JSON.stringify({ data: data })
           });
         } catch (error) {
           console.log(`${error}, "An error occurred", "error`);
@@ -888,19 +905,21 @@ export default {
         try {
           let data = `
           ${this.title}controller.delete('${reqPath}', (req, res) => {
-          const { data, error } = await supabase
+          const { data, error } = supabase
             .from('${this.title}')
             .delete()
-            .eq('id', 1)
+            .eq('id', 1).then(data => {
+            res.send(data)
+          })
         })
         `
-          
+
           fetch(`http://localhost:4000/creapi/${this.title}`, {
             method: "POST", // or 'PUT'
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({data: data})
+            body: JSON.stringify({ data: data })
           });
         } catch (error) {
           console.log(`${error}, "An error occurred", "error`);
