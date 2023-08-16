@@ -80,7 +80,7 @@
         </div>
       </div>
     </div>
-    <!-- Modal -->
+    <!-- API Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -193,6 +193,22 @@
             </form>
           </div>
 
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="connectModal" tabindex="-1" aria-labelledby="connectModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="connectModalLabel">Connect Element to API</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" @click="connectAPI()">Create</button>
+          </div>
         </div>
       </div>
     </div>
@@ -679,6 +695,34 @@ export default {
       */
     }
 
+    this.editor.Components.addType('input', {
+      isComponent: el => el.tagName == 'BUTTON',
+      model: {
+        defaults: {
+          traits: [
+            {
+              type: 'button',
+              // ...
+              text: 'Make button functional',
+              full: true, // Full width button
+              command: () => this.editor.runCommand(this.connectFrontend())
+              // or you can just specify the Command ID
+            }],
+          // As by default, traits are binded to attributes, so to define
+          // their initial value we can use attributes
+          attributes: { type: 'button', required: true },
+        },
+      },
+    });
+
+    let bm = this.editor.BlockManager;
+    bm.add('input', {
+      label: 'Bike',
+      content: { type: 'input' },
+      media: `<img src='https://i.ibb.co/crfWSGP/nature.png' style="width:100%"></img>`,
+      category: 'Elements'
+    })
+
     /* 
     const pageManager = editor.Pages;
 
@@ -928,6 +972,9 @@ export default {
       let paramStatus = this.paramStatus;
       // `res.status(${this.title})`;
 
+    },
+    connectFrontend() {
+      new bootstrap.Modal('#connectModal').show();
     }
   },
 };
