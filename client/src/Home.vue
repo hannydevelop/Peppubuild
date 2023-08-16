@@ -204,10 +204,33 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
+            <div class="input">
+              <label>Request Type</label>
+              <select class="form-select" aria-label="Default select example" v-model="apiReqType">
+                <option value="GET">GET</option>
+                <option value="POST">POST</option>
+                <option value="PUT" selected>PUT</option>
+                <option value="DELETE">DELETE</option>
+              </select>
+            </div>
+            <div class="input">
+              <input type="Text" class="form-control" placeholder="URL" v-model="apiReqUrl" />
+            </div>
+            <label>Request Body</label>
+            <div>
+              <div class="form-check-inline col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                <input type="Text" class="form-control" name="exampleInputEmail" id="exampleInputEmail"
+                  placeholder="Key" v-model="bodyKey" />
+              </div>
+              <div class="form-check-inline col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                <input type="Text" class="form-control" name="exampleInputEmail" id="exampleInputEmail"
+                  placeholder="Value" v-model="bodyValue" />
+              </div>
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" @click="connectAPI()">Create</button>
+            <button type="button" class="btn btn-primary" @click="connectAPI()">Connect</button>
           </div>
         </div>
       </div>
@@ -229,6 +252,10 @@
 .requestbtn {
   margin: 10px;
   font-size: 12px;
+}
+
+.input {
+  padding: 10px;
 }
 
 .button:hover {
@@ -408,7 +435,9 @@ export default {
     paramType: "",
     paramName: "",
     paramStatus: "",
-    accept: ""
+    accept: "",
+    apiReqType: "",
+    apiReqUrl: ""
   }),
   computed: {
     pm() {
@@ -975,6 +1004,22 @@ export default {
     },
     connectFrontend() {
       new bootstrap.Modal('#connectModal').show();
+    },
+
+    connectAPI() {
+      /*
+      let data = `axios({
+        method: '${this.apiReqType}',
+        url: '${this.apiReqUrl}',
+        headers: {'${this.apiReqHeaders}'},
+        data: { ${this.apiReqData} }
+      }).then(response => { return response })`
+       */
+      let data = `axios({
+        method: '${this.apiReqType}',
+        url: '${this.apiReqUrl}',
+        data: { "${this.bodyKey}": "${this.bodyValue}"}
+      }).then(response => { return response })`
     }
   },
 };
