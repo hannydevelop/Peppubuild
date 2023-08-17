@@ -33,6 +33,7 @@
         "node-fetch": "^3.3.1",
         "path": "^0.12.7",
         "prompt-checkbox": "^2.2.0",
+        "replace-in-file": "^7.0.1",
         "sweetalert": "^2.1.2",
         "url": "^0.11.1",
         "vue": "^3.0.2",

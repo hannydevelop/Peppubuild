@@ -219,12 +219,16 @@
             <label>Request Body</label>
             <div>
               <div class="form-check-inline col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                <input type="Text" class="form-control" name="exampleInputEmail" id="exampleInputEmail"
-                  placeholder="Key" v-model="bodyKey" />
+                <input type="Text" class="form-control" name="exampleInputEmail" id="exampleInputEmail" placeholder="Key"
+                  v-model="bodyKey" />
               </div>
               <div class="form-check-inline col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                 <input type="Text" class="form-control" name="exampleInputEmail" id="exampleInputEmail"
                   placeholder="Value" v-model="bodyValue" />
+              </div>
+              <div class="input">
+                <input type="Text" class="form-control" name="exampleInputEmail" id="exampleInputEmail"
+                  placeholder="Function Name" v-model="funcName" />
               </div>
             </div>
           </div>
@@ -437,7 +441,8 @@ export default {
     paramStatus: "",
     accept: "",
     apiReqType: "",
-    apiReqUrl: ""
+    apiReqUrl: "",
+    funcName: ""
   }),
   computed: {
     pm() {
@@ -1016,12 +1021,26 @@ export default {
         data: { ${this.apiReqData} }
       }).then(response => { return response })`
        */
-      let data = `axios({
+      let data = `
+      function ${this.funcName} {
+        axios({
         method: '${this.apiReqType}',
         url: '${this.apiReqUrl}',
         data: { "${this.bodyKey}": "${this.bodyValue}"}
-      }).then(response => { return response })`
-
+      }).then(response => { return response })
+      }
+      `
+      try {
+        fetch(`http://localhost:4000/conapi`, {
+          method: "POST", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ data: data })
+        });
+      } catch {
+        console.log('An error occurred')
+      }
       // add onclick event to button. 
       // randomly choose function name and embed the axios code to the function name.
     }

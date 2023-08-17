@@ -14,6 +14,7 @@ import cors from 'cors'
 import axios from 'axios';
 import PackageJson from '@npmcli/package-json'
 import { setFlagsFromString } from 'v8';
+import replaceInFile from 'replace-in-file';
 
 const adapter = new FileSync('db.json')
 const db = low(adapter)
@@ -140,7 +141,7 @@ async function createFrontend(tempath) {
     fs.mkdirSync(`${tempath}/client/dist`)
     fs.mkdirSync(`${tempath}/client/dist/css`)
     fs.mkdirSync(`${tempath}/client/src`)
-    let index_content = "";
+    let index_content = "import axios from 'axios";
     fs.writeFileSync(`${tempath}/client/src/index.js`, index_content, function (err) {
         if (err) return err;
     });
@@ -167,6 +168,7 @@ async function createFrontend(tempath) {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>Document</title>
                 <link rel="stylesheet" type="text/css" href="./css/style.css">
+                <script src="./src/index.js"></script>
             </head>
             ${html}
           </html>`
@@ -283,10 +285,26 @@ app.put('/save/:id', (req, res) => {
 
     let htmlContent = editor.Pages.get(id).getMainComponent().toHTML();
     let myCss = editor.getCss();
-
+    let regex = new RegExp('<body>(.|\n)*?<\/body>')
+    const options = {
+        files: filePath,
+        from: regex,
+        to: htmlContent
+    };
+    
+    replaceInFile(options)
+    .then(result => {
+        console.log("Replacement results: ",result);
+    })
+    .catch(error => {
+        console.log(error);
+    });
+    /* 
     fs.writeFileSync(filePath, htmlContent, function (err) {
         if (err) return err;
     });
+    */
+    
     fs.writeFileSync(cssPath, myCss, function (err) {
         if (err) return err;
     });
@@ -486,7 +504,12 @@ app.post('/creapi/:apiname', (req, res) => {
 })
 
 app.post('/conapi', (req, res) => {
-    // get path to frontend JS file
+    let projectName = db.get("project.name").value();
+    let tempath = path.join(CURR_DIR, projectName);
+    let jsPath = `${tempath}/client/src/index.js`;
+    fs.appendFileSync(jsPath, req.body.data, function (err) {
+        if (err) return err;
+    });
 })
 
 app.listen(4000, () => console.log('server started successfully at port : 4000....'));
