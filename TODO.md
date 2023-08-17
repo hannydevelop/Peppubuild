@@ -3,6 +3,7 @@
 - Read (https://github.com/orgs/supabase/discussions/3852) make supabase adaptable.
 - Modify api form, remove all unnecessary points.
 - Work on frontend to connect api to frontend.
+    - Make saved changes reflect in html project page
     - Create elements blocks, This blocks can be connected to server's API
     - Add buttons to elements.
     - Add connect API trait to all elements.

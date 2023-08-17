@@ -729,6 +729,7 @@ export default {
       model: {
         defaults: {
           traits: [
+            'onclick',
             {
               type: 'button',
               // ...
@@ -1020,6 +1021,9 @@ export default {
         url: '${this.apiReqUrl}',
         data: { "${this.bodyKey}": "${this.bodyValue}"}
       }).then(response => { return response })`
+
+      // add onclick event to button. 
+      // randomly choose function name and embed the axios code to the function name.
     }
   },
 };

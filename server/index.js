@@ -25,7 +25,9 @@ const __dirname = path.dirname(__filename)
 // Get current directory
 const CURR_DIR = path.join(process.cwd(), '..');
 // Bootstrap Frontend Structure.
-const pkgJson = await PackageJson.load(`${CURR_DIR}`)
+const pkgJson = await PackageJson.load(`${CURR_DIR}`);
+
+
 
 async function updateScriptfront(name) {
     pkgJson.update({
@@ -143,14 +145,13 @@ async function createFrontend(tempath) {
         if (err) return err;
     });
 
-
-    // gen html and css files.
-    let pages = await fetch('http://localhost:4000/projects').then(response => { return response.json() })   // this dummy value works now to append one page.
+    let pages = db.get("pages").value();
     let editor = grapesjs.grapesjs.init({
         headless: true, pageManager: {
             pages: pages
         }
     });
+    // gen html and css files.
     var myCss = ''
     editor.Pages.getAll().forEach(e => {
         const name = e.id
@@ -250,7 +251,7 @@ app.use(cors({ origin: "*" }));
 
 // Get all pages in an existing project.
 app.get('/projects', (req, res) => {
-    const projects = db.get("pages").value()
+    const projects = db.get("pages").value();
     res.send(projects)
 })
 
@@ -265,7 +266,30 @@ app.post('/add', (req, res) => {
 app.put('/save/:id', (req, res) => {
     let id = req.params.id;
     db.get("pages").find({ id: id }).assign({ styles: req.body.styles, component: req.body.component }).write();
-    res.json("successfully saved project")
+    res.json("successfully saved project");
+    // push the changes into webpack project.
+    // where tempath is name of project.
+    let projectName = db.get("project.name").value();
+    let tempath = path.join(CURR_DIR, projectName);
+    let filePath = `${tempath}/client/dist/${id}.html`;
+    let cssPath = `${tempath}/client/dist/css/style.css`;
+
+    let pages = db.get("pages").value();
+    let editor = grapesjs.grapesjs.init({
+        headless: true, pageManager: {
+            pages: pages
+        }
+    });
+
+    let htmlContent = editor.Pages.get(id).getMainComponent().toHTML();
+    let myCss = editor.getCss();
+
+    fs.writeFileSync(filePath, htmlContent, function (err) {
+        if (err) return err;
+    });
+    fs.writeFileSync(cssPath, myCss, function (err) {
+        if (err) return err;
+    });
 })
 
 // Delete a page from an existing project
@@ -341,7 +365,7 @@ app.post('/publishfront/:name', (req, res) => {
     }
 
     db.defaults({ project: {} })
-    .write()
+        .write()
     db.set('project.name', projectName).write()
 
     // Call createDirectoryContents
@@ -364,7 +388,7 @@ app.post('/publishback/:name', (req, res) => {
     }
 
     db.defaults({ project: {} })
-    .write()
+        .write()
     db.set('project.name', projectName).write()
 
     // Call createDirectoryContents
@@ -459,6 +483,10 @@ app.post('/creapi/:apiname', (req, res) => {
         if (err) return err;
     });
 
+})
+
+app.post('/conapi', (req, res) => {
+    // get path to frontend JS file
 })
 
 app.listen(4000, () => console.log('server started successfully at port : 4000....'));
