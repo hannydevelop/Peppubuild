@@ -1021,14 +1021,19 @@ export default {
         data: { ${this.apiReqData} }
       }).then(response => { return response })`
        */
+      // add an 'add' button to the key and value input.
+      // make values added into an array.
+      // now, imbed data into a for loop.
       let data = `
-      function ${this.funcName} {
+      function ${this.funcName}() {
         axios({
         method: '${this.apiReqType}',
         url: '${this.apiReqUrl}',
         data: { "${this.bodyKey}": "${this.bodyValue}"}
       }).then(response => { return response })
       }
+
+      window.${this.funcName} = ${this.funcName};
       `
       try {
         fetch(`http://localhost:4000/conapi`, {

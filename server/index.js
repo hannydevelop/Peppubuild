@@ -168,7 +168,7 @@ async function createFrontend(tempath) {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>Document</title>
                 <link rel="stylesheet" type="text/css" href="./css/style.css">
-                <script src="./src/index.js"></script>
+                <script src="../src/index.js"></script>
             </head>
             ${html}
           </html>`

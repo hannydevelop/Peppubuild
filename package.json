@@ -7,10 +7,9 @@
         "front-build": "webpack",
         "back-start": "cd server; node index.js",
         "front-start": "cd client; webpack-dev-server",
-        "start": "concurrently \"npm run back-start\" \"npm run front-start\" \"npm run projectf-start\" \"npm run projectb-start\"",
-        "watch": "watch 'npm run start' ./",
-        "projectf-start": "cd sol/client; webpack-dev-server",
-        "projectb-start": "cd sol/server; node index.js"
+        "webpack-build": "cd client; npx webpack",
+        "start": "concurrently \"npm run back-start\" \"npm run front-start\" \"webpack-build\" \"npm run projectf-start\" \"npm run projectb-start\"",
+        "watch": "watch 'npm run start' ./"
     },
     "keywords": [],
     "author": "",
