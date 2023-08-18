@@ -141,7 +141,7 @@ async function createFrontend(tempath) {
     fs.mkdirSync(`${tempath}/client/dist`)
     fs.mkdirSync(`${tempath}/client/dist/css`)
     fs.mkdirSync(`${tempath}/client/src`)
-    let index_content = "import axios from 'axios";
+    let index_content = "import axios from 'axios'";
     fs.writeFileSync(`${tempath}/client/src/index.js`, index_content, function (err) {
         if (err) return err;
     });
@@ -248,7 +248,7 @@ async function postProcess(tempath) {
 var app = express();
 
 /* CRUD Request for db */
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb'}));
 app.use(cors({ origin: "*" }));
 
 // Get all pages in an existing project.
