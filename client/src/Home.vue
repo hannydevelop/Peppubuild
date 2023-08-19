@@ -1047,13 +1047,23 @@ export default {
         axios({
         method: '${this.apiReqType}',
         url: '${this.apiReqUrl}',
-        data: { "${this.body}"}
+        data: { ${this.body.map((x) =>  {return `${x.key}:document.getElementById(${x.value})`})}}
       }).then(response => { return response })
       }
 
       window.${this.funcName} = ${this.funcName};
       `
-      console.log(data)
+      try {
+        fetch(`http://localhost:4000/conapi`, {
+          method: "POST", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ data: data })
+        });
+      } catch {
+        console.log('An error occurred')
+      }
       // add onclick event to button. 
       // randomly choose function name and embed the axios code to the function name.
     }
