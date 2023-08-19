@@ -218,13 +218,19 @@
             </div>
             <label>Request Body</label>
             <div>
-              <div class="form-check-inline col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                <input type="Text" class="form-control" name="exampleInputEmail" id="exampleInputEmail" placeholder="Key"
-                  v-model="bodyKey" />
-              </div>
-              <div class="form-check-inline col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                <input type="Text" class="form-control" name="exampleInputEmail" id="exampleInputEmail"
-                  placeholder="Value" v-model="bodyValue" />
+              <div>
+                <div v-for="(field, index) in body" :key="index" class="field-wrapper">
+                  <div class="form-check-inline col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <input type="Text" class="form-control" name="exampleInputEmail" id="exampleInputEmail"
+                      placeholder="Key" v-model="body[index].key" />
+                  </div>
+                  <div class="form-check-inline col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <input type="Text" class="form-control" name="exampleInputEmail" id="exampleInputEmail"
+                      placeholder="Value" v-model="body[index].value" />
+                  </div>
+                  <button class="btn btn-danger" @click="removeField(index)">Remove</button>
+                </div>
+                <button class="btn btn-success button" @click="addField()">Add Field</button>
               </div>
               <div class="input">
                 <input type="Text" class="form-control" name="exampleInputEmail" id="exampleInputEmail"
@@ -260,6 +266,10 @@
 
 .input {
   padding: 10px;
+}
+
+.button {
+  margin: 10px;
 }
 
 .button:hover {
@@ -442,7 +452,8 @@ export default {
     accept: "",
     apiReqType: "",
     apiReqUrl: "",
-    funcName: ""
+    funcName: "",
+    body: [{ key: "", value: "" }]
   }),
   computed: {
     pm() {
@@ -779,6 +790,12 @@ export default {
     });
   },
   methods: {
+    addField() {
+      this.body.push({ key: '', value: '' }); // add empty value to the body array
+    },
+    removeField(index) {
+      this.body.splice(index, 1); // remove field at the specified index
+    },
     preview() {
       let page_name = this.pm.getSelected().id;
       if (page_name == 'index') {
@@ -1024,28 +1041,19 @@ export default {
       // add an 'add' button to the key and value input.
       // make values added into an array.
       // now, imbed data into a for loop.
+      
       let data = `
       function ${this.funcName}() {
         axios({
         method: '${this.apiReqType}',
         url: '${this.apiReqUrl}',
-        data: { "${this.bodyKey}": "${this.bodyValue}"}
+        data: { "${this.body}"}
       }).then(response => { return response })
       }
 
       window.${this.funcName} = ${this.funcName};
       `
-      try {
-        fetch(`http://localhost:4000/conapi`, {
-          method: "POST", // or 'PUT'
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ data: data })
-        });
-      } catch {
-        console.log('An error occurred')
-      }
+      console.log(data)
       // add onclick event to button. 
       // randomly choose function name and embed the axios code to the function name.
     }
