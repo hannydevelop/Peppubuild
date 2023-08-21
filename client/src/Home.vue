@@ -54,7 +54,7 @@
       <div>
         <ul class="nav nav-tabs" id="myTab" role="tablist">
           <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" type="button" role="tab"
+            <button class="nav-link active" data-bs-target="#database" data-bs-toggle="tab" type="button" role="tab"
               aria-selected="true">
               <i class="fa fa-database"></i>
             </button>
@@ -66,6 +66,15 @@
             </button>
           </li>
         </ul>
+        <div class="collapse" id="database">
+          <div class="card card-body">
+            <form @submit.prevent="">
+              <input type="Text" class="form-control dbinput" placeholder="Anon key" v-model="dbAnon"/>
+              <input type="Text" class="form-control dbinput" placeholder="URL" v-model="dbUrl"/>
+              <button type="submit" class="btn btn-success requestbtn" @click="addKeys()">Add DB Keys</button>
+            </form>
+          </div>
+        </div>
         <div class="collapse" id="requests">
           <div class="card card-body">
             <!-- Button trigger modal -->
@@ -262,6 +271,11 @@
 .requestbtn {
   margin: 10px;
   font-size: 12px;
+}
+
+.dbinput {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .input {
@@ -1047,7 +1061,7 @@ export default {
         axios({
         method: '${this.apiReqType}',
         url: '${this.apiReqUrl}',
-        data: { ${this.body.map((x) =>  {return `${x.key}:document.getElementById(${x.value})`})}}
+        data: { ${this.body.map((x) =>  {return `${x.key}:document.getElementById("${x.value}").value`})}
       }).then(response => { return response })
       }
 

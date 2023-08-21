@@ -52,6 +52,32 @@ async function updateScriptserver(name) {
     await pkgJson.save();
 }
 
+async function updateScriptwebpack(name) {
+    pkgJson.update({
+        scripts: {
+            ...pkgJson.content.scripts,
+            'webpackbuild': `cd ${name}/client; npx webpack`,
+        }
+    })
+
+    await pkgJson.save();
+}
+
+function createENV(projectName) {
+    let anon_key = db.get("db.anon_key").value();
+    let url = db.get("db.url").value();
+    let filePath = path.join(CURR_DIR, projectName, "db.env");
+    let data = `
+    ANON_KEY =${anon_key}
+    URL =${url}
+    `
+    if (!fs.existsSync(filePath)) {
+        fs.writeFileSync(filePath, data, function (err) {
+            if (err) return err;
+        });
+    }
+}
+
 // Save Frontend changes.
 async function createBackend(tempath) {
     // gen server folder
@@ -99,6 +125,9 @@ async function createBackend(tempath) {
     fs.writeFileSync(`${tempath}/server/controllers/welcome.js`, welcome, function (err) {
         if (err) return err;
     });
+
+    // create ENV
+    createENV(tempath);
 }
 
 // Save Frontend changes.
@@ -179,6 +208,9 @@ async function createFrontend(tempath) {
             if (err) return err;
         });
     })
+
+    // create ENV
+    createENV(tempath);
 }
 
 // Add postProcess to inject Grapesjs code
@@ -239,7 +271,9 @@ async function postProcess(tempath) {
             if (err) return err;
         });
     })
-
+    
+    // create ENV
+    createENV(tempath);
 
     return true;
 }
@@ -248,7 +282,7 @@ async function postProcess(tempath) {
 var app = express();
 
 /* CRUD Request for db */
-app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.json({ limit: '50mb' }));
 app.use(cors({ origin: "*" }));
 
 // Get all pages in an existing project.
@@ -291,20 +325,20 @@ app.put('/save/:id', (req, res) => {
         from: regex,
         to: htmlContent
     };
-    
+
     replaceInFile(options)
-    .then(result => {
-        console.log("Replacement results: ",result);
-    })
-    .catch(error => {
-        console.log(error);
-    });
+        .then(result => {
+            console.log("Replacement results: ", result);
+        })
+        .catch(error => {
+            console.log(error);
+        });
     /* 
     fs.writeFileSync(filePath, htmlContent, function (err) {
         if (err) return err;
     });
     */
-    
+
     fs.writeFileSync(cssPath, myCss, function (err) {
         if (err) return err;
     });
@@ -391,6 +425,7 @@ app.post('/publishfront/:name', (req, res) => {
 
     createFrontend(tartgetPath);
     updateScriptfront(projectName);
+    updateScriptwebpack(projectName);
 })
 
 // publish back
@@ -436,6 +471,7 @@ app.post('/publishfull/:name', (req, res) => {
     createFrontend(tartgetPath);
     createBackend(tartgetPath);
     updateScriptfront(projectName);
+    updateScriptwebpack(projectName);
     updateScriptserver(projectName);
 })
 
@@ -510,6 +546,15 @@ app.post('/conapi', (req, res) => {
     fs.appendFileSync(jsPath, req.body.data, function (err) {
         if (err) return err;
     });
+})
+
+app.post('/createnv', (req, res) => {
+    let anon_key = req.body.anon_key;
+    let url = req.body.url;
+        db.defaults({ db: {} })
+        .write()
+    db.set('db.anon_key', anon_key).write();
+    db.set('db.url', url).write();
 })
 
 app.listen(4000, () => console.log('server started successfully at port : 4000....'));
