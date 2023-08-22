@@ -63,10 +63,15 @@ async function updateScriptwebpack(name) {
     await pkgJson.save();
 }
 
-function createENV(projectName) {
+// Save Frontend changes.
+async function createBackend(tempath) {
+    // gen server folder
+    // gen index.js
+    fs.mkdirSync(`${tempath}/server`)
+    let filePath = `${tempath}/server/.env`
+
     let anon_key = db.get("db.anon_key").value();
     let url = db.get("db.url").value();
-    let filePath = path.join(CURR_DIR, projectName, "db.env");
     let data = `
     ANON_KEY =${anon_key}
     URL =${url}
@@ -76,13 +81,6 @@ function createENV(projectName) {
             if (err) return err;
         });
     }
-}
-
-// Save Frontend changes.
-async function createBackend(tempath) {
-    // gen server folder
-    // gen index.js
-    fs.mkdirSync(`${tempath}/server`)
 
     // gen package.json()
     const package_json = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/package.json');
@@ -126,8 +124,6 @@ async function createBackend(tempath) {
         if (err) return err;
     });
 
-    // create ENV
-    createENV(tempath);
 }
 
 // Save Frontend changes.
@@ -210,74 +206,7 @@ async function createFrontend(tempath) {
     })
 
     // create ENV
-    createENV(tempath);
 }
-
-// Add postProcess to inject Grapesjs code
-async function postProcess(tempath) {
-    let pagesd = await fetch('http://localhost:4000/projects').then(response => { return response.json() })   // this dummy value works now to append one page.
-    let editor = grapesjs.grapesjs.init({
-        headless: true, pageManager: {
-            pages: pagesd
-        }
-    });
-    editor.Pages.getAll().forEach(e => {
-        const name = e.id
-        const component = e.getMainComponent()
-        const html = editor.getHtml({ component });
-        const css = editor.getCss({ component });
-        let mainPage = `
-        <template>${html})}</template>
-        <script></script>
-        <style>${css}</style>
-        `
-        fs.appendFileSync(`${tempath}/src/views/${name}.vue`, mainPage, (err) => {
-            if (err) throw err;
-            console.log('The "data to append" was appended to file!');
-        });
-
-        // write import into router's index.js
-        var data = fs.readFileSync(`${tempath}/src/router/index.js`).toString().split("\n")
-        data.splice(0, 0, `import ${name}` + ` from '../views/${name}.vue'`);
-        var text = data.join("\n");
-
-        fs.writeFileSync(`${tempath}/src/router/index.js`, text, function (err) {
-            if (err) return err;
-        });
-
-        // write routes into router's index.js
-        // make this a function and return line number
-        let file = fs.readFileSync(`${tempath}/src/router/index.js`, "utf8");
-        let arr = file.split(/\r?\n/);
-        let lineNum = 0;
-        arr.forEach((line, idx) => {
-            if (line.includes("routes: [")) {
-                lineNum = idx + 1;
-            }
-        });
-        var data = fs.readFileSync(`${tempath}/src/router/index.js`).toString().split("\n");
-        let value =
-            `
-        {
-            path: '/${name}',
-            name: ${name},
-            component: ${name}
-        },
-        `
-        data.splice(lineNum, 0, value);
-        var text = data.join("\n");
-
-        fs.writeFileSync(`${tempath}/src/router/index.js`, text, function (err) {
-            if (err) return err;
-        });
-    })
-    
-    // create ENV
-    createENV(tempath);
-
-    return true;
-}
-
 
 var app = express();
 
@@ -496,15 +425,14 @@ app.post('/creapi/:apiname', (req, res) => {
         });
     } else {
         let createPath = fs.createWriteStream(apiPath);
-        let url = 'blah';
-        let apikey = 'blaq';
         let controllerData = `
         const express = require('express');
 
         var supabaseClient = require('@supabase/supabase-js')
+        require('dotenv').config()
 
         // Create a single supabase client for interacting with your database
-        const supabase = supabaseClient.createClient('${url}', '${apikey}')
+        const supabase = supabaseClient.createClient('${process.env.URL}', '${process.env.ANON_KEY}')
 
         //set variable users as expressRouter
         var ${controllerFile}controller = express.Router();
@@ -548,7 +476,7 @@ app.post('/conapi', (req, res) => {
     });
 })
 
-app.post('/createnv', (req, res) => {
+app.post('/createdb', (req, res) => {
     let anon_key = req.body.anon_key;
     let url = req.body.url;
         db.defaults({ db: {} })

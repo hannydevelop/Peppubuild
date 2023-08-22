@@ -59,16 +59,16 @@
               <i class="fa fa-database"></i>
             </button>
           </li>
-          <li class="nav-item" role="presentation">
+          <li class="nav-item active" role="presentation">
             <button class="nav-link" data-bs-toggle="tab" data-bs-target="#requests" type="button" role="tab"
               aria-controls="trait" aria-selected="false">
               <i class="fa fa-arrows"></i>
             </button>
           </li>
         </ul>
-        <div class="collapse" id="database">
+        <div class="collapse fade show active" id="database">
           <div class="card card-body">
-            <form @submit.prevent="">
+            <form @submit.prevent="addKeys()">
               <input type="Text" class="form-control dbinput" placeholder="Anon key" v-model="dbAnon"/>
               <input type="Text" class="form-control dbinput" placeholder="URL" v-model="dbUrl"/>
               <button type="submit" class="btn btn-success requestbtn" @click="addKeys()">Add DB Keys</button>
@@ -467,7 +467,9 @@ export default {
     apiReqType: "",
     apiReqUrl: "",
     funcName: "",
-    body: [{ key: "", value: "" }]
+    body: [{ key: "", value: "" }],
+    dbAnon: "",
+    dbUrl: ""
   }),
   computed: {
     pm() {
@@ -1080,6 +1082,22 @@ export default {
       }
       // add onclick event to button. 
       // randomly choose function name and embed the axios code to the function name.
+    },
+
+    addKeys() {
+      let anon_key = this.dbAnon;
+      let url = this.dbUrl;
+      try {
+        fetch(`http://localhost:4000/createdb`, {
+          method: "POST", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ anon_key: anon_key, url: url})
+        });
+      } catch {
+        console.log('an error occurred')
+      }
     }
   },
 };
