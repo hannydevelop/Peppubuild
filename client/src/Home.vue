@@ -16,6 +16,10 @@
           {{ page.get('name') || page.id }} <span v-if="!isSelected(page)" @click="removePage(page.id)"
             class="page-close"><i class="fa fa-trash"></i></span>
         </button>
+        <div class="pages-sec">Project Name</div>
+          <button v-if="projectName" type="button" class="btn btn-outline-secondary btn-sm mb-2 mx-2" @click="addPage()">
+          {{ projectName }}
+        </button>
       </div>
       <div class="">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -69,8 +73,8 @@
         <div class="collapse fade show active" id="database">
           <div class="card card-body">
             <form @submit.prevent="addKeys()">
-              <input type="Text" class="form-control dbinput" placeholder="Anon key" v-model="dbAnon"/>
-              <input type="Text" class="form-control dbinput" placeholder="URL" v-model="dbUrl"/>
+              <input type="Text" class="form-control dbinput" placeholder="Anon key" v-model="dbAnon" />
+              <input type="Text" class="form-control dbinput" placeholder="URL" v-model="dbUrl" />
               <button type="submit" class="btn btn-success requestbtn" @click="addKeys()">Add DB Keys</button>
             </form>
           </div>
@@ -253,6 +257,14 @@
           </div>
         </div>
       </div>
+    </div>
+    <div v-if="!dbAnon && !dbUrl" class="alert alert-warning alert-dismissible fade show" role="alert">
+      <strong>No DB Keys Set!</strong> You've not setup your DB keys for Supabase.
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div v-if="!projectName" class="alert alert-danger alert-dismissible fade show" role="alert">
+      <strong>No Project Yet!</strong> Peppubuild will behave in an unexpected way if you don't create a project.
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     <div class="main-content">
       <nav class="navbar navbar-light">
@@ -469,7 +481,8 @@ export default {
     funcName: "",
     body: [{ key: "", value: "" }],
     dbAnon: "",
-    dbUrl: ""
+    dbUrl: "",
+    projectName: ""
   }),
   computed: {
     pm() {
@@ -477,6 +490,11 @@ export default {
     }
   },
   async mounted() {
+    this.dbAnon = await fetch('http://localhost:4000/dbanon').then(response => { return response.text() });
+    this.dbUrl = await fetch('http://localhost:4000/dburl').then(response => { return response.text() });
+
+    this.projectName = await fetch('http://localhost:4000/pname').then(response => { return response.text() });
+
     this.pages = await fetch('http://localhost:4000/projects').then(response => { return response.json() });
     this.editor = grapesjs.init({
       showOffsets: 1,
@@ -1057,13 +1075,13 @@ export default {
       // add an 'add' button to the key and value input.
       // make values added into an array.
       // now, imbed data into a for loop.
-      
+
       let data = `
       function ${this.funcName}() {
         axios({
         method: '${this.apiReqType}',
         url: '${this.apiReqUrl}',
-        data: { ${this.body.map((x) =>  {return `${x.key}:document.getElementById("${x.value}").value`})}
+        data: { ${this.body.map((x) => { return `${x.key}:document.getElementById("${x.value}").value` })}
       }).then(response => { return response })
       }
 
@@ -1093,7 +1111,7 @@ export default {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ anon_key: anon_key, url: url})
+          body: JSON.stringify({ anon_key: anon_key, url: url })
         });
       } catch {
         console.log('an error occurred')

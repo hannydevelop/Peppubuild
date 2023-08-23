@@ -1,7 +1,6 @@
 // Import dependencies
 import * as fs from 'fs';
 import { fileURLToPath } from 'url'
-import createDirectoryContents from './utils/directory.js'
 import createProject from './utils/project.js'
 import * as path from 'path';
 import grapesjs from 'grapesjs'
@@ -11,9 +10,7 @@ import FileSync from 'lowdb/adapters/FileSync.js'
 import bodyParser from 'body-parser';
 import express from 'express'
 import cors from 'cors'
-import axios from 'axios';
 import PackageJson from '@npmcli/package-json'
-import { setFlagsFromString } from 'v8';
 import replaceInFile from 'replace-in-file';
 
 const adapter = new FileSync('db.json')
@@ -483,6 +480,21 @@ app.post('/createdb', (req, res) => {
         .write()
     db.set('db.anon_key', anon_key).write();
     db.set('db.url', url).write();
+})
+
+app.get('/dbanon', (req, res) => {
+    let anon_key = db.get("db.anon_key").value();
+    res.send(anon_key);
+})
+
+app.get('/dburl', (req, res) => {
+    let url = db.get("db.url").value();
+    res.send(url);
+})
+
+app.get('/pname', (req, res) => {
+    let projectName = db.get("project.name").value();
+    res.send(projectName);
 })
 
 app.listen(4000, () => console.log('server started successfully at port : 4000....'));
