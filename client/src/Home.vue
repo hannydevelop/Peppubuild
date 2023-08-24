@@ -100,6 +100,10 @@
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="exampleModalLabel">Create New Request</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div v-if="apiReqUrl" class="alert alert-warning alert-dismissible fade show" role="alert">
+              Your API request URL is localhost:3000/{{ title }}/{{ apiReqUrl }}.
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
           </div>
           <div class="modal-body">
             <form @submit.prevent="createNewReq">
@@ -142,7 +146,7 @@
               </div>
               <div>
                 <label>Create Request</label>
-              </div>           
+              </div>
               <div class="form-check-inline col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 input">
                 <select class="form-select" aria-label="Default select example" v-model="reqType">
                   <option value="GET">GET</option>
@@ -892,10 +896,10 @@ export default {
         })
 
         ${this.title}controller.post('${reqPath}', (req, res) => {
-          ${this.reqbody.map(function (x) {return `let ${x.value} = req.body.${x.value}`}).join(";")}
+          ${this.reqbody.map(function (x) { return `let ${x.value} = req.body.${x.value}` }).join(";")}
           const { data, error } = supabase
             .from('${this.title}')
-            .insert({ ${this.reqbody.map((x) => {return `${x.value}:${x.value}`})} }).then(data => {
+            .insert({ ${this.reqbody.map((x) => { return `${x.value}:${x.value}` })} }).then(data => {
             res.send(data)
           })
         })
@@ -912,16 +916,16 @@ export default {
 
         ${this.title}controller.put('${reqPath}:id', (req, res) => {
           let id = req.params.id;
-          ${this.reqbody.map(function (x) {return `let ${x.value} = req.body.${x.value}`}).join(";")}
+          ${this.reqbody.map(function (x) { return `let ${x.value} = req.body.${x.value}` }).join(";")}
           const { data, error } = supabase
             .from('${this.title}')
-            .update({ ${this.reqbody.map((x) => {return `${x.value}:${x.value}`})} })
+            .update({ ${this.reqbody.map((x) => { return `${x.value}:${x.value}` })} })
             .eq('id', id).then(data => {
             res.send(data)
           })
         })
         `
-        fetch(`http://localhost:4000/creapi/${this.title}`, {
+          fetch(`http://localhost:4000/creapi/${this.title}`, {
             method: "POST", // or 'PUT'
             headers: {
               "Content-Type": "application/json",
@@ -956,10 +960,10 @@ export default {
         try {
           let data = `
           ${this.title}controller.post('${reqPath}', (req, res) => {
-          ${this.reqbody.map(function (x) {return `let ${x.value} = req.body.${x.value}`}).join(";")}
+          ${this.reqbody.map(function (x) { return `let ${x.value} = req.body.${x.value}` }).join(";")}
           const { data, error } = supabase
             .from('${this.title}')
-            .insert({ ${this.reqbody.map((x) => {return `${x.value}:${x.value}`})} }).then(data => {
+            .insert({ ${this.reqbody.map((x) => { return `${x.value}:${x.value}` })} }).then(data => {
             res.send(data)
           })
         })
@@ -979,10 +983,10 @@ export default {
           let data = `
           ${this.title}controller.put('${reqPath}:id', (req, res) => {
           let id = req.params.id;
-          ${this.reqbody.map(function (x) {return `let ${x.value} = req.body.${x.value}`}).join(";")}
+          ${this.reqbody.map(function (x) { return `let ${x.value} = req.body.${x.value}` }).join(";")}
           const { data, error } = supabase
             .from('${this.title}')
-            .update({ ${this.reqbody.map((x) => {return `${x.value}:${x.value}`})} })
+            .update({ ${this.reqbody.map((x) => { return `${x.value}:${x.value}` })} })
             .eq('id', id).then(data => {
             res.send(data)
           })

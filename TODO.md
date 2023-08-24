@@ -1,6 +1,4 @@
 - Clear api form after submission.
-- Add sweetalert after api submission.
-- Read (https://github.com/orgs/supabase/discussions/3852) make supabase adaptable.
 - Modify api form, remove all unnecessary points.
 - Work on frontend to connect api to frontend.
     - Make saved changes reflect in html project page
