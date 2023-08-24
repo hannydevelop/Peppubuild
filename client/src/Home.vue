@@ -17,7 +17,7 @@
             class="page-close"><i class="fa fa-trash"></i></span>
         </button>
         <div class="pages-sec">Project Name</div>
-          <button v-if="projectName" type="button" class="btn btn-outline-secondary btn-sm mb-2 mx-2" @click="addPage()">
+        <button v-if="projectName" type="button" class="btn btn-outline-secondary btn-sm mb-2 mx-2" @click="addPage()">
           {{ projectName }}
         </button>
       </div>
@@ -118,73 +118,32 @@
                 <div>
                   <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                      <button class="nav-link active" data-bs-target="#params" id="home-tab" data-bs-toggle="tab"
-                        type="button" role="tab" aria-selected="true">
-                        Params
-                      </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#body" type="button" role="tab"
+                      <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#body" type="button" role="tab"
                         aria-controls="trait" aria-selected="false">
                         Body
                       </button>
                     </li>
                   </ul>
-                  <div class="collapse fade" id="body">
+                  <div class="collapse fade show active" id="body">
                     <div class="card card-body">
-                      <button class="btn btn-primary requestbtn" @click="createRequest()">Create Request</button>
-                    </div>
-                  </div>
-                  <div class="collapse fade show active" id="params">
-                    <div class="form-check-inline col-4 col-sm-3 col-md-3 col-lg-4 col-xl-4 input">
-                      <select class="form-select" aria-label="Default select example" v-model="paramType">
-                        <option value="Parameter Type">Parameter Type</option>
-                        <option value="String">String</option>
-                        <option value="Integer">Integer</option>
-                      </select>
-                    </div>
-                    <div class="form-check-inline col-6 col-sm-8 col-md-8 col-lg-8 col-xl-8 input">
-                      <input type="Text" class="form-control" name="exampleInputEmail" id="exampleInputEmail"
-                        placeholder="Parameter Name" v-model="paramName" />
+                      <div>
+                        <div v-for="(field, index) in reqbody" :key="index" class="field-wrapper">
+                          <div class="form-check-inline col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                            <input type="Text" class="form-control" name="exampleInputEmail" id="exampleInputEmail"
+                              placeholder="Value" v-model="reqbody[index].value" />
+                          </div>
+                          <button class="btn btn-danger" @click="removeBody(index)">Remove</button>
+                        </div>
+                        <button class="btn btn-success button" @click="addBody()">Add Field</button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="form-group col-md-12">
-                <label for="exampleInputEmail">Response</label>
-                <div>
-                  <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                      <button class="nav-link active" data-bs-target="#status" data-bs-toggle="tab" type="button"
-                        role="tab" aria-selected="true">
-                        Status
-                      </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#send" type="button" role="tab"
-                        aria-controls="trait" aria-selected="false">
-                        Send
-                      </button>
-                    </li>
-                  </ul>
-                  <div class="collapse fade" id="send">
-                    <div class="card card-body">
-                      <button class="btn btn-primary requestbtn" @click="createRequest()">Create Request</button>
-                    </div>
-                  </div>
-                  <div class="collapse fade show active" id="status">
-                    <div class="form-check-inline col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 input">
-                      <select class="form-select" aria-label="Default select example" v-model="paramStatus">
-                        <option value="200">200 (Sucess)</option>
-                        <option value="404">404 (Error)</option>
-                        <option value="403">403 (Forbidden)</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-check-inline col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 input">
+              <div>
                 <label>Create Request</label>
+              </div>           
+              <div class="form-check-inline col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 input">
                 <select class="form-select" aria-label="Default select example" v-model="reqType">
                   <option value="GET">GET</option>
                   <option value="POST">POST</option>
@@ -474,7 +433,6 @@ export default {
     path: "",
     paramType: "",
     paramName: "",
-    paramStatus: "",
     accept: "",
     apiReqType: "",
     apiReqUrl: "",
@@ -482,7 +440,8 @@ export default {
     body: [{ key: "", value: "" }],
     dbAnon: "",
     dbUrl: "",
-    projectName: ""
+    projectName: "",
+    reqbody: [{ value: "" }],
   }),
   computed: {
     pm() {
@@ -830,6 +789,12 @@ export default {
     removeField(index) {
       this.body.splice(index, 1); // remove field at the specified index
     },
+    addBody() {
+      this.reqbody.push({ key: '', value: '' }); // add empty value to the body array
+    },
+    removeBody(index) {
+      this.reqbody.splice(index, 1); // remove field at the specified index
+    },
     preview() {
       let page_name = this.pm.getSelected().id;
       if (page_name == 'index') {
@@ -927,41 +892,42 @@ export default {
         })
 
         ${this.title}controller.post('${reqPath}', (req, res) => {
+          ${this.reqbody.map(function (x) {return `let ${x.value} = req.body.${x.value}`}).join(";")}
           const { data, error } = supabase
             .from('${this.title}')
-            .insert({ id: 1, name: 'Denmark' }).then(data => {
+            .insert({ ${this.reqbody.map((x) => {return `${x.value}:${x.value}`})} }).then(data => {
             res.send(data)
           })
         })
 
-        ${this.title}controller.delete('${reqPath}', (req, res) => {
+        ${this.title}controller.delete('${reqPath}:id', (req, res) => {
+          let id = req.params.id;
           const { data, error } = supabase
             .from('${this.title}')
             .delete()
-            .eq('id', 1).then(data => {
+            .eq('id', id).then(data => {
             res.send(data)
           })
         })
 
-        ${this.title}controller.put('${reqPath}', (req, res) => {
+        ${this.title}controller.put('${reqPath}:id', (req, res) => {
+          let id = req.params.id;
+          ${this.reqbody.map(function (x) {return `let ${x.value} = req.body.${x.value}`}).join(";")}
           const { data, error } = supabase
             .from('${this.title}')
-            .update({ name: 'Australia' })
-            .eq('id', 1).then(data => {
+            .update({ ${this.reqbody.map((x) => {return `${x.value}:${x.value}`})} })
+            .eq('id', id).then(data => {
             res.send(data)
           })
         })
         `
-
-          fetch(`http://localhost:4000/creapi/${this.title}`, {
+        fetch(`http://localhost:4000/creapi/${this.title}`, {
             method: "POST", // or 'PUT'
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({ data: data })
-          })
-          new bootstrap.Modal(document.getElementById('exampleModal'))._hideModal();
-          swal("Successful!", "API created", "success");
+          });
         } catch (error) {
           console.log(`${error}, "An error occurred", "error`);
         }
@@ -990,14 +956,14 @@ export default {
         try {
           let data = `
           ${this.title}controller.post('${reqPath}', (req, res) => {
+          ${this.reqbody.map(function (x) {return `let ${x.value} = req.body.${x.value}`}).join(";")}
           const { data, error } = supabase
             .from('${this.title}')
-            .insert({ id: 1, name: 'Denmark' }).then(data => {
+            .insert({ ${this.reqbody.map((x) => {return `${x.value}:${x.value}`})} }).then(data => {
             res.send(data)
           })
         })
         `
-
           fetch(`http://localhost:4000/creapi/${this.title}`, {
             method: "POST", // or 'PUT'
             headers: {
@@ -1011,16 +977,17 @@ export default {
       } else if (type == 'put') {
         try {
           let data = `
-          ${this.title}controller.put('${reqPath}', (req, res) => {
+          ${this.title}controller.put('${reqPath}:id', (req, res) => {
+          let id = req.params.id;
+          ${this.reqbody.map(function (x) {return `let ${x.value} = req.body.${x.value}`}).join(";")}
           const { data, error } = supabase
             .from('${this.title}')
-            .update({ name: 'Australia' })
-            .eq('id', 1).then(data => {
+            .update({ ${this.reqbody.map((x) => {return `${x.value}:${x.value}`})} })
+            .eq('id', id).then(data => {
             res.send(data)
           })
         })
         `
-
           fetch(`http://localhost:4000/creapi/${this.title}`, {
             method: "POST", // or 'PUT'
             headers: {
@@ -1034,11 +1001,12 @@ export default {
       } else if (type == 'delete') {
         try {
           let data = `
-          ${this.title}controller.delete('${reqPath}', (req, res) => {
+          ${this.title}controller.delete('${reqPath}:id', (req, res) => {
+          let id = req.params.id;
           const { data, error } = supabase
             .from('${this.title}')
             .delete()
-            .eq('id', 1).then(data => {
+            .eq('id', id).then(data => {
             res.send(data)
           })
         })
@@ -1055,7 +1023,6 @@ export default {
           console.log(`${error}, "An error occurred", "error`);
         }
       }
-      let paramStatus = this.paramStatus;
       // `res.status(${this.title})`;
 
     },

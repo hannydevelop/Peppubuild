@@ -429,7 +429,7 @@ app.post('/creapi/:apiname', (req, res) => {
         require('dotenv').config()
 
         // Create a single supabase client for interacting with your database
-        const supabase = supabaseClient.createClient('${process.env.URL}', '${process.env.ANON_KEY}')
+        const supabase = supabaseClient.createClient(process.env.URL, process.env.ANON_KEY)
 
         //set variable users as expressRouter
         var ${controllerFile}controller = express.Router();
