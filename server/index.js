@@ -477,7 +477,7 @@ app.post('/conapi', (req, res) => {
 app.post('/createdb', (req, res) => {
     let anon_key = req.body.anon_key;
     let url = req.body.url;
-        db.defaults({ db: {} })
+    db.defaults({ db: {} })
         .write()
     db.set('db.anon_key', anon_key).write();
     db.set('db.url', url).write();
@@ -496,6 +496,74 @@ app.get('/dburl', (req, res) => {
 app.get('/pname', (req, res) => {
     let projectName = db.get("project.name").value();
     res.send(projectName);
+})
+
+app.post('/request/:type', (req, res) => {
+    let reqType = req.params.type;
+    db.defaults({ get: [], post: [], delete: [], update: [] })
+        .write();
+    if (reqType == 'full') {
+        db.get('get').push(
+            {
+                "name": req.body.name,
+                "description": req.body.description,
+                "path": req.body.path,
+                // "reqBody": req.body.reqbody
+            }).write();
+        db.get('post').push(
+            {
+                "name": req.body.name,
+                "description": req.body.description,
+                "path": req.body.path,
+                // "reqBody": req.body.reqbody
+            }).write();
+        db.get('delete').push(
+            {
+                "name": req.body.name,
+                "description": req.body.description,
+                "path": req.body.path,
+                // "reqBody": req.body.reqbody
+            }).write();
+        db.get('update').push(
+            {
+                "name": req.body.name,
+                "description": req.body.description,
+                "path": req.body.path,
+                // "reqBody": req.body.reqbody
+            }).write();
+    } else if (reqType == 'create') {
+        db.get('post').push(
+            {
+                "name": req.body.name,
+                "description": req.body.description,
+                "path": req.body.path,
+                // "reqBody": req.body.reqbody
+            }).write();
+    } else if (reqType == 'read') {
+        db.get('get').push(
+            {
+                "name": req.body.name,
+                "description": req.body.description,
+                "path": req.body.path,
+                // "reqBody": req.body.reqbody
+            }).write();
+    } else if (reqType == 'update') {
+        db.get('update').push(
+            {
+                "name": req.body.name,
+                "description": req.body.description,
+                "path": req.body.path,
+                // "reqBody": req.body.reqbody
+            }).write();
+    } else if (reqType == 'delete') {
+        db.get('delete').push(
+            {
+                "name": req.body.name,
+                "description": req.body.description,
+                "path": req.body.path,
+                // "reqBody": req.body.reqbody
+            }).write();
+    }
 })
 
 app.listen(4000, () => console.log('server started successfully at port : 4000....'));

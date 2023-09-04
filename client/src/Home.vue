@@ -932,6 +932,13 @@ export default {
             },
             body: JSON.stringify({ data: data })
           });
+          fetch(`http://localhost:4000/request/full`, {
+            method: "POST", // or 'PUT'
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name: this.title, description: this.description, path: `${reqPath}${this.title}`})
+          });
         } catch (error) {
           console.log(`${error}, "An error occurred", "error`);
         }
@@ -952,6 +959,13 @@ export default {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({ data: data })
+          });
+          fetch(`http://localhost:4000/request/read`, {
+            method: "POST", // or 'PUT'
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name: this.title, description: this.description, path: `${reqPath}${this.title}`})
           });
         } catch (error) {
           console.log(`${error}, "An error occurred", "error`);
@@ -974,6 +988,13 @@ export default {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({ data: data })
+          });
+          fetch(`http://localhost:4000/request/create`, {
+            method: "POST", // or 'PUT'
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name: this.title, description: this.description, path: `${reqPath}${this.title}`})
           });
         } catch (error) {
           console.log(`${error}, "An error occurred", "error`);
@@ -999,6 +1020,13 @@ export default {
             },
             body: JSON.stringify({ data: data })
           });
+          fetch(`http://localhost:4000/request/update`, {
+            method: "POST", // or 'PUT'
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name: this.title, description: this.description, path: `${reqPath}${this.title}`})
+          });
         } catch (error) {
           console.log(`${error}, "An error occurred", "error`);
         }
@@ -1022,6 +1050,13 @@ export default {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({ data: data })
+          });
+          fetch(`http://localhost:4000/request/delete`, {
+            method: "POST", // or 'PUT'
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name: this.title, description: this.description, path: `${reqPath}${this.title}`})
           });
         } catch (error) {
           console.log(`${error}, "An error occurred", "error`);
@@ -1087,6 +1122,9 @@ export default {
       } catch {
         console.log('an error occurred')
       }
+    },
+    listRequest() {
+      
     }
   },
 };
