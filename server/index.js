@@ -80,33 +80,34 @@ async function createBackend(tempath) {
     }
 
     // gen package.json()
-    const package_json = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/package.json');
+    // const package_json = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/package.json');
     // Get the Blob data
-    const json = await package_json.text()
+    // const json = await package_json.text();
+    const json = fs.readFileSync(`${CURR_DIR}/server/template/node/package.json`, "utf-8");
     fs.writeFileSync(`${tempath}/server/package.json`, json, function (err) {
         if (err) return err;
     });
 
     // gen outer package.json()
-    const package_json_outer = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/package.json');
+    // const package_json_outer = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/package.json');
     // Get the Blob data
-    const json_file = await package_json_outer.text()
+    const json_file = fs.readFileSync(`${CURR_DIR}/server/template/package.json`, "utf-8");
     fs.writeFileSync(`${tempath}/package.json`, json_file, function (err) {
         if (err) return err;
     });
 
     // gen gitignore
-    const gitignore_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/.gitignore');
+    // const gitignore_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/.gitignore');
     // Get the Blob data
-    const gitignore = await gitignore_file.text()
+    const gitignore = fs.readFileSync(`${CURR_DIR}/server/template/node/.gitignore`, "utf-8");
     fs.writeFileSync(`${tempath}/server/.gitignore`, gitignore, function (err) {
         if (err) return err;
     });
 
     // gen index.js
-    const index_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/index.js');
+    // const index_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/index.js');
     // Get the Blob data
-    const index = await index_file.text()
+    const index = fs.readFileSync(`${CURR_DIR}/server/template/node/index.js`, "utf-8");
     fs.writeFileSync(`${tempath}/server/index.js`, index, function (err) {
         if (err) return err;
     });
@@ -115,8 +116,8 @@ async function createBackend(tempath) {
     fs.mkdirSync(`${tempath}/server/controllers`)
 
     // Gen welcome controller
-    let welcome_content = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/controllers/welcome.js');
-    const welcome = await welcome_content.text()
+    // let welcome_content = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/controllers/welcome.js');
+    const welcome = fs.readFileSync(`${CURR_DIR}/server/template/node/controllers/welcome.js`, "utf-8");
     fs.writeFileSync(`${tempath}/server/controllers/welcome.js`, welcome, function (err) {
         if (err) return err;
     });
@@ -128,33 +129,34 @@ async function createFrontend(tempath) {
     // create client folder.
     fs.mkdirSync(`${tempath}/client`)
     // gen package.json()
-    const package_json = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/package.json');
+    // const package_json = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/package.json');
     // Get the Blob data
-    const json = await package_json.text()
+    const json = fs.readFileSync(`${CURR_DIR}/server/template/webpack/package.json`, "utf-8");
+
     fs.writeFileSync(`${tempath}/client/package.json`, json, function (err) {
         if (err) return err;
     });
 
     // gen outer package.json()
-    const package_json_outer = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/package.json');
+    // const package_json_outer = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/package.json');
     // Get the Blob data
-    const json_file = await package_json_outer.text()
+    const json_file = fs.readFileSync(`${CURR_DIR}/server/template/package.json`, "utf-8");
     fs.writeFileSync(`${tempath}/package.json`, json_file, function (err) {
         if (err) return err;
     });
 
     // gen webpack config
-    const webpack_config = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/webpack.config.js');
+    // const webpack_config = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/webpack.config.js');
     // Get the Blob data
-    const webpack = await webpack_config.text()
+    const webpack = fs.readFileSync(`${CURR_DIR}/server/template/webpack/webpack.config.js`, "utf-8");
     fs.writeFileSync(`${tempath}/client/webpack.config.js`, webpack, function (err) {
         if (err) return err;
     });
 
     // gen gitignore
-    const gitignore_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/.gitignore');
+    // const gitignore_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/.gitignore');
     // Get the Blob data
-    const gitignore = await gitignore_file.text()
+    const gitignore = fs.readFileSync(`${CURR_DIR}/server/template/webpack/.gitignore`, "utf-8");
     fs.writeFileSync(`${tempath}/client/.gitignore`, gitignore, function (err) {
         if (err) return err;
     });
@@ -350,8 +352,7 @@ app.post('/publishfront/:name', (req, res) => {
     // createDirectoryContents(templatePath, projectName);
 
     createFrontend(tartgetPath);
-    updateScriptfront(projectName);
-    updateScriptwebpack(projectName);
+
 })
 
 // publish back
