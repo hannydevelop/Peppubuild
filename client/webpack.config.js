@@ -9,6 +9,9 @@ module.exports = {
   mode: env == 'production' || env == 'none' ? env : 'development',
   entry: ['./src/app.js'],
   devServer: {
+    client: {
+      overlay: false,
+    },
     proxy: {
       '/appfront': {
         target: 'http://localhost:9000',
