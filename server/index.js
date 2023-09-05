@@ -566,4 +566,21 @@ app.post('/request/:type', (req, res) => {
     }
 })
 
+app.get('/apis/:type', (req, res) => {
+    let reqType = req.params.type;
+    if (reqType == 'create') {
+        let data = db.get("get").value();
+        res.send(data)
+    } else if (reqType == 'read') {
+        let data = db.get("post").value();
+        res.send(data)
+    } else if (reqType == 'update') {
+        let data = db.get("update").value();
+        res.send(data)
+    } else if (reqType == 'delete') {
+        let data = db.get("delete").value();
+        res.send(data)
+    }
+})
+
 app.listen(4000, () => console.log('server started successfully at port : 4000....'));

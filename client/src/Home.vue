@@ -229,6 +229,99 @@
       <strong>No Project Yet!</strong> Peppubuild will behave in an unexpected way if you don't create a project.
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
+    <div class="modal fade" id="apiModal" tabindex="-1" aria-labelledby="apiModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Request Lists</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>POST</th>
+                  </tr>
+                </thead>
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Path</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="postReq in postReq">
+                    <td>{{ postReq.name }}</td>
+                    <td>{{ postReq.description }}</td>
+                    <td>{{ postReq.path }}</td>
+                  </tr>
+                </tbody>
+                <thead>
+                  <tr>
+                    <th>GET</th>
+                  </tr>
+                </thead>
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Path</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="getReq in getReq">
+                    <td>{{ getReq.name }}</td>
+                    <td>{{ getReq.description }}</td>
+                    <td>{{ getReq.path }}</td>
+                  </tr>
+                </tbody>
+                <thead>
+                  <tr>
+                    <th>UPDATE</th>
+                  </tr>
+                </thead>
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Path</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="updateReq in updateReq">
+                    <td>{{ updateReq.name }}</td>
+                    <td>{{ updateReq.description }}</td>
+                    <td>{{ updateReq.path }}</td>
+                  </tr>
+                </tbody>
+                <thead>
+                  <tr>
+                    <th>DELETE</th>
+                  </tr>
+                </thead>
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Path</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="deleteReq in deleteReq">
+                    <td>{{ deleteReq.name }}</td>
+                    <td>{{ deleteReq.description }}</td>
+                    <td>{{ deleteReq.path }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+    </div>
     <div class="main-content">
       <nav class="navbar navbar-light">
         <div class="container-fluid">
@@ -446,6 +539,10 @@ export default {
     dbUrl: "",
     projectName: "",
     reqbody: [{ value: "" }],
+    postReq: [],
+    getReq: [],
+    deleteReq: [],
+    updateReq: []
   }),
   computed: {
     pm() {
@@ -937,7 +1034,7 @@ export default {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ name: this.title, description: this.description, path: `${reqPath}${this.title}`})
+            body: JSON.stringify({ name: this.title, description: this.description, path: `${reqPath}${this.title}` })
           });
         } catch (error) {
           console.log(`${error}, "An error occurred", "error`);
@@ -965,7 +1062,7 @@ export default {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ name: this.title, description: this.description, path: `${reqPath}${this.title}`})
+            body: JSON.stringify({ name: this.title, description: this.description, path: `${reqPath}${this.title}` })
           });
         } catch (error) {
           console.log(`${error}, "An error occurred", "error`);
@@ -994,7 +1091,7 @@ export default {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ name: this.title, description: this.description, path: `${reqPath}${this.title}`})
+            body: JSON.stringify({ name: this.title, description: this.description, path: `${reqPath}${this.title}` })
           });
         } catch (error) {
           console.log(`${error}, "An error occurred", "error`);
@@ -1025,7 +1122,7 @@ export default {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ name: this.title, description: this.description, path: `${reqPath}${this.title}`})
+            body: JSON.stringify({ name: this.title, description: this.description, path: `${reqPath}${this.title}` })
           });
         } catch (error) {
           console.log(`${error}, "An error occurred", "error`);
@@ -1056,7 +1153,7 @@ export default {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ name: this.title, description: this.description, path: `${reqPath}${this.title}`})
+            body: JSON.stringify({ name: this.title, description: this.description, path: `${reqPath}${this.title}` })
           });
         } catch (error) {
           console.log(`${error}, "An error occurred", "error`);
@@ -1123,8 +1220,18 @@ export default {
         console.log('an error occurred')
       }
     },
-    listRequest() {
-      
+    async listRequest() {
+      this.postReq = await fetch('http://localhost:4000/apis/create').then(response => { return response.json() });
+      this.getReq = await fetch('http://localhost:4000/apis/read').then(response => { return response.json() });
+      this.updateReq = await fetch('http://localhost:4000/apis/update').then(response => { return response.json() });
+      this.deleteReq = await fetch('http://localhost:4000/apis/delete').then(response => { return response.json() });
+
+      new bootstrap.Modal('#apiModal').show();
+      console.log(this.deleteReq);
+      console.log(this.postReq);
+      console.log(this.getReq);
+      console.log(this.updateReq);
+
     }
   },
 };
