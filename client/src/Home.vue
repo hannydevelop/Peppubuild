@@ -1034,7 +1034,7 @@ export default {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ name: this.title, description: this.description, path: `${reqPath}${this.title}` })
+            body: JSON.stringify({ name: this.title, description: this.description, path: `http://localhost:4000${reqPath}${this.title}` })
           });
         } catch (error) {
           console.log(`${error}, "An error occurred", "error`);
@@ -1062,7 +1062,7 @@ export default {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ name: this.title, description: this.description, path: `${reqPath}${this.title}` })
+            body: JSON.stringify({ name: this.title, description: this.description, path: `http://localhost:4000${reqPath}${this.title}` })
           });
         } catch (error) {
           console.log(`${error}, "An error occurred", "error`);
@@ -1091,7 +1091,7 @@ export default {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ name: this.title, description: this.description, path: `${reqPath}${this.title}` })
+            body: JSON.stringify({ name: this.title, description: this.description, path: `http://localhost:4000${reqPath}${this.title}` })
           });
         } catch (error) {
           console.log(`${error}, "An error occurred", "error`);
@@ -1122,7 +1122,7 @@ export default {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ name: this.title, description: this.description, path: `${reqPath}${this.title}` })
+            body: JSON.stringify({ name: this.title, description: this.description, path: `http://localhost:4000${reqPath}${this.title}` })
           });
         } catch (error) {
           console.log(`${error}, "An error occurred", "error`);
@@ -1153,7 +1153,7 @@ export default {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ name: this.title, description: this.description, path: `${reqPath}${this.title}` })
+            body: JSON.stringify({ name: this.title, description: this.description, path: `http://localhost:4000${reqPath}${this.title}` })
           });
         } catch (error) {
           console.log(`${error}, "An error occurred", "error`);
