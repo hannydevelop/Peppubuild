@@ -165,7 +165,19 @@ async function createFrontend(tempath) {
     fs.mkdirSync(`${tempath}/client/dist`)
     fs.mkdirSync(`${tempath}/client/dist/css`)
     fs.mkdirSync(`${tempath}/client/src`)
-    let index_content = "import axios from 'axios'";
+    let index_content = `
+    import axios from 'axios'
+
+    const { createApp, ref } = Vue
+
+    createApp({
+        setup() {
+            return {
+                // write data here
+            }
+        }
+    }).mount('#app')
+    `;
     fs.writeFileSync(`${tempath}/client/src/index.js`, index_content, function (err) {
         if (err) return err;
     });
@@ -192,6 +204,7 @@ async function createFrontend(tempath) {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>Document</title>
                 <link rel="stylesheet" type="text/css" href="./css/style.css">
+                <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
                 <script src="../src/index.js"></script>
             </head>
             ${html}
