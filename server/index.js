@@ -173,8 +173,11 @@ async function createFrontend(tempath) {
     createApp({
         setup() {
             return {
-                // write data here
+                // write data here.
             }
+        }, 
+        mounted() {
+            // write mounted here.
         }
     }).mount('#app')
     `;

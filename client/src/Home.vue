@@ -230,97 +230,97 @@
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     <div class="modal fade" id="apiModal" tabindex="-1" aria-labelledby="apiModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Request Lists</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>POST</th>
-                  </tr>
-                </thead>
-                <thead>
-                  <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Path</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="postReq in postReq">
-                    <td>{{ postReq.name }}</td>
-                    <td>{{ postReq.description }}</td>
-                    <td>{{ postReq.path }}</td>
-                  </tr>
-                </tbody>
-                <thead>
-                  <tr>
-                    <th>GET</th>
-                  </tr>
-                </thead>
-                <thead>
-                  <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Path</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="getReq in getReq">
-                    <td>{{ getReq.name }}</td>
-                    <td>{{ getReq.description }}</td>
-                    <td>{{ getReq.path }}</td>
-                  </tr>
-                </tbody>
-                <thead>
-                  <tr>
-                    <th>UPDATE</th>
-                  </tr>
-                </thead>
-                <thead>
-                  <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Path</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="updateReq in updateReq">
-                    <td>{{ updateReq.name }}</td>
-                    <td>{{ updateReq.description }}</td>
-                    <td>{{ updateReq.path }}</td>
-                  </tr>
-                </tbody>
-                <thead>
-                  <tr>
-                    <th>DELETE</th>
-                  </tr>
-                </thead>
-                <thead>
-                  <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Path</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="deleteReq in deleteReq">
-                    <td>{{ deleteReq.name }}</td>
-                    <td>{{ deleteReq.description }}</td>
-                    <td>{{ deleteReq.path }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Request Lists</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>POST</th>
+                </tr>
+              </thead>
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Path</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="postReq in postReq">
+                  <td>{{ postReq.name }}</td>
+                  <td>{{ postReq.description }}</td>
+                  <td>{{ postReq.path }}</td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr>
+                  <th>GET</th>
+                </tr>
+              </thead>
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Path</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="getReq in getReq">
+                  <td>{{ getReq.name }}</td>
+                  <td>{{ getReq.description }}</td>
+                  <td>{{ getReq.path }}</td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr>
+                  <th>UPDATE</th>
+                </tr>
+              </thead>
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Path</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="updateReq in updateReq">
+                  <td>{{ updateReq.name }}</td>
+                  <td>{{ updateReq.description }}</td>
+                  <td>{{ updateReq.path }}</td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr>
+                  <th>DELETE</th>
+                </tr>
+              </thead>
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Path</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="deleteReq in deleteReq">
+                  <td>{{ deleteReq.name }}</td>
+                  <td>{{ deleteReq.description }}</td>
+                  <td>{{ deleteReq.path }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
+      </div>
     </div>
     <div class="main-content">
       <nav class="navbar navbar-light">
@@ -631,7 +631,7 @@ export default {
       },
       plugins: ["gjs-blocks-basic"],
       pluginsOpts: {
-        "gjs-blocks-basic": { blocks: "image, video, map, text, link" },
+        "gjs-blocks-basic": {},
       },
     });
 
@@ -854,6 +854,18 @@ export default {
         },
       },
     });
+
+    var defaultType = this.editor.DomComponents.getType("default");
+    var _initialize = defaultType.model.prototype.initialize;
+    defaultType.model.prototype.initialize = function () {
+      _initialize.apply(this, arguments);
+
+      this.get("traits").add({
+        type: "input",
+        label: "Parent",
+        name: "v-for"
+      });
+    };
 
     let bm = this.editor.BlockManager;
     bm.add('input', {
