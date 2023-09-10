@@ -173,11 +173,11 @@ async function createFrontend(tempath) {
     createApp({
         setup() {
             return {
-                // write data here.
+                /*Insert Data Here*/
             }
         }, 
         mounted() {
-            // write mounted here.
+            /*Insert Mounted Here*/
         }
     }).mount('#app')
     `;
@@ -597,6 +597,46 @@ app.get('/apis/:type', (req, res) => {
         let data = db.get("delete").value();
         res.send(data)
     }
+})
+
+app.post('/calldata', (req, res) => {
+    // get file path;
+    let projectName = db.get("project.name").value();
+    let tempath = path.join(CURR_DIR, projectName);
+    let filePath = `${tempath}/client/src/index.js`;
+    // add data fetch to onmount (i.e this.data = fetch())
+    let mounted_dummy = '/*Insert Mounted Here*/'
+    let return_dummy = '/*Insert Data Here*/'
+    //
+    let mounted_data = `
+    /*Insert Mounted Here*/
+    let this.${res.body.parent} = fetch(``${req.body.path}``, {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({parent: ''})
+      });
+    `
+    let return_data = `
+    /*Insert Data Here*/
+    ${res.body.parent}: []
+    `
+
+    const options = {
+        files: filePath,
+        from: [mounted_dummy, return_dummy],
+        to: [mounted_data, return_data]
+    };
+
+    replaceInFile(options)
+        .then(result => {
+            console.log("Replacement results: ", result);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    // add data to return (i.e data = [])
 })
 
 app.listen(4000, () => console.log('server started successfully at port : 4000....'));

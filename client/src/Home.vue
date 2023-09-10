@@ -86,9 +86,9 @@
               data-bs-target="#exampleModal">
               Create New Request
             </button>
-
             <button class="btn btn-warning requestbtn" @click="updateRequest()">Update Request</button>
             <button class="btn btn-success requestbtn" @click="listRequest()">Requests List</button>
+            <button class="btn btn-info requestbtn" @click="getData()">Get Data</button>
           </div>
         </div>
       </div>
@@ -1244,6 +1244,19 @@ export default {
       console.log(this.getReq);
       console.log(this.updateReq);
 
+    },
+    async getData() {
+      let parent = prompt('what is the parent of the data');
+      let path = prompt('what is the path of the data');
+      try {
+        fetch(`http://localhost:4000/calldata`, {
+          method: "POST", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({parent: parent, path: path})
+        });
+      } catch { }
     }
   },
 };
