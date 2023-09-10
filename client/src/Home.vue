@@ -511,6 +511,7 @@ import JSZip from 'jszip';
 import FileSaver from 'file-saver';
 import { left } from '@popperjs/core';
 import * as bootstrap from 'bootstrap';
+import grapesForm from 'grapesjs-plugin-forms'
 
 const swv = "sw-visibility";
 const expt = "export-template";
@@ -629,9 +630,10 @@ export default {
       layerManager: {
         appendTo: "#layers-container",
       },
-      plugins: ["gjs-blocks-basic"],
+      plugins: ["gjs-blocks-basic", grapesForm],
       pluginsOpts: {
         "gjs-blocks-basic": {},
+        "grapesjs-plugin-forms": {}
       },
     });
 
@@ -1248,7 +1250,8 @@ export default {
     async getData() {
       let parent = prompt('what is the parent of the data');
       let path = prompt('what is the path of the data');
-      try {
+      if(parent || path !== 'null') {
+        try {
         fetch(`http://localhost:4000/calldata`, {
           method: "POST", // or 'PUT'
           headers: {
@@ -1257,6 +1260,7 @@ export default {
           body: JSON.stringify({parent: parent, path: path})
         });
       } catch { }
+      }
     }
   },
 };

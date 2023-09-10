@@ -28,6 +28,7 @@
         "file-saver": "^2.0.5",
         "fs": "^0.0.1-security",
         "grapesjs": "^0.21.2",
+        "grapesjs-plugin-forms": "^2.0.6",
         "inquirer": "^9.2.7",
         "jszip": "^3.10.1",
         "lowdb": "^1.0.0",
