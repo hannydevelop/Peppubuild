@@ -210,7 +210,9 @@ async function createFrontend(tempath) {
                 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
                 <script src="../src/index.js"></script>
             </head>
+            <body>
             ${html}
+            </body>
           </html>`
         fs.writeFileSync(`${tempath}/client/dist/${name}.html`, htmlContent, function (err) {
             if (err) return err;
@@ -261,7 +263,11 @@ app.put('/save/:id', (req, res) => {
         }
     });
 
-    let htmlContent = editor.Pages.get(id).getMainComponent().toHTML();
+    let htmlContent = `
+    <body>
+    ${editor.Pages.get(id).getMainComponent().toHTML()}
+    </body>
+    `
     let myCss = editor.getCss();
     let regex = new RegExp('<body>(.|\n)*?<\/body>')
     const options = {

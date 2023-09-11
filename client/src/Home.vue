@@ -511,7 +511,7 @@ import JSZip from 'jszip';
 import FileSaver from 'file-saver';
 import { left } from '@popperjs/core';
 import * as bootstrap from 'bootstrap';
-import grapesForm from 'grapesjs-plugin-forms'
+import gjsForms from 'grapesjs-plugin-forms'
 
 const swv = "sw-visibility";
 const expt = "export-template";
@@ -576,7 +576,7 @@ export default {
         }, {
           name: 'Desktop',
           width: '',
-          widthMedia: '1024',
+          widthMedia: '',
         },
         {
           name: 'Tablet',
@@ -630,10 +630,10 @@ export default {
       layerManager: {
         appendTo: "#layers-container",
       },
-      plugins: ["gjs-blocks-basic", grapesForm],
+      plugins: ["gjs-blocks-basic", gjsForms],
       pluginsOpts: {
         "gjs-blocks-basic": {},
-        "grapesjs-plugin-forms": {}
+        gjsForms: {}
       },
     });
 
@@ -836,11 +836,26 @@ export default {
       */
     }
 
-    this.editor.Components.addType('input', {
+    this.editor.Components.addType('button-trait', {
       isComponent: el => el.tagName == 'BUTTON',
       model: {
         defaults: {
+          tagName: 'button',
+          attributes: { type: 'button' },
+          text: 'Send',
           traits: [
+            {
+              name: 'text',
+              changeProp: true,
+            }, {
+              type: 'select',
+              name: 'type',
+              options: [
+                { value: 'button' },
+                { value: 'submit' },
+                { value: 'reset' },
+              ]
+            },
             'onclick',
             {
               type: 'button',
@@ -849,12 +864,26 @@ export default {
               full: true, // Full width button
               command: () => this.editor.runCommand(this.connectFrontend())
               // or you can just specify the Command ID
-            }],
+            }
+          ],
           // As by default, traits are binded to attributes, so to define
           // their initial value we can use attributes
-          attributes: { type: 'button', required: true },
+        },
+        init() {
+          const comps = this.components();
+          const tChild = comps.length === 1 && comps.models[0];
+          const chCnt = (tChild && tChild.is('textnode') && tChild.get('content')) || '';
+          const text = chCnt || this.get('text');
+          this.set('text', text);
+          this.on('change:text', this.__onTextChange);
+          (text !== chCnt) && this.__onTextChange();
+        },
+
+        __onTextChange() {
+          this.components(this.get('text'));
         },
       },
+
     });
 
     var defaultType = this.editor.DomComponents.getType("default");
@@ -870,9 +899,9 @@ export default {
     };
 
     let bm = this.editor.BlockManager;
-    bm.add('input', {
+    bm.add('button-trait', {
       label: 'Bike',
-      content: { type: 'input' },
+      content: { type: 'button-trait' },
       media: `<img src='https://i.ibb.co/crfWSGP/nature.png' style="width:100%"></img>`,
       category: 'Elements'
     })
@@ -1198,7 +1227,7 @@ export default {
         axios({
         method: '${this.apiReqType}',
         url: '${this.apiReqUrl}',
-        data: { ${this.body.map((x) => { return `${x.key}:document.getElementById("${x.value}").value` })}
+        data: { ${this.body.map((x) => { return `${x.key}:document.getElementById("${x.value}").value` })}}
       }).then(response => { return response })
       }
 
@@ -1250,16 +1279,16 @@ export default {
     async getData() {
       let parent = prompt('what is the parent of the data');
       let path = prompt('what is the path of the data');
-      if(parent || path !== 'null') {
+      if (parent || path !== 'null') {
         try {
-        fetch(`http://localhost:4000/calldata`, {
-          method: "POST", // or 'PUT'
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({parent: parent, path: path})
-        });
-      } catch { }
+          fetch(`http://localhost:4000/calldata`, {
+            method: "POST", // or 'PUT'
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ parent: parent, path: path })
+          });
+        } catch { }
       }
     }
   },
