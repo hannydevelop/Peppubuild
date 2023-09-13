@@ -856,7 +856,7 @@ export default {
                 { value: 'reset' },
               ]
             },
-            'onclick',
+            '@click',
             {
               type: 'button',
               // ...
@@ -1230,8 +1230,6 @@ export default {
         data: { ${this.body.map((x) => { return `${x.key}:document.getElementById("${x.value}").value` })}}
       }).then(response => { return response })
       }
-
-      window.${this.funcName} = ${this.funcName};
       `
       try {
         fetch(`http://localhost:4000/conapi`, {

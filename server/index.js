@@ -31,7 +31,7 @@ async function updateScriptfront(name) {
     pkgJson.update({
         scripts: {
             ...pkgJson.content.scripts,
-            'projectf-start': `cd ${name}/client; webpack-dev-server`,
+            'projectf-start': `cd ${name}/client; npx serve`,
         }
     })
 
@@ -43,17 +43,6 @@ async function updateScriptserver(name) {
         scripts: {
             ...pkgJson.content.scripts,
             "projectb-start": `cd ${name}/server; node index.js`,
-        }
-    })
-
-    await pkgJson.save();
-}
-
-async function updateScriptwebpack(name) {
-    pkgJson.update({
-        scripts: {
-            ...pkgJson.content.scripts,
-            'webpackbuild': `cd ${name}/client; npx webpack`,
         }
     })
 
@@ -145,14 +134,6 @@ async function createFrontend(tempath) {
         if (err) return err;
     });
 
-    // gen webpack config
-    // const webpack_config = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/webpack.config.js');
-    // Get the Blob data
-    const webpack = fs.readFileSync(`${CURR_DIR}/server/template/webpack/webpack.config.js`, "utf-8");
-    fs.writeFileSync(`${tempath}/client/webpack.config.js`, webpack, function (err) {
-        if (err) return err;
-    });
-
     // gen gitignore
     // const gitignore_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/.gitignore');
     // Get the Blob data
@@ -162,26 +143,26 @@ async function createFrontend(tempath) {
     });
 
     // gen index.js
-    fs.mkdirSync(`${tempath}/client/dist`)
-    fs.mkdirSync(`${tempath}/client/dist/css`)
-    fs.mkdirSync(`${tempath}/client/src`)
+    fs.mkdirSync(`${tempath}/client/css`)
+    fs.mkdirSync(`${tempath}/client/js`)
+
     let index_content = `
-    import axios from 'axios'
 
-    const { createApp, ref } = Vue
-
-    createApp({
+    export default {
         setup() {
-            return {
-                /*Insert Data Here*/
-            }
-        }, 
-        mounted() {
+          return { 
+            /*Insert Data Here*/
+           }
+        },
+        methods: {
+            /*Insert Methods Here*/
+        },
+        async mounted() {
             /*Insert Mounted Here*/
         }
-    }).mount('#app')
+    }
     `;
-    fs.writeFileSync(`${tempath}/client/src/index.js`, index_content, function (err) {
+    fs.writeFileSync(`${tempath}/client/js/index.js`, index_content, function (err) {
         if (err) return err;
     });
 
@@ -207,17 +188,23 @@ async function createFrontend(tempath) {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>Document</title>
                 <link rel="stylesheet" type="text/css" href="./css/style.css">
-                <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-                <script src="../src/index.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.0/axios.min.js" integrity="sha512-aoTNnqZcT8B4AmeCFmiSnDlc4Nj/KPaZyB5G7JnOnUEkdNpCZs1LCankiYi01sLTyWy+m2P+W4XM+BuQ3Q4/Dg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                <script type="module">
+                    import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+
+                    import Index from './js/index.js'
+
+                    createApp(Index).mount('#app')
+                </script>
             </head>
             <body>
             ${html}
             </body>
           </html>`
-        fs.writeFileSync(`${tempath}/client/dist/${name}.html`, htmlContent, function (err) {
+        fs.writeFileSync(`${tempath}/client/${name}.html`, htmlContent, function (err) {
             if (err) return err;
         });
-        fs.writeFileSync(`${tempath}/client/dist/css/style.css`, myCss += css, function (err) {
+        fs.writeFileSync(`${tempath}/client/css/style.css`, myCss += css, function (err) {
             if (err) return err;
         });
     })
@@ -253,8 +240,8 @@ app.put('/save/:id', (req, res) => {
     // where tempath is name of project.
     let projectName = db.get("project.name").value();
     let tempath = path.join(CURR_DIR, projectName);
-    let filePath = `${tempath}/client/dist/${id}.html`;
-    let cssPath = `${tempath}/client/dist/css/style.css`;
+    let filePath = `${tempath}/client/${id}.html`;
+    let cssPath = `${tempath}/client/css/style.css`;
 
     let pages = db.get("pages").value();
     let editor = grapesjs.grapesjs.init({
@@ -264,7 +251,7 @@ app.put('/save/:id', (req, res) => {
     });
 
     let htmlContent = `
-    <body>
+    <body id="app">
     ${editor.Pages.get(id).getMainComponent().toHTML()}
     </body>
     `
@@ -374,6 +361,7 @@ app.post('/publishfront/:name', (req, res) => {
     // createDirectoryContents(templatePath, projectName);
 
     createFrontend(tartgetPath);
+    updateScriptfront(projectName);
 
 })
 
@@ -420,7 +408,6 @@ app.post('/publishfull/:name', (req, res) => {
     createFrontend(tartgetPath);
     createBackend(tartgetPath);
     updateScriptfront(projectName);
-    updateScriptwebpack(projectName);
     updateScriptserver(projectName);
 })
 
@@ -490,7 +477,25 @@ app.post('/creapi/:apiname', (req, res) => {
 app.post('/conapi', (req, res) => {
     let projectName = db.get("project.name").value();
     let tempath = path.join(CURR_DIR, projectName);
-    let jsPath = `${tempath}/client/src/index.js`;
+    let jsPath = `${tempath}/client/js/index.js`;
+
+    let method_dummy = `/*Insert Methods Here*/`;
+    let method_data = `
+    /*Insert Methods Here*/
+    ${req.body.data}`;
+    const options = {
+        files: jsPath,
+        from: [method_dummy],
+        to: [method_data]
+    };
+
+    replaceInFile(options)
+        .then(result => {
+            console.log("Replacement results: ", result);
+        })
+        .catch(error => {
+            console.log(error);
+        });
     fs.appendFileSync(jsPath, req.body.data, function (err) {
         if (err) return err;
     });
@@ -609,20 +614,14 @@ app.post('/calldata', (req, res) => {
     // get file path;
     let projectName = db.get("project.name").value();
     let tempath = path.join(CURR_DIR, projectName);
-    let filePath = `${tempath}/client/src/index.js`;
+    let filePath = `${tempath}/client/js/index.js`;
     // add data fetch to onmount (i.e this.data = fetch())
     let mounted_dummy = '/*Insert Mounted Here*/'
     let return_dummy = '/*Insert Data Here*/'
     //
     let mounted_data = `
     /*Insert Mounted Here*/
-    let this.${req.body.parent} = fetch(``${req.body.path}``, {
-        method: "POST", // or 'PUT'
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({parent: ''})
-      });
+    let this.${req.body.parent} = await fetch(``${req.body.path}``).then(response => { return response.json() });
     `
     let return_data = `
     /*Insert Data Here*/

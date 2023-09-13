@@ -12,6 +12,7 @@ module.exports = {
     client: {
       overlay: false,
     },
+    /*
     proxy: {
       '/appfront': {
         target: 'http://localhost:9000',
@@ -26,6 +27,7 @@ module.exports = {
         pathRewrite: { '^/peppuback': '' },
       },
     },
+     */
     
     historyApiFallback: true,
     hot: true,
