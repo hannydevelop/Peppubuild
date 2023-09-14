@@ -557,6 +557,49 @@ export default {
     this.projectName = await fetch('http://localhost:4000/pname').then(response => { return response.text() });
 
     this.pages = await fetch('http://localhost:4000/projects').then(response => { return response.json() });
+
+    function myPlugin(editor) {
+      var defaultType = editor.DomComponents.getType("default");
+      var _initialize = defaultType.model.prototype.initialize;
+      defaultType.model.prototype.initialize = function () {
+        _initialize.apply(this, arguments);
+
+        this.get("traits").add({
+          type: "input",
+          label: "Parent",
+          name: "v-for"
+        });
+
+        this.get("traits").add({
+          type: "",
+          label: "Model",
+          name: "v-model"
+        });
+      };
+
+      editor.DomComponents.addType("custom-button", {
+      extend: "button",
+      view: {
+        events: {
+          dblclick: "handleDblClick"
+        },
+        handleDblClick() {
+          new bootstrap.Modal('#connectModal').show();
+        }
+      }
+    });
+
+    editor.Blocks.add("Button", {
+      label: "Custom Button",
+      attributes: { class: "fa fa-youtube-play" },
+      content: {
+        type: "custom-button"
+      }
+    });
+    
+    }
+
+
     this.editor = grapesjs.init({
       showOffsets: 1,
       noticeOnUnload: 0,
@@ -630,7 +673,7 @@ export default {
       layerManager: {
         appendTo: "#layers-container",
       },
-      plugins: ["gjs-blocks-basic", gjsForms],
+      plugins: ["gjs-blocks-basic", gjsForms, myPlugin],
       pluginsOpts: {
         "gjs-blocks-basic": {},
         gjsForms: {}
@@ -886,19 +929,19 @@ export default {
 
     });
 
-    var defaultType = this.editor.DomComponents.getType("default");
-    var _initialize = defaultType.model.prototype.initialize;
-    defaultType.model.prototype.initialize = function () {
-      _initialize.apply(this, arguments);
 
-      this.get("traits").add({
-        type: "input",
-        label: "Parent",
-        name: "v-for"
-      });
-    };
 
     let bm = this.editor.BlockManager;
+
+    // Add a block
+    bm.add("Button", {
+      label: "Custom Button",
+      attributes: { class: "fa fa-youtube-play" },
+      content: {
+        type: "custom-button"
+      }
+    });
+
     bm.add('button-trait', {
       label: 'Bike',
       content: { type: 'button-trait' },
@@ -1223,7 +1266,7 @@ export default {
       // now, imbed data into a for loop.
 
       let data = `
-      function ${this.funcName}() {
+      ${this.funcName} {
         axios({
         method: '${this.apiReqType}',
         url: '${this.apiReqUrl}',
@@ -1277,14 +1320,14 @@ export default {
     async getData() {
       let parent = prompt('what is the parent of the data');
       let path = prompt('what is the path of the data');
-      if (parent || path !== 'null') {
+      if (parent || path !== null) {
         try {
           fetch(`http://localhost:4000/calldata`, {
             method: "POST", // or 'PUT'
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ parent: parent, path: path })
+            body: JSON.stringify({ contain: parent, path: path })
           });
         } catch { }
       }

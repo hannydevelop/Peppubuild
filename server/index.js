@@ -197,7 +197,7 @@ async function createFrontend(tempath) {
                     createApp(Index).mount('#app')
                 </script>
             </head>
-            <body>
+            <body id="app">
             ${html}
             </body>
           </html>`
@@ -253,10 +253,9 @@ app.put('/save/:id', (req, res) => {
     let htmlContent = `
     <body id="app">
     ${editor.Pages.get(id).getMainComponent().toHTML()}
-    </body>
     `
     let myCss = editor.getCss();
-    let regex = new RegExp('<body>(.|\n)*?<\/body>')
+    let regex = new RegExp('<body id="app">(.|\n)*?<\/body>')
     const options = {
         files: filePath,
         from: regex,
@@ -483,10 +482,14 @@ app.post('/conapi', (req, res) => {
     let method_data = `
     /*Insert Methods Here*/
     ${req.body.data}`;
+
+    // add if chain to check if it's post request to add v-model in data.
+    let return_dummy = '/*Insert Data Here*/';
+    let return_data = ``;
     const options = {
         files: jsPath,
-        from: [method_dummy],
-        to: [method_data]
+        from: [method_dummy, return_dummy],
+        to: [method_data, return_data]
     };
 
     replaceInFile(options)
@@ -496,9 +499,6 @@ app.post('/conapi', (req, res) => {
         .catch(error => {
             console.log(error);
         });
-    fs.appendFileSync(jsPath, req.body.data, function (err) {
-        if (err) return err;
-    });
 })
 
 app.post('/createdb', (req, res) => {
@@ -621,11 +621,11 @@ app.post('/calldata', (req, res) => {
     //
     let mounted_data = `
     /*Insert Mounted Here*/
-    let this.${req.body.parent} = await fetch(``${req.body.path}``).then(response => { return response.json() });
+    this.${req.body.contain} = await fetch('${req.body.path}').then(response => { return response.json() });
     `
     let return_data = `
     /*Insert Data Here*/
-    ${res.body.parent}: []
+    ${req.body.contain}: [],
     `
 
     const options = {
