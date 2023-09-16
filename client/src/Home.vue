@@ -997,13 +997,14 @@ export default {
       let component = this.editor.Pages.getSelected().getMainComponent();
       let styles = this.editor.getStyle();
       try {
-        let PageId = this.pm.getSelected().id
+        let PageId = this.pm.getSelected().id;
+        let html = this.editor.Pages.get(PageId).getMainComponent().toHTML();
         await fetch(`http://localhost:4000/save/${PageId}`, {
           method: "PUT", // or 'PUT'
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ component: component, styles: styles }),
+          body: JSON.stringify({ component: component, styles: styles, html: html }),
         });
 
         console.log("Success:");
@@ -1311,10 +1312,6 @@ export default {
       this.deleteReq = await fetch('http://localhost:4000/apis/delete').then(response => { return response.json() });
 
       new bootstrap.Modal('#apiModal').show();
-      console.log(this.deleteReq);
-      console.log(this.postReq);
-      console.log(this.getReq);
-      console.log(this.updateReq);
 
     },
     async getData() {

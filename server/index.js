@@ -252,7 +252,7 @@ app.put('/save/:id', (req, res) => {
 
     let htmlContent = `
     <body id="app">
-    ${editor.Pages.get(id).getMainComponent().toHTML()}
+    ${req.body.html}
     `
     let myCss = editor.getCss();
     let regex = new RegExp('<body id="app">(.|\n)*?<\/body>')
