@@ -19,7 +19,7 @@
     "express-async-handler": "^1.2.0",
     "file-saver": "^2.0.5",
     "fs": "^0.0.1-security",
-    "grapesjs": "^0.21.5",
+    "grapesjs": "^0.21.6",
     "grapesjs-blocks-basic": "^1.0.2",
     "grapesjs-plugin-forms": "^2.0.1",
     "inquirer": "^9.2.7",

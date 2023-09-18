@@ -167,7 +167,7 @@ async function createFrontend(tempath) {
     });
 
     let pages = db.get("pages").value();
-    let editor = grapesjs.grapesjs.init({
+    let editor = grapesjs.init({
         headless: true, pageManager: {
             pages: pages
         }
@@ -244,7 +244,7 @@ app.put('/save/:id', (req, res) => {
     let cssPath = `${tempath}/client/css/style.css`;
 
     let pages = db.get("pages").value();
-    let editor = grapesjs.grapesjs.init({
+    let editor = grapesjs.init({
         headless: true, pageManager: {
             pages: pages
         }
