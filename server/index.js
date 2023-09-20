@@ -4,7 +4,6 @@ import { fileURLToPath } from 'url'
 import createProject from './utils/project.js'
 import * as path from 'path';
 import grapesjs from 'grapesjs'
-import fetch from 'node-fetch';
 import low from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync.js'
 import bodyParser from 'body-parser';
@@ -12,6 +11,8 @@ import express from 'express'
 import cors from 'cors'
 import PackageJson from '@npmcli/package-json'
 import replaceInFile from 'replace-in-file';
+import grapeNav from 'grapesjs-navbar';
+import plugin from 'grapesjs-style-bg';
 
 const adapter = new FileSync('db.json')
 const db = low(adapter)

@@ -512,6 +512,8 @@ import FileSaver from 'file-saver';
 import { left } from '@popperjs/core';
 import * as bootstrap from 'bootstrap';
 import gjsForms from 'grapesjs-plugin-forms'
+import grapeNav from 'grapesjs-navbar';
+import plugin from 'grapesjs-style-bg';
 
 const swv = "sw-visibility";
 const expt = "export-template";
@@ -591,14 +593,13 @@ export default {
 
     editor.Blocks.add("Button", {
       label: "Custom Button",
-      attributes: { class: "fa fa-youtube-play" },
+      attributes: { class: "fa fa-square" },
       content: {
         type: "custom-button"
-      }
+      },
+      category: 'Extra'
     });
-    
     }
-
 
     this.editor = grapesjs.init({
       showOffsets: 1,
@@ -673,10 +674,11 @@ export default {
       layerManager: {
         appendTo: "#layers-container",
       },
-      plugins: ["gjs-blocks-basic", gjsForms, myPlugin],
+      plugins: ["gjs-blocks-basic", gjsForms, myPlugin, grapeNav, plugin],
       pluginsOpts: {
         "gjs-blocks-basic": {},
-        gjsForms: {}
+        gjsForms: {},
+        grapeNav: {}
       },
     });
 
@@ -879,58 +881,7 @@ export default {
       */
     }
 
-    this.editor.Components.addType('button-trait', {
-      isComponent: el => el.tagName == 'BUTTON',
-      model: {
-        defaults: {
-          tagName: 'button',
-          attributes: { type: 'button' },
-          text: 'Send',
-          traits: [
-            {
-              name: 'text',
-              changeProp: true,
-            }, {
-              type: 'select',
-              name: 'type',
-              options: [
-                { value: 'button' },
-                { value: 'submit' },
-                { value: 'reset' },
-              ]
-            },
-            '@click',
-            {
-              type: 'button',
-              // ...
-              text: 'Make button functional',
-              full: true, // Full width button
-              command: () => this.editor.runCommand(this.connectFrontend())
-              // or you can just specify the Command ID
-            }
-          ],
-          // As by default, traits are binded to attributes, so to define
-          // their initial value we can use attributes
-        },
-        init() {
-          const comps = this.components();
-          const tChild = comps.length === 1 && comps.models[0];
-          const chCnt = (tChild && tChild.is('textnode') && tChild.get('content')) || '';
-          const text = chCnt || this.get('text');
-          this.set('text', text);
-          this.on('change:text', this.__onTextChange);
-          (text !== chCnt) && this.__onTextChange();
-        },
-
-        __onTextChange() {
-          this.components(this.get('text'));
-        },
-      },
-
-    });
-
-
-
+    
     let bm = this.editor.BlockManager;
 
     // Add a block
@@ -941,13 +892,6 @@ export default {
         type: "custom-button"
       }
     });
-
-    bm.add('button-trait', {
-      label: 'Bike',
-      content: { type: 'button-trait' },
-      media: `<img src='https://i.ibb.co/crfWSGP/nature.png' style="width:100%"></img>`,
-      category: 'Elements'
-    })
 
     /* 
     const pageManager = editor.Pages;
