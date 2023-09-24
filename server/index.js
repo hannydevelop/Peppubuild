@@ -27,7 +27,6 @@ const CURR_DIR = path.join(process.cwd(), '..');
 const pkgJson = await PackageJson.load(`${CURR_DIR}`);
 
 
-
 async function updateScriptfront(name) {
     pkgJson.update({
         scripts: {
@@ -150,6 +149,9 @@ async function createFrontend(tempath) {
     let index_content = `
 
     export default {
+        /*Insert Imports Here*/ 
+        import axios from 'axios'
+
         setup() {
           return { 
             /*Insert Data Here*/
@@ -475,6 +477,7 @@ app.post('/creapi/:apiname', (req, res) => {
 })
 
 app.post('/conapi', (req, res) => {
+    /* */
     let projectName = db.get("project.name").value();
     let tempath = path.join(CURR_DIR, projectName);
     let jsPath = `${tempath}/client/js/index.js`;
@@ -486,7 +489,25 @@ app.post('/conapi', (req, res) => {
 
     // add if chain to check if it's post request to add v-model in data.
     let return_dummy = '/*Insert Data Here*/';
-    let return_data = ``;
+
+    // search value in array db.json for [req.body.return_data]. If they are 
+    // present, skip the value below. Else, add the value below.
+    let empty_array = [];
+    req.body.return_data.forEach((element) => {
+        let array = db.get('project.value').map('value').value();
+        if (array.includes(element.value) !== true) {
+            db.get('project.value').push({ value: element.value }).write();
+            empty_array.push(element.value)
+        }
+    }
+    )
+    let return_data = `
+    /*Insert Data Here*/
+    ${empty_array.map((x) => {return `${x}: []`})}
+    `
+
+    console.log(return_data)
+
     const options = {
         files: jsPath,
         from: [method_dummy, return_dummy],
@@ -500,6 +521,9 @@ app.post('/conapi', (req, res) => {
         .catch(error => {
             console.log(error);
         });
+
+
+    // store [req.body.return_data] in db.json.
 })
 
 app.post('/createdb', (req, res) => {

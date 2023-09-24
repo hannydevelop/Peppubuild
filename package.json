@@ -9,7 +9,8 @@
         "front-start": "cd client; webpack-dev-server",
         "start": "concurrently \"npm run back-start\" \"npm run front-start\" \"npm run projectf-start\" \"npm run projectb-start\"",
         "watch": "watch 'npm run start' ./",
-        "projectf-start": "cd Danre/client; npx serve -p 9000"
+        "projectf-start": "cd Saply/client; npx serve",
+        "projectb-start": "cd Saply/server; node index.js"
     },
     "keywords": [],
     "author": "",

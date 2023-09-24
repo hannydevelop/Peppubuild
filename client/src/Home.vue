@@ -198,10 +198,6 @@
                 <div v-for="(field, index) in body" :key="index" class="field-wrapper">
                   <div class="form-check-inline col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
                     <input type="Text" class="form-control" name="exampleInputEmail" id="exampleInputEmail"
-                      placeholder="Key" v-model="body[index].key" />
-                  </div>
-                  <div class="form-check-inline col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                    <input type="Text" class="form-control" name="exampleInputEmail" id="exampleInputEmail"
                       placeholder="Value" v-model="body[index].value" />
                   </div>
                   <button class="btn btn-danger" @click="removeField(index)">Remove</button>
@@ -537,7 +533,7 @@ export default {
     apiReqType: "",
     apiReqUrl: "",
     funcName: "",
-    body: [{ key: "", value: "" }],
+    body: [{ value: "" }],
     dbAnon: "",
     dbUrl: "",
     projectName: "",
@@ -835,7 +831,7 @@ export default {
       },
     });
 
-    // this.editor.getModel().set('dmode', 'translate');
+    this.editor.getModel().set('dmode', 'translate');
 
     this.editor.Panels.getPanels().reset([
       {
@@ -1070,13 +1066,13 @@ export default {
   },
   methods: {
     addField() {
-      this.body.push({ key: '', value: '' }); // add empty value to the body array
+      this.body.push({ value: '' }); // add empty value to the body array
     },
     removeField(index) {
       this.body.splice(index, 1); // remove field at the specified index
     },
     addBody() {
-      this.reqbody.push({ key: '', value: '' }); // add empty value to the body array
+      this.reqbody.push({ value: '' }); // add empty value to the body array
     },
     removeBody(index) {
       this.reqbody.splice(index, 1); // remove field at the specified index
@@ -1370,9 +1366,9 @@ export default {
         axios({
         method: '${this.apiReqType}',
         url: '${this.apiReqUrl}',
-        data: { ${this.body.map((x) => { return `${x.key}:document.getElementById("${x.value}").value` })}}
+        data: { ${this.body.map((x) => { return `${x.value}:this.${x.value}` })}}
       }).then(response => { return response })
-      }
+      },
       `
       try {
         fetch(`http://localhost:4000/conapi`, {
@@ -1380,7 +1376,7 @@ export default {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ data: data })
+          body: JSON.stringify({ data: data, return_data: this.body })
         });
       } catch {
         console.log('An error occurred')
