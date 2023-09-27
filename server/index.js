@@ -147,10 +147,10 @@ async function createFrontend(tempath) {
     fs.mkdirSync(`${tempath}/client/js`)
 
     let index_content = `
-
+    import axios from 'axios';
+    
     export default {
         /*Insert Imports Here*/ 
-        import axios from 'axios'
 
         setup() {
           return { 

@@ -183,7 +183,6 @@
             <div class="input">
               <label>Request Type</label>
               <select class="form-select" aria-label="Default select example" v-model="apiReqType">
-                <option value="GET">GET</option>
                 <option value="POST">POST</option>
                 <option value="PUT" selected>PUT</option>
                 <option value="DELETE">DELETE</option>
@@ -1349,6 +1348,7 @@ export default {
     },
 
     connectAPI() {
+      console.log(`'${this.apiReqUrl}/:' + id`)
       /*
       let data = `axios({
         method: '${this.apiReqType}',
@@ -1360,27 +1360,72 @@ export default {
       // add an 'add' button to the key and value input.
       // make values added into an array.
       // now, imbed data into a for loop.
-
-      let data = `
-      ${this.funcName} {
+      if (this.apiReqType == "POST") {
+        let data = `
+      ${this.funcName}(id) {
         axios({
         method: '${this.apiReqType}',
-        url: '${this.apiReqUrl}',
+        url: '${this.apiReqUrl}/:' + id,
         data: { ${this.body.map((x) => { return `${x.value}:this.${x.value}` })}}
       }).then(response => { return response })
       },
       `
-      try {
-        fetch(`http://localhost:4000/conapi`, {
-          method: "POST", // or 'PUT'
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ data: data, return_data: this.body })
-        });
-      } catch {
-        console.log('An error occurred')
+        try {
+          fetch(`http://localhost:4000/conapi`, {
+            method: "POST", // or 'PUT'
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ data: data, return_data: this.body })
+          });
+        } catch {
+          console.log('An error occurred')
+        }
+      } else if (this.apiReqType == "PUT") {
+        let data = `
+      ${this.funcName}(id) {
+        axios({
+        method: '${this.apiReqType}',
+        url: '${this.apiReqUrl}/:' + id,
+        data: { ${this.body.map((x) => { return `${x.value}:this.${x.value}` })}}
+      }).then(response => { return response })
+      },
+      `
+        try {
+          fetch(`http://localhost:4000/conapi`, {
+            method: "POST", // or 'PUT'
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ data: data, return_data: this.body })
+          });
+        } catch {
+          console.log('An error occurred')
+        }
+      } else if (this.apiReqType == "DELETE") {
+        let data = `
+      ${this.funcName}(id) {
+        axios({
+        method: '${this.apiReqType}',
+        url: '${this.apiReqUrl}/:' + id,
+        data: { }
+      }).then(response => { return response })
+      },
+      `
+        try {
+          fetch(`http://localhost:4000/conapi`, {
+            method: "POST", // or 'PUT'
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ data: data, return_data: this.body })
+          });
+        } catch {
+          console.log('An error occurred')
+        }
       }
+
+
       // add onclick event to button. 
       // randomly choose function name and embed the axios code to the function name.
     },
