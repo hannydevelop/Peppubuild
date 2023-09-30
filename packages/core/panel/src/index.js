@@ -1,4 +1,3 @@
-import { Editor, } from 'grapesjs';
 import en from './locale/en';
 
 export default (editor, opts = {}) => {
@@ -32,6 +31,15 @@ export default (editor, opts = {}) => {
       command: 'peppu:save'
     }
   )
+
+  editor.Panels.addButton('options', [
+    {
+      id: 'bcode',
+      className: 'fa fa-terminal',
+      active: false,
+      command: 'peppu:code'
+    }
+  ])
 
   editor.Panels.addButton('views', 
     {
