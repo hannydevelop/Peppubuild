@@ -5,6 +5,10 @@ export default {
             placeholder: 'page name',
             new: 'New Page +',
         },
+        project: {
+            placeholder: 'project name',
+            new: 'Create Project +',
+        },
         settings: {
             save: 'Save',
 

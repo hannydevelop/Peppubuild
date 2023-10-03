@@ -305,7 +305,7 @@ $mainColor: #34A853;
 }
 
 .pages-wrp,
-.pages {
+.pages, .project {
     display: flex;
     flex-direction: column;
 }
@@ -322,6 +322,17 @@ $mainColor: #34A853;
 
 .add-page {
     background: $mainColor;
+    color: white;
+    font-size: 12px;
+    padding: 8px 5px;
+    border-radius: 2px;
+    cursor: pointer;
+    white-space: nowrap;
+    margin-bottom: 10px;
+}
+
+.add-project {
+    background: #263332;
     color: white;
     font-size: 12px;
     padding: 8px 5px;
