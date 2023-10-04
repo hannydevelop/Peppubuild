@@ -11,9 +11,7 @@ export default class PagesApp extends UI {
         this.isSelected = this.isSelected.bind(this);
         this.handleNameInput = this.handleNameInput.bind(this);
         this.openEdit = this.openEdit.bind(this);
-        this.createFront = this.createFront.bind(this);
-        this.createBack = this.createBack.bind(this);
-        this.createFull = this.createFull.bind(this);
+        this.createPublish = this.createPublish.bind(this);
 
         /* Set initial app state */
         this.state = {
@@ -22,7 +20,7 @@ export default class PagesApp extends UI {
             nameText: '',
             pages: [],
             loading: false,
-            pageName: ''
+            projectName: ''
         };
     }
 
@@ -91,65 +89,59 @@ export default class PagesApp extends UI {
         this.update();
     }
 
-    bootstrapBack() {
-        let CURR_DIR = path.join(process.cwd());
-        console.log(CURR_DIR)
-    }
-
-    createFront() {
-
-    }
-
-    createBack() {
-        this.bootstrapBack()
-    }
-
-    createFull() {
-
+    createPublish(value) {
+        let name = this.state.projectName;
+        fetch(`http://localhost:4000/${value}/${name}`, {
+            method: "POST", // or 'PUT'
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
     }
 
     addProject() {
         let name = prompt('What would you like to name this project?');
         localStorage.setItem("projectName", name);
-        this.state.pageName = name;
+        this.state.projectName = name;
         swal("What type of project will you like to create", {
             buttons: {
                 front: {
                     text: "Frontend",
-                    value: "front",
+                    value: "publishfront",
                 },
                 back: {
                     text: "Backend",
-                    value: "back",
+                    value: "publishback",
                 },
                 defeat: {
                     text: "Fullstack",
-                    value: "full",
+                    value: "publishfull",
                 }
             },
         })
             .then((value) => {
                 switch (value) {
-
-                    case "front":
+                    case "publishfront":
                         try {
+                            this.createPublish(value);
                             swal("Successfully!", "Frontend bootstrapped", "success");
                         } catch (error) {
                             swal("Error", "An error occurred", "error");
                         }
                         break;
 
-                    case "back":
+                    case "publishback":
                         try {
-                            this.createBack()
+                            this.createPublish(value);
                             swal("Successful!", "Backend bootstrapped", "success");
                         } catch (error) {
                             swal("Error", "An error occurred", error);
                         }
                         break;
 
-                    case "full":
+                    case "publishfull":
                         try {
+                            this.createPublish(value);
                             swal("Successful!", "Fullstack bootstrapped", "success");
                         } catch (error) {
                             swal("Error", "An error occurred", "error");
@@ -188,14 +180,14 @@ export default class PagesApp extends UI {
     }
 
     renderProject() {
-        if (!this.state.pageName) {
+        if (!this.state.projectName) {
             return localStorage.getItem("projectName");
         } else {
-            return this.state.pageName;
+            return this.state.projectName;
         }
         // console.log(localStorage.getItem('projectName'))
         // return localStorage.getItem('projectName');
-        // return this.state.pageName
+        // return this.state.projectName
     }
 
     update() {
