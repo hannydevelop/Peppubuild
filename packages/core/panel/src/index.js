@@ -11,7 +11,8 @@ export default (editor, opts = {}) => {
         two: '#9ca8bb',
         three: '#1df205',
         four: '#1df205'
-      }
+      },
+      url: 'https://www.peppubuild.com',
       // default options
     }, ...opts
   };
@@ -21,9 +22,9 @@ export default (editor, opts = {}) => {
     en,
     ...options.i18n,
   });
- 
+
   // add editor panels
-  editor.Panels.addButton('options', 
+  editor.Panels.addButton('options',
     {
       id: 'save',
       className: 'fa fa-save',
@@ -41,7 +42,7 @@ export default (editor, opts = {}) => {
     }
   ])
 
-  editor.Panels.addButton('views', 
+  editor.Panels.addButton('views',
     {
       id: 'publish',
       className: 'fa fa-upload',
@@ -58,7 +59,18 @@ export default (editor, opts = {}) => {
       command: 'peppu:create'
     }
   ])
-  
+
+  // Add logo to panel
+  editor.Panels.addButton('options',
+    {
+      id: 'logo',
+      label: `<img src='https://www.linkpicture.com/q/IMG_2437-1.png' style="width:60%;height:50%;"/>`,
+      active: false,
+      command: 'peppu:logo'
+    }
+  )
+
+
   // option value for CSS values
   let cssString = `
     .gjs-one-bg {
@@ -91,4 +103,6 @@ export default (editor, opts = {}) => {
   commands.add('peppu:create', editor => { console.log('created') });
   // add option for front, back or fullstack
   commands.add('peppu:publish', editor => { console.log('published') });
+  // peppu logo
+  editor.Commands.add('peppu:logo', editor => { window.open(options.url) });
 };

@@ -1,11 +1,11 @@
 {
   "name": "peppu-panel",
-  "version": "0.1.1",
-  "description": "Panel",
+  "version": "1.0.0",
+  "description": "peppu-panel",
   "main": "dist/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YOUR-USERNAME/panel.git"
+    "url": "https://github.com/YOUR-USERNAME/peppu-panel.git"
   },
   "scripts": {
     "start": "grapesjs-cli serve",

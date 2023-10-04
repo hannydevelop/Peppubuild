@@ -1,14 +1,15 @@
-# Panel
+# peppu-panel
 
 [DEMO](##)
 > **Provide a live demo of your plugin**
-
+For a better user engagement create a simple live demo by using services like [JSFiddle](https://jsfiddle.net) [CodeSandbox](https://codesandbox.io) [CodePen](https://codepen.io) and link it here in your README (attaching a screenshot/gif will also be a plus).
+To help you in this process here below you will find the necessary HTML/CSS/JS, so it just a matter of copy-pasting on some of those services. After that delete this part and update the link above
 
 ### HTML
 ```html
 <link href="https://unpkg.com/grapesjs/dist/css/grapes.min.css" rel="stylesheet">
 <script src="https://unpkg.com/grapesjs"></script>
-<script src="https://unpkg.com/peppu-panel@0.1.1"></script>
+<script src="https://unpkg.com/peppu-panel"></script>
 
 <div id="gjs"></div>
 ```
@@ -32,30 +33,37 @@ body, html {
 }
 ```
 
-### Options
-
-```js
-bgColor: {
-  one: '#fff',
-  two: '#9ca8bb',
-  three: '#1df205',
-  four: '#1df205'
-}
-```
-
 
 ## Summary
+
+* Plugin name: `peppu-panel`
+* Components
+    * `component-id-1`
+    * `component-id-2`
+    * ...
+* Blocks
+    * `block-id-1`
+    * `block-id-2`
+    * ...
+
+
+
+## Options
+
+| Option | Description | Default |
+|-|-|-
+| `option1` | Description option | `default value` |
 
 
 
 ## Download
 
 * CDN
-  * `https://unpkg.com/peppu-panel@0.1.1`
+  * `https://unpkg.com/peppu-panel`
 * NPM
   * `npm i peppu-panel`
 * GIT
-  * `git clone https://github.com/hannydevelop/peppugen`
+  * `git clone https://github.com/YOUR-USERNAME/peppu-panel.git`
 
 
 
@@ -108,8 +116,8 @@ const editor = grapesjs.init({
 Clone the repository
 
 ```sh
-$ git clone https://github.com/hannydevelop/peppu-gen
-$ cd panel
+$ git clone https://github.com/YOUR-USERNAME/peppu-panel.git
+$ cd peppu-panel
 ```
 
 Install dependencies

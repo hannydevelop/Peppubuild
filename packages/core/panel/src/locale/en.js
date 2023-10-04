@@ -1,5 +1,5 @@
 export default {
-    'panel': {
+    'peppu-panel': {
         // 'key': 'value',
     },
 };
