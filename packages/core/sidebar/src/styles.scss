@@ -110,6 +110,26 @@ $mainColor: #34A853;
     text-align: center;
 }
 
+.project-text {
+    float: left;
+}
+
+.project {
+    padding: 10px;
+}
+
+
+.p-delete {
+    opacity: .5;
+    float: right;
+    background-color: rgba(0, 0, 0, .1);
+    border: 1px solid rgba(0, 0, 0, .2);
+    height: 17px;
+    width: 17px;
+    text-align: center;
+    border-radius: 3px;
+}
+
 #site-list {
     max-height: 400px;
     overflow-y: auto;
@@ -126,7 +146,7 @@ $mainColor: #34A853;
     transition: .3s;
 }
 
-.site-wrapper.selected {
+.site-wrapper.selected, .project {
     border: 2px solid $mainColor;
 }
 
@@ -305,7 +325,7 @@ $mainColor: #34A853;
 }
 
 .pages-wrp,
-.pages, .project {
+.pages{
     display: flex;
     flex-direction: column;
 }
@@ -332,14 +352,15 @@ $mainColor: #34A853;
 }
 
 .add-project {
-    background: #263332;
+    background: rgb(5, 125, 237);
     color: white;
     font-size: 12px;
-    padding: 8px 5px;
+    padding: 10px;
     border-radius: 2px;
     cursor: pointer;
     white-space: nowrap;
     margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .page {

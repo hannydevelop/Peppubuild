@@ -12,6 +12,11 @@ export default class PagesApp extends UI {
         this.handleNameInput = this.handleNameInput.bind(this);
         this.openEdit = this.openEdit.bind(this);
         this.createPublish = this.createPublish.bind(this);
+        this.saveProject = this.saveProject.bind(this);
+        this.getProject = this.getProject.bind(this);
+        this.getProjectName = this.getProjectName.bind(this);
+        this.openDelete = this.openDelete.bind(this);
+        this.deleteProject = this.deleteProject.bind(this)
 
         /* Set initial app state */
         this.state = {
@@ -62,6 +67,34 @@ export default class PagesApp extends UI {
         }
     }
 
+    deleteProject() {
+        localStorage.removeItem("projectName");
+        try {
+            fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/pdelete`, {
+                method: "DELETE", // or 'PUT'
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }).then(swal("Successful!", "Deleted Project", "success"))
+        } catch { swal("Error", "An error occurred", "error") }
+    }
+
+    openDelete(e) {
+        if (this.opts.confirmDeleteProject()) {
+            if (this.state.projectName) {
+                this.state.projectName = null
+                this.deleteProject();
+            }
+            else if (localStorage.getItem("projectName") != null) {
+                this.deleteProject();
+            }
+            
+            // this.pm.remove(e.currentTarget.dataset.key);
+            // call delete in localhost and possibly db
+            this.update();
+        }
+    }
+
     openEdit(e) {
         const { editor } = this;
         this.setStateSilent({
@@ -74,7 +107,7 @@ export default class PagesApp extends UI {
 
     editPage(id, name) {
         const currentPage = this.pm.get(id);
-        currentPage?.set('name', name);
+        currentPage?.set('id', name);
         this.update()
     }
 
@@ -91,12 +124,39 @@ export default class PagesApp extends UI {
 
     createPublish(value) {
         let name = this.state.projectName;
-        fetch(`http://localhost:4000/${value}/${name}`, {
+        fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/${value}/${name}`, {
             method: "POST", // or 'PUT'
             headers: {
                 "Content-Type": "application/json",
             },
         })
+    }
+
+    saveProject() {
+        let gjsProject = localStorage.getItem('gjsProject');
+        const {editor} = this;
+        let id = this.pm.getSelected().id;
+        let html = editor.Pages.get(id).getMainComponent().toHTML();
+        let css = editor.getCss()
+        try {
+            fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/save/${id}`, {
+                method: "PUT", // or 'PUT'
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ gjsProject: gjsProject,  html: html, css: css}),
+            }).then(swal("Successful!", "Project Saved", "success"))
+        } catch { swal("Error", "An error occurred", "error") }
+    }
+
+    async getProject() {
+        let data = await fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/projects`).then(response => { return response.json() });
+        return data;
+    }
+
+    async getProjectName() {
+        let data = fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/pname`).then(response => { return response.text() });
+        return data;
     }
 
     addProject() {
@@ -124,7 +184,7 @@ export default class PagesApp extends UI {
                     case "publishfront":
                         try {
                             this.createPublish(value);
-                            swal("Successfully!", "Frontend bootstrapped", "success");
+                            swal("Successful!", "Frontend bootstrapped", "success");
                         } catch (error) {
                             swal("Error", "An error occurred", "error");
                         }
@@ -180,10 +240,17 @@ export default class PagesApp extends UI {
     }
 
     renderProject() {
-        if (!this.state.projectName) {
-            return localStorage.getItem("projectName");
-        } else {
-            return this.state.projectName;
+        if (!this.state.projectName && localStorage.getItem("projectName") != null) {
+            return `
+            <span class="project-text"><i class="fa fa-folder-o" style="margin:5px;"></i>${localStorage.getItem("projectName")}</span>
+            <span class="p-delete"><i class="fa fa-trash" style="margin:5px;"></i></span>`
+        } else if (this.state.projectName) {
+            return `
+            <span class="project-text"><i class="fa fa-folder-o" style="margin:5px;"></i>${this.state.projectName}</span>
+            <span class="p-delete"><i class="fa fa-trash" style="margin:5px;"></i></span>
+            `;
+        }else {
+            return 'No project yet'
         }
         // console.log(localStorage.getItem('projectName'))
         // return localStorage.getItem('projectName');
@@ -196,6 +263,7 @@ export default class PagesApp extends UI {
         this.$el?.find('.page').on('click', this.selectPage);
         this.$el?.find('.page-edit').on('click', this.openEdit);
         this.$el?.find('.page-close').on('click', this.removePage);
+        this.$el?.find('.p-delete').on('click', this.openDelete);
     }
 
     render() {

@@ -3,6 +3,6 @@ private/
 /locale
 node_modules/
 *.log
-_index.html
+index.html
 dist/
 stats.json

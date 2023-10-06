@@ -19,12 +19,18 @@ export default (editor, opts = {}) => {
         }
     });
 
-    cm.add('open-pages', {
+    cm.add('peppu:open', {
         run(editor) {
             editor.PagesApp.showPanel();
         },
         stop(editor) {
             editor.PagesApp.hidePanel();
+        }
+    })
+
+    cm.add('peppu:save', {
+        run(editor) {
+            editor.PagesApp.saveProject();
         }
     })
 }

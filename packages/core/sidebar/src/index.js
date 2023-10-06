@@ -54,8 +54,20 @@ export default (editor, opts = {}) => {
     // Load commands
     commands(editor, options);
 
+    const cm = editor.Commands;
+
     // Load page with index zero
     editor.on('load', async () => {
-        console.log(editor.PagesApp.saveChanges())
+        let gjsProject = localStorage.getItem('gjsProject');
+        let projectName = await editor.PagesApp.getProjectName();
+        if (projectName) {
+            localStorage.setItem("projectName", projectName)
+        }
+      if (gjsProject) {
+        return;
+      } else {
+        let data = await editor.PagesApp.getProject();
+        localStorage.setItem("gjsProject", JSON.stringify(data));
+        location.reload();      }
     });
 };
