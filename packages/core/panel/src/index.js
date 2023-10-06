@@ -35,10 +35,10 @@ export default (editor, opts = {}) => {
 
   editor.Panels.addButton('options', [
     {
-      id: 'bcode',
+      id: 'peppu:open',
       className: 'fa fa-terminal',
       active: false,
-      command: 'peppu:code'
+      command: 'peppu:open'
     }
   ])
 
@@ -50,15 +50,6 @@ export default (editor, opts = {}) => {
       command: 'peppu:publish'
     }
   )
-
-  editor.Panels.addButton('views', [
-    {
-      id: 'create',
-      className: 'fa fa-folder-open',
-      active: false,
-      command: 'peppu:create'
-    }
-  ])
 
   // Add logo to panel
   editor.Panels.addButton('options',
@@ -98,11 +89,6 @@ export default (editor, opts = {}) => {
   style.innerText = cssString;
   document.head.appendChild(style);
 
-  // create commands for save, publish and create project.
-  commands.add('peppu:save', editor => { console.log('saved') });
-  commands.add('peppu:create', editor => { console.log('created') });
-  // add option for front, back or fullstack
-  commands.add('peppu:publish', editor => { console.log('published') });
   // peppu logo
   editor.Commands.add('peppu:logo', editor => { window.open(options.url) });
 };
