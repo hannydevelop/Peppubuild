@@ -59,9 +59,12 @@ export default (editor, opts = {}) => {
     // Load page with index zero
     editor.on('load', async () => {
         let gjsProject = localStorage.getItem('gjsProject');
-        let projectName = await editor.PagesApp.getProjectName();
-        if (projectName) {
-            localStorage.setItem("projectName", projectName)
+        let pname = localStorage.getItem('projectName');
+        if (pname == null) {
+            let projectName = await editor.PagesApp.getProjectName();
+            if (projectName) {
+                localStorage.setItem("projectName", projectName)
+            }
         }
       if (gjsProject) {
         return;
