@@ -1,0 +1,28 @@
+{
+  "name": "peppubuild",
+  "version": "0.1.0",
+  "description": "The official repository for peppubuild",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "no-code",
+    "grapesjs",
+    "fullstack no-code"
+  ],
+  "type": "module",
+  "author": "Ukpai Ugochi",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "fs": "^0.0.1-security",
+    "grapesjs": "^0.21.7",
+    "lowdb": "^1.0.0",
+    "path": "^0.12.7",
+    "replace-in-file": "^7.0.1"
+  }
+}
