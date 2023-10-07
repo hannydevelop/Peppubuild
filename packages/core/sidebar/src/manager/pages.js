@@ -63,6 +63,7 @@ export default class PagesApp extends UI {
     removePage(e) {
         if (this.opts.confirmDeletePage()) {
             this.pm.remove(e.currentTarget.dataset.key);
+            // Call fetch to remove page from disk
             this.update();
         }
     }
@@ -116,7 +117,7 @@ export default class PagesApp extends UI {
         const { nameText } = this.state
         if (!nameText) return;
         pm.add({
-            name: nameText,
+            id: nameText,
             component: ''
         });
         this.update();

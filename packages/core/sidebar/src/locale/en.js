@@ -8,7 +8,7 @@ export default {
         project: {
             placeholder: 'project name',
             new: 'Create Project +',
-            url: 'http://localhost:4000',
+            url: 'http://localhost:1404',
         },
         settings: {
             save: 'Save',
