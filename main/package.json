@@ -22,6 +22,7 @@
     "fs": "^0.0.1-security",
     "grapesjs": "^0.21.7",
     "lowdb": "^1.0.0",
+    "open": "^9.1.0",
     "path": "^0.12.7",
     "replace-in-file": "^7.0.1"
   }
