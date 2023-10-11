@@ -9,6 +9,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import replaceInFile from 'replace-in-file';
 import open from 'open';
+import 'dotenv/config'
 
 const adapter = new FileSync('db.json');
 const CURR_DIR = path.join(process.cwd(), '..');
@@ -372,5 +373,5 @@ app.get('/', function(req, res) {
     res.render('home.ejs');
 });
 
-app.listen(1404, () => console.log('server started successfully at port : 1404....'));
-await open('http://localhost:1404');
+app.listen(process.env.PORT, () => console.log(`server started successfully at port : ${process.env.PORT}`));
+await open(`http://localhost:${process.env.PORT}`);
