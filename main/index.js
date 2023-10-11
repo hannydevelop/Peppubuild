@@ -8,6 +8,7 @@ import grapesjs from 'grapesjs';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import replaceInFile from 'replace-in-file';
+import open from 'open';
 
 const adapter = new FileSync('db.json');
 const CURR_DIR = path.join(process.cwd(), '..');
@@ -372,3 +373,4 @@ app.get('/', function(req, res) {
 });
 
 app.listen(1404, () => console.log('server started successfully at port : 1404....'));
+await open('http://localhost:1404');
