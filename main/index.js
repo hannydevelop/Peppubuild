@@ -9,7 +9,8 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import replaceInFile from 'replace-in-file';
 import open from 'open';
-import 'dotenv/config'
+import 'dotenv/config';
+import plugin from 'grapesjs-blocks-basic';
 
 const adapter = new FileSync('db.json');
 const CURR_DIR = path.join(process.cwd(), '..');
@@ -369,8 +370,19 @@ app.delete('/pagedelete/:id', function(req, res) {
 })
 
 /* Pages */
+app.use(express.static('views'));
+app.use('/css', express.static('views/'))
+
 app.get('/', function(req, res) {
     res.render('home.ejs');
+});
+
+app.get('/login', function(req, res) {
+    res.render('login.ejs');
+});
+
+app.get('/register', function(req, res) {
+    res.render('registration.ejs');
 });
 
 app.listen(process.env.PORT, () => console.log(`server started successfully at port : ${process.env.PORT}`));
