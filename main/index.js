@@ -10,7 +10,6 @@ import cors from 'cors';
 import replaceInFile from 'replace-in-file';
 import open from 'open';
 import 'dotenv/config';
-import plugin from 'grapesjs-blocks-basic';
 
 const adapter = new FileSync('db.json');
 const CURR_DIR = path.join(process.cwd(), '..');
