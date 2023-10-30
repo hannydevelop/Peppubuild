@@ -16,7 +16,8 @@ export default class PagesApp extends UI {
         this.getProject = this.getProject.bind(this);
         this.getProjectName = this.getProjectName.bind(this);
         this.openDelete = this.openDelete.bind(this);
-        this.deleteProject = this.deleteProject.bind(this)
+        this.deleteProject = this.deleteProject.bind(this);
+        this.deletePage = this.deletePage.bind(this)
 
         /* Set initial app state */
         this.state = {
@@ -63,7 +64,7 @@ export default class PagesApp extends UI {
     removePage(e) {
         if (this.opts.confirmDeletePage()) {
             this.pm.remove(e.currentTarget.dataset.key);
-            // Call fetch to remove page from disk
+            this.deletePage(e.currentTarget.dataset.key);
             this.update();
         }
     }
@@ -77,6 +78,17 @@ export default class PagesApp extends UI {
                     "Content-Type": "application/json",
                 },
             }).then(swal("Successful!", "Deleted Project", "success"))
+        } catch { swal("Error", "An error occurred", "error") }
+    }
+
+    deletePage(id) {
+        try {
+            fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/pagedelete/${id}`, {
+                method: "DELETE", // or 'PUT'
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }).then(swal("Successful!", "Deleted Page", "success"))
         } catch { swal("Error", "An error occurred", "error") }
     }
 
