@@ -11,8 +11,6 @@ import express from 'express'
 import cors from 'cors'
 import PackageJson from '@npmcli/package-json'
 import replaceInFile from 'replace-in-file';
-import grapeNav from 'grapesjs-navbar';
-import plugin from 'grapesjs-style-bg';
 
 const adapter = new FileSync('db.json')
 const db = low(adapter)
@@ -222,8 +220,14 @@ app.use(bodyParser.json({ limit: '50mb' }));
 app.use(cors({ origin: "*" }));
 
 // Get all pages in an existing project.
+/*
 app.get('/projects', (req, res) => {
     const projects = db.get("pages").value();
+    res.send(projects)
+})
+ */
+app.get('/projects', (req, res) => {
+    const projects = db.get("gjsProject.project");
     res.send(projects)
 })
 
@@ -234,11 +238,13 @@ app.post('/add', (req, res) => {
     res.json("successfully added page")
 })
 
-// Edit a post
 app.put('/save/:id', (req, res) => {
     let id = req.params.id;
-    db.get("pages").find({ id: id }).assign({ styles: req.body.styles, component: req.body.component }).write();
-    res.json("successfully saved project");
+    let gjsP = req.body.gjsProject;
+    // console.log(gjsP)
+    db.defaults({ gjsProject: {} })
+    .write();
+    db.set('gjsProject.project', JSON.parse(gjsP)).write();
     // push the changes into webpack project.
     // where tempath is name of project.
     let projectName = db.get("project.name").value();
@@ -257,21 +263,49 @@ app.put('/save/:id', (req, res) => {
     <body id="app">
     ${req.body.html}
     `
-    let myCss = editor.getCss();
+    let myCss = req.body.css;
     let regex = new RegExp('<body id="app">(.|\n)*?<\/body>')
     const options = {
         files: filePath,
         from: regex,
         to: htmlContent
     };
-
-    replaceInFile(options)
+    if (fs.existsSync(filePath)) {
+        replaceInFile(options)
         .then(result => {
             console.log("Replacement results: ", result);
         })
         .catch(error => {
             console.log(error);
         });
+    } else {
+        let content = `
+        <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Document</title>
+                <link rel="stylesheet" type="text/css" href="./css/style.css">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.0/axios.min.js" integrity="sha512-aoTNnqZcT8B4AmeCFmiSnDlc4Nj/KPaZyB5G7JnOnUEkdNpCZs1LCankiYi01sLTyWy+m2P+W4XM+BuQ3Q4/Dg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                <script type="module">
+                    import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+
+                    import Index from './js/index.js'
+
+                    createApp(Index).mount('#app')
+                </script>
+            </head>
+            <body id="app">
+            ${req.body.html}
+            </body>
+          </html>
+        `
+        fs.writeFileSync(filePath, content, function (err) {
+            if (err) return err;
+        });
+    }
     /* 
     fs.writeFileSync(filePath, htmlContent, function (err) {
         if (err) return err;
@@ -548,6 +582,14 @@ app.get('/dburl', (req, res) => {
 app.get('/pname', (req, res) => {
     let projectName = db.get("project.name").value();
     res.send(projectName);
+})
+
+// delete project
+app.delete('/pdelete', (req, res) => {
+    let projectName = db.get("project.name").value();
+    let tartgetPath = path.join(CURR_DIR, projectName);
+    fs.rmdirSync(tartgetPath, { recursive: true, force: true });
+    db.unset('project.name').write();
 })
 
 app.post('/request/:type', (req, res) => {
