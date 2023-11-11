@@ -21,7 +21,7 @@ If you would like to join in Peppubuild's alpha test, [register your interest in
 - [ ] Public Beta: Peppubuild is stable enough for members of the public to use. Since it is still in test phase, users may find some errors.
 - [ ] Public: Peppubuild is now stable for public use.
 
-The current version of Peppubuild is the Alpha stage. If you would like to join the test, send a mail to contact@peppubuild.com.
+The current version of Peppubuild is the Alpha stage. If you would like to join the test, [register your interest in this form](https://docs.google.com/forms/d/e/1FAIpQLSf1qQVoPErBs95Om7U5wnPuPWLm6Xmgvcs6FA1rCxVhpUtcsA/viewform?usp=sf_link).
 
 ## How it Works
 Peppubuild currently offers a self-hosted option, with our Github repository. For this, clone the Peppubuild repository:
