@@ -11,7 +11,6 @@ Peppubuild is opensource, users can use our cloud version (nocode), self-hosted 
 
 ## Call for Alpha Test
 If you would like to join in Peppubuild's alpha test, [register your interest in this form](https://docs.google.com/forms/d/e/1FAIpQLSf1qQVoPErBs95Om7U5wnPuPWLm6Xmgvcs6FA1rCxVhpUtcsA/viewform?usp=sf_link).
-<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSf1qQVoPErBs95Om7U5wnPuPWLm6Xmgvcs6FA1rCxVhpUtcsA/viewform?embedded=true" width="640" height="992" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
 
 ## Structure
 <a href="https://imgbb.com/"><img src="https://i.ibb.co/1dHJH4Y/Untitled-3.png" alt="Untitled-3" border="0"></a>                
