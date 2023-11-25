@@ -1,0 +1,168 @@
+{
+  "_chunk-5d3f7933.js": {
+    "file": "assets/chunks/chunk-5d3f7933.js",
+    "imports": [
+      "_chunk-cbe7ef5d.js"
+    ]
+  },
+  "_chunk-9365e301.js": {
+    "file": "assets/chunks/chunk-9365e301.js"
+  },
+  "_chunk-93c80111.js": {
+    "file": "assets/chunks/chunk-93c80111.js"
+  },
+  "_chunk-c27b6911.js": {
+    "file": "assets/chunks/chunk-c27b6911.js"
+  },
+  "_chunk-cbe7ef5d.js": {
+    "file": "assets/chunks/chunk-cbe7ef5d.js"
+  },
+  "node_modules/vite-plugin-ssr/dist/esm/client/client-routing-runtime/entry.js": {
+    "dynamicImports": [
+      "pages/auth/index.page.vue",
+      "pages/contact/index.page.vue",
+      "pages/index/index.page.vue",
+      "renderer/_error.page.vue",
+      "renderer/_default.page.client.js",
+      "renderer/_default.page.server.js?extractAssets&lang.js"
+    ],
+    "file": "assets/entries/entry-client-routing.6adf8a35.js",
+    "imports": [
+      "_chunk-9365e301.js"
+    ],
+    "isEntry": true,
+    "src": "node_modules/vite-plugin-ssr/dist/esm/client/client-routing-runtime/entry.js"
+  },
+  "node_modules/vite-plugin-ssr/dist/esm/client/server-routing-runtime/entry.js": {
+    "dynamicImports": [
+      "pages/auth/index.page.vue",
+      "pages/contact/index.page.vue",
+      "pages/index/index.page.vue",
+      "renderer/_error.page.vue",
+      "renderer/_default.page.client.js",
+      "renderer/_default.page.server.js?extractAssets&lang.js"
+    ],
+    "file": "assets/entries/entry-server-routing.8630f31d.js",
+    "imports": [
+      "_chunk-9365e301.js"
+    ],
+    "isEntry": true,
+    "src": "node_modules/vite-plugin-ssr/dist/esm/client/server-routing-runtime/entry.js"
+  },
+  "pages/auth/index.page.css": {
+    "file": "assets/static/index.page.a2213f21.css",
+    "src": "pages/auth/index.page.css"
+  },
+  "pages/auth/index.page.vue": {
+    "assets": [
+      "assets/static/github.f1d4a57c.svg"
+    ],
+    "css": [
+      "assets/static/index.page.a2213f21.css"
+    ],
+    "file": "assets/entries/pages_auth_index.page.2b1c5cc8.js",
+    "imports": [
+      "_chunk-93c80111.js",
+      "_chunk-5d3f7933.js",
+      "_chunk-c27b6911.js",
+      "_chunk-cbe7ef5d.js"
+    ],
+    "isDynamicEntry": true,
+    "isEntry": true,
+    "src": "pages/auth/index.page.vue"
+  },
+  "pages/contact/index.page.css": {
+    "file": "assets/static/index.page.65740e33.css",
+    "src": "pages/contact/index.page.css"
+  },
+  "pages/contact/index.page.vue": {
+    "css": [
+      "assets/static/index.page.65740e33.css"
+    ],
+    "file": "assets/entries/pages_contact_index.page.15c43657.js",
+    "imports": [
+      "_chunk-93c80111.js",
+      "_chunk-c27b6911.js",
+      "_chunk-cbe7ef5d.js"
+    ],
+    "isDynamicEntry": true,
+    "isEntry": true,
+    "src": "pages/contact/index.page.vue"
+  },
+  "pages/index/index.page.css": {
+    "file": "assets/static/index.page.1e5c7d39.css",
+    "src": "pages/index/index.page.css"
+  },
+  "pages/index/index.page.vue": {
+    "css": [
+      "assets/static/index.page.1e5c7d39.css"
+    ],
+    "file": "assets/entries/pages_index_index.page.b739a677.js",
+    "imports": [
+      "_chunk-c27b6911.js",
+      "_chunk-cbe7ef5d.js"
+    ],
+    "isDynamicEntry": true,
+    "isEntry": true,
+    "src": "pages/index/index.page.vue"
+  },
+  "renderer/_default.page.client.js": {
+    "assets": [
+      "assets/static/logo.06a96a65.svg"
+    ],
+    "file": "assets/entries/renderer_default.page.client.bdfff8e4.js",
+    "imports": [
+      "_chunk-5d3f7933.js",
+      "renderer/_default.page.server.js?extractAssets&lang.js",
+      "_chunk-c27b6911.js",
+      "_chunk-cbe7ef5d.js"
+    ],
+    "isDynamicEntry": true,
+    "isEntry": true,
+    "src": "renderer/_default.page.client.js"
+  },
+  "renderer/_default.page.server.js?extractAssets&lang.css": {
+    "file": "assets/static/default.page.server.cd67cf87.css",
+    "src": "renderer/_default.page.server.js?extractAssets&lang.css"
+  },
+  "renderer/_default.page.server.js?extractAssets&lang.js": {
+    "css": [
+      "assets/static/default.page.server.cd67cf87.css"
+    ],
+    "file": "assets/entries/renderer_default.page.server.extractAssets.4a55bcd3.js",
+    "isDynamicEntry": true,
+    "isEntry": true,
+    "src": "renderer/_default.page.server.js?extractAssets&lang.js"
+  },
+  "renderer/_error.page.css": {
+    "file": "assets/static/error.page.dfc1bbe5.css",
+    "src": "renderer/_error.page.css"
+  },
+  "renderer/_error.page.vue": {
+    "assets": [
+      "assets/static/space.c15855a6.png"
+    ],
+    "css": [
+      "assets/static/error.page.dfc1bbe5.css"
+    ],
+    "file": "assets/entries/renderer_error.page.87948ea7.js",
+    "imports": [
+      "_chunk-cbe7ef5d.js"
+    ],
+    "isDynamicEntry": true,
+    "isEntry": true,
+    "src": "renderer/_error.page.vue"
+  },
+  "renderer/github.svg": {
+    "file": "assets/static/github.f1d4a57c.svg",
+    "src": "renderer/github.svg"
+  },
+  "renderer/logo.svg": {
+    "file": "assets/static/logo.06a96a65.svg",
+    "src": "renderer/logo.svg"
+  },
+  "renderer/space.png": {
+    "file": "assets/static/space.c15855a6.png",
+    "src": "renderer/space.png"
+  }
+}

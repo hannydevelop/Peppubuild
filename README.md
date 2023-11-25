@@ -36,20 +36,19 @@ Next start your application with the command below:
 npm run start
 ```
 
-Navigate to `http://localhost:8080` in your browser and start using Peppubuild.
+Navigate to `http://localhost:1404` in your browser and start using Peppubuild.
 
 ### Progress
 Front-end Frameworks
 
-- [x] Webpack
-- [ ] VueJs
+- [x] VueJs
 - [ ] ReactJs
 - [ ] Angular
 
 Backend
-- [x] NodeJs
+- [] NodeJs
 
 Database
-- [x] Supabase
+- [] Supabase
 
-We are currently implementing front-end scripting for VueJs. If you want to follow our Roadmap, checkout the [project board]() for our Alpha version.
+We are currently implementing front-end scripting for VueJs. If you want to follow our Roadmap, checkout the [project board](https://github.com/users/hannydevelop/projects/1) for our Alpha version.

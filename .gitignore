@@ -1,6 +1,2 @@
-node_modules
-package-lock.json
-Danre
-test
-TODO
-tester
+node_modules/
+.env

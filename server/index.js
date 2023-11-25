@@ -1,714 +1,112 @@
-// Import dependencies
-import * as fs from 'fs';
-import { fileURLToPath } from 'url'
-import createProject from './utils/project.js'
-import * as path from 'path';
-import grapesjs from 'grapesjs'
-import low from 'lowdb';
-import FileSync from 'lowdb/adapters/FileSync.js'
-import bodyParser from 'body-parser';
+// This file isn't processed by Vite, see https://github.com/brillout/vite-plugin-ssr/issues/562
+// Consequently:
+//  - When changing this file, you needed to manually restart your server for your changes to take effect.
+//  - To use your environment variables defined in your .env files, you need to install dotenv, see https://vite-plugin-ssr.com/env
+//  - To use your path aliases defined in your vite.config.js, you need to tell Node.js about them, see https://vite-plugin-ssr.com/path-aliases
+
+// If you want Vite to process your server code then use one of these:
+//  - vavite (https://github.com/cyco130/vavite)
+//     - See vavite + vite-pugin-ssr examples at https://github.com/cyco130/vavite/tree/main/examples
+//  - vite-node (https://github.com/antfu/vite-node)
+//  - HatTip (https://github.com/hattipjs/hattip)
+//    - You can use Bati (https://batijs.github.io/) to scaffold a vite-plugin-ssr + HatTip app. Note that Bati generates apps that use the V1 design (https://vite-plugin-ssr.com/migration/v1-design) and Vike packages (https://vite-plugin-ssr.com/vike-packages)
+
 import express from 'express'
-import cors from 'cors'
-import PackageJson from '@npmcli/package-json'
-import replaceInFile from 'replace-in-file';
+import compression from 'compression'
+import cookieParser from 'cookie-parser'
+import bodyParser from 'body-parser'
+import { renderPage } from 'vite-plugin-ssr/server'
+import { root } from './root.js'
+const isProduction = process.env.NODE_ENV === 'production'
 
-const adapter = new FileSync('db.json')
-const db = low(adapter)
+startServer()
 
-// Declare const for template directory 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+async function startServer() {
+  const app = express()
 
-// Get current directory
-const CURR_DIR = path.join(process.cwd(), '..');
-// Bootstrap Frontend Structure.
-const pkgJson = await PackageJson.load(`${CURR_DIR}`);
+  // parse application/x-www-form-urlencoded
+  app.use(bodyParser.urlencoded({ extended: false }))
 
+  // parse application/json
+  app.use(bodyParser.json())
 
-async function updateScriptfront(name) {
-    pkgJson.update({
-        scripts: {
-            ...pkgJson.content.scripts,
-            'projectf-start': `cd ${name}/client; npx serve`,
-        }
+  app.use(compression())
+  app.use(cookieParser())
+
+  // Vite integration
+  if (isProduction) {
+    // In production, we need to serve our static assets ourselves.
+    // (In dev, Vite's middleware serves our static assets.)
+    const sirv = (await import('sirv')).default
+    app.use(sirv(`${root}/dist/client`))
+  } else {
+    // We instantiate Vite's development server and integrate its middleware to our server.
+    // ⚠️ We instantiate it only in development. (It isn't needed in production and it
+    // would unnecessarily bloat our production server.)
+    const vite = await import('vite')
+    const viteDevMiddleware = (
+      await vite.createServer({
+        root,
+        server: { middlewareMode: true }
+      })
+    ).middlewares
+    app.use(viteDevMiddleware)
+  }
+
+  // set route for logout
+  app.get('/logout', (_req, res) => {
+    res.clearCookie('pepputoken')
+    res.send('Cookie have been deleted successfully');
+  })
+
+  // set route for user login
+  app.post('/login', (req, res) => {
+    // collect token
+    let providerToken = req.body.token;
+    // verify token
+
+    // store token
+    res.cookie('pepputoken', providerToken, {
+      maxAge: 24 * 60 * 60 * 1000, // One day
+      // httpOnly: true // Only the server can read the cookie
     })
+    // send response
+    res.send('Cookie have been saved successfully');
+  })
 
-    await pkgJson.save();
-}
+  // set user as token retrieved from login and stored in cookies
+  app.use(function (req, _res, next) {
+    const token = req.cookies.pepputoken;
+    req.user = token
+    next()
+  })
 
-async function updateScriptserver(name) {
-    pkgJson.update({
-        scripts: {
-            ...pkgJson.content.scripts,
-            "projectb-start": `cd ${name}/server; node index.js`,
-        }
-    })
+  // ...
+  // Other middlewares (e.g. some RPC middleware such as Telefunc)
+  // ...
 
-    await pkgJson.save();
-}
-
-// Save Frontend changes.
-async function createBackend(tempath) {
-    // gen server folder
-    // gen index.js
-    fs.mkdirSync(`${tempath}/server`)
-    let filePath = `${tempath}/server/.env`
-
-    let anon_key = db.get("db.anon_key").value();
-    let url = db.get("db.url").value();
-    let data = `
-    ANON_KEY =${anon_key}
-    URL =${url}
-    `
-    if (!fs.existsSync(filePath)) {
-        fs.writeFileSync(filePath, data, function (err) {
-            if (err) return err;
-        });
+  // Vite-plugin-ssr middleware. It should always be our last middleware (because it's a
+  // catch-all middleware superseding any middleware placed after it).
+  app.get('*', async (req, res, next) => {
+    const pageContextInit = {
+      urlOriginal: req.originalUrl,
+      user: req.user
     }
-
-    // gen package.json()
-    // const package_json = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/package.json');
-    // Get the Blob data
-    // const json = await package_json.text();
-    const json = fs.readFileSync(`${CURR_DIR}/server/template/node/package.json`, "utf-8");
-    fs.writeFileSync(`${tempath}/server/package.json`, json, function (err) {
-        if (err) return err;
-    });
-
-    // gen outer package.json()
-    // const package_json_outer = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/package.json');
-    // Get the Blob data
-    const json_file = fs.readFileSync(`${CURR_DIR}/server/template/package.json`, "utf-8");
-    fs.writeFileSync(`${tempath}/package.json`, json_file, function (err) {
-        if (err) return err;
-    });
-
-    // gen gitignore
-    // const gitignore_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/.gitignore');
-    // Get the Blob data
-    const gitignore = fs.readFileSync(`${CURR_DIR}/server/template/node/.gitignore`, "utf-8");
-    fs.writeFileSync(`${tempath}/server/.gitignore`, gitignore, function (err) {
-        if (err) return err;
-    });
-
-    // gen index.js
-    // const index_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/index.js');
-    // Get the Blob data
-    const index = fs.readFileSync(`${CURR_DIR}/server/template/node/index.js`, "utf-8");
-    fs.writeFileSync(`${tempath}/server/index.js`, index, function (err) {
-        if (err) return err;
-    });
-
-    // gen index.js
-    fs.mkdirSync(`${tempath}/server/controllers`)
-
-    // Gen welcome controller
-    // let welcome_content = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/controllers/welcome.js');
-    const welcome = fs.readFileSync(`${CURR_DIR}/server/template/node/controllers/welcome.js`, "utf-8");
-    fs.writeFileSync(`${tempath}/server/controllers/welcome.js`, welcome, function (err) {
-        if (err) return err;
-    });
-
-}
-
-// Save Frontend changes.
-async function createFrontend(tempath) {
-    // create client folder.
-    fs.mkdirSync(`${tempath}/client`)
-    // gen package.json()
-    // const package_json = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/package.json');
-    // Get the Blob data
-    const json = fs.readFileSync(`${CURR_DIR}/server/template/webpack/package.json`, "utf-8");
-
-    fs.writeFileSync(`${tempath}/client/package.json`, json, function (err) {
-        if (err) return err;
-    });
-
-    // gen outer package.json()
-    // const package_json_outer = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/package.json');
-    // Get the Blob data
-    const json_file = fs.readFileSync(`${CURR_DIR}/server/template/package.json`, "utf-8");
-    fs.writeFileSync(`${tempath}/package.json`, json_file, function (err) {
-        if (err) return err;
-    });
-
-    // gen gitignore
-    // const gitignore_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/.gitignore');
-    // Get the Blob data
-    const gitignore = fs.readFileSync(`${CURR_DIR}/server/template/webpack/.gitignore`, "utf-8");
-    fs.writeFileSync(`${tempath}/client/.gitignore`, gitignore, function (err) {
-        if (err) return err;
-    });
-
-    // gen index.js
-    fs.mkdirSync(`${tempath}/client/css`)
-    fs.mkdirSync(`${tempath}/client/js`)
-
-    let index_content = `
-    import axios from 'axios';
-    
-    export default {
-        /*Insert Imports Here*/ 
-
-        setup() {
-          return { 
-            /*Insert Data Here*/
-           }
-        },
-        methods: {
-            /*Insert Methods Here*/
-        },
-        async mounted() {
-            /*Insert Mounted Here*/
-        }
-    }
-    `;
-    fs.writeFileSync(`${tempath}/client/js/index.js`, index_content, function (err) {
-        if (err) return err;
-    });
-
-    let pages = db.get("pages").value();
-    let editor = grapesjs.init({
-        headless: true, pageManager: {
-            pages: pages
-        }
-    });
-    // gen html and css files.
-    var myCss = ''
-    editor.Pages.getAll().forEach(e => {
-        const name = e.id
-        const component = e.getMainComponent()
-        const html = editor.getHtml({ component });
-        const css = editor.getCss({ component });
-        let htmlContent = `
-          <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta http-equiv="X-UA-Compatible" content="IE=edge">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Document</title>
-                <link rel="stylesheet" type="text/css" href="./css/style.css">
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.0/axios.min.js" integrity="sha512-aoTNnqZcT8B4AmeCFmiSnDlc4Nj/KPaZyB5G7JnOnUEkdNpCZs1LCankiYi01sLTyWy+m2P+W4XM+BuQ3Q4/Dg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-                <script type="module">
-                    import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
-
-                    import Index from './js/index.js'
-
-                    createApp(Index).mount('#app')
-                </script>
-            </head>
-            <body id="app">
-            ${html}
-            </body>
-          </html>`
-        fs.writeFileSync(`${tempath}/client/${name}.html`, htmlContent, function (err) {
-            if (err) return err;
-        });
-        fs.writeFileSync(`${tempath}/client/css/style.css`, myCss += css, function (err) {
-            if (err) return err;
-        });
-    })
-
-    // create ENV
-}
-
-var app = express();
-
-/* CRUD Request for db */
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use(cors({ origin: "*" }));
-
-// Get all pages in an existing project.
-/*
-app.get('/projects', (req, res) => {
-    const projects = db.get("pages").value();
-    res.send(projects)
-})
- */
-app.get('/projects', (req, res) => {
-    const projects = db.get("gjsProject.project");
-    res.send(projects)
-})
-
-// Add a new page to existing project.
-app.post('/add', (req, res) => {
-    const project = req.body;
-    db.get("pages").push(project).write();
-    res.json("successfully added page")
-})
-
-app.put('/save/:id', (req, res) => {
-    let id = req.params.id;
-    let gjsP = req.body.gjsProject;
-    // console.log(gjsP)
-    db.defaults({ gjsProject: {} })
-    .write();
-    db.set('gjsProject.project', JSON.parse(gjsP)).write();
-    // push the changes into webpack project.
-    // where tempath is name of project.
-    let projectName = db.get("project.name").value();
-    let tempath = path.join(CURR_DIR, projectName);
-    let filePath = `${tempath}/client/${id}.html`;
-    let cssPath = `${tempath}/client/css/style.css`;
-
-    let pages = db.get("pages").value();
-    let editor = grapesjs.init({
-        headless: true, pageManager: {
-            pages: pages
-        }
-    });
-
-    let htmlContent = `
-    <body id="app">
-    ${req.body.html}
-    `
-    let myCss = req.body.css;
-    let regex = new RegExp('<body id="app">(.|\n)*?<\/body>')
-    const options = {
-        files: filePath,
-        from: regex,
-        to: htmlContent
-    };
-    if (fs.existsSync(filePath)) {
-        replaceInFile(options)
-        .then(result => {
-            console.log("Replacement results: ", result);
-        })
-        .catch(error => {
-            console.log(error);
-        });
+    const pageContext = await renderPage(pageContextInit)
+    const { httpResponse } = pageContext
+    if (!httpResponse) {
+      return next()
     } else {
-        let content = `
-        <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta http-equiv="X-UA-Compatible" content="IE=edge">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Document</title>
-                <link rel="stylesheet" type="text/css" href="./css/style.css">
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.0/axios.min.js" integrity="sha512-aoTNnqZcT8B4AmeCFmiSnDlc4Nj/KPaZyB5G7JnOnUEkdNpCZs1LCankiYi01sLTyWy+m2P+W4XM+BuQ3Q4/Dg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-                <script type="module">
-                    import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
-
-                    import Index from './js/index.js'
-
-                    createApp(Index).mount('#app')
-                </script>
-            </head>
-            <body id="app">
-            ${req.body.html}
-            </body>
-          </html>
-        `
-        fs.writeFileSync(filePath, content, function (err) {
-            if (err) return err;
-        });
+      const { body, statusCode, headers, earlyHints } = httpResponse
+      if (res.writeEarlyHints) res.writeEarlyHints({ link: earlyHints.map((e) => e.earlyHintLink) })
+      headers.forEach(([name, value]) => res.setHeader(name, value))
+      res.status(statusCode)
+      // For HTTP streams use httpResponse.pipe() instead, see https://vite-plugin-ssr.com/stream
+      res.send(body)
     }
-    /* 
-    fs.writeFileSync(filePath, htmlContent, function (err) {
-        if (err) return err;
-    });
-    */
+  })
 
-    fs.writeFileSync(cssPath, myCss, function (err) {
-        if (err) return err;
-    });
-})
-
-// Delete a page from an existing project
-app.delete('/delete/:id', (req, res) => {
-    let id = req.params.id;
-    db.get("pages").remove({ id: id }).write();
-    res.json("successfully deleted project")
-})
-/* 
-// index.js
-app.get("/auth", (req, res) => {
-    // Store parameters in an object
-    const params = {
-        scope: "repo",
-        client_id: '096081ee1cd4643253a7',
-    };
-
-    // Convert parameters to a URL-encoded string
-    const urlEncodedParams = new URLSearchParams(params).toString();
-    res.redirect(`https://github.com/login/oauth/authorize?${urlEncodedParams}`);
-});
-
-// index.js
-app.get("/github-callback", async (req, res) => {
-    const { code } = req.query;
-
-    const body = {
-        client_id: '096081ee1cd4643253a7',
-        client_secret: '84626fb811829b95e63680184015668d63e29192',
-        code,
-    };
-
-    let accessToken;
-    const options = { headers: { accept: "application/json" } };
-
-    // let repo_name = prompt('What would you like to name your repository');
-
-    await axios
-        .post("https://github.com/login/oauth/access_token", body, options)
-        .then((response) => response.data.access_token)
-        .then((token) => {
-            accessToken = token;
-            axios({
-                method: 'POST',
-                url: 'https://api.github.com/user/repos',
-                headers: { 'Authorization': `Bearer ${token}` },
-                data: { "name": 'mod' }
-            }).then(response => {
-                axios({
-                    method: 'PUT',
-                    url: `https://api.github.com/repos/${response.data.owner.login}/${response.data.name}/contents/`,
-                    headers: { 'Authorization': `Bearer ${token}` },
-                    data: { "content": 'bXkgbmV3IGZpbGUgY29udGVudHM=', "message": "initial commit" }
-                })
-                // create url to store username and repo name in db.
-            })
-        })
-        .catch((err) => res.status(500).json({ err: err.message }));
-        
-});
-*/
-
-// publish front
-app.post('/publishfront/:name', (req, res) => {
-    let projectName = req.params.name;
-    // let projectName = req.body.projectName;
-    // let projectType = req.body.projectType;
-    let tartgetPath = path.join(CURR_DIR, projectName);
-
-    // Call createProject in inquirerPrecss
-    if (!createProject(tartgetPath)) {
-        return;
-    }
-
-    db.defaults({ project: {} })
-        .write()
-    db.set('project.name', projectName).write()
-
-    // Call createDirectoryContents
-    // createDirectoryContents(templatePath, projectName);
-
-    createFrontend(tartgetPath);
-    updateScriptfront(projectName);
-
-})
-
-// publish back
-app.post('/publishback/:name', (req, res) => {
-    let projectName = req.params.name;
-    // let projectName = req.body.projectName;
-    // let projectType = req.body.projectType;
-    let tartgetPath = path.join(CURR_DIR, projectName);
-
-    // Call createProject in inquirerPrecss
-    if (!createProject(tartgetPath)) {
-        return;
-    }
-
-    db.defaults({ project: {} })
-        .write()
-    db.set('project.name', projectName).write()
-
-    // Call createDirectoryContents
-    // createDirectoryContents(templatePath, projectName);
-
-    createBackend(tartgetPath);
-    updateScriptserver(projectName);
-})
-
-// publish full
-app.post('/publishfull/:name', (req, res) => {
-    let projectName = req.params.name;
-    // store project name to db.
-    // let projectName = req.body.projectName;
-    // let projectType = req.body.projectType;
-    let tartgetPath = path.join(CURR_DIR, projectName);
-
-    // Call createProject in inquirerPrecss
-    if (!createProject(tartgetPath)) {
-        return;
-    }
-    db.defaults({ project: {} })
-        .write()
-    db.set('project.name', projectName).write()
-    // Call createDirectoryContents         
-    // createDirectoryContents(templatePath, projectName);
-    createFrontend(tartgetPath);
-    createBackend(tartgetPath);
-    updateScriptfront(projectName);
-    updateScriptserver(projectName);
-})
-
-
-/*
-// create server api.
-// search for api name in controller. If not found, create filename in controller.
-// now, initialise supabase and add api into it.
- */
-
-app.post('/creapi/:apiname', (req, res) => {
-    // get project name
-    let projectName = db.get("project.name").value();
-
-    // get server targetpath
-    // get controller folder-file path.
-    let controllerFile = req.params.apiname;
-    let apiPath = path.join(CURR_DIR, projectName, 'server', 'controllers', `${controllerFile}.js`);
-    if (fs.existsSync(apiPath)) {
-        fs.appendFileSync(apiPath, req.body.data, function (err) {
-            if (err) return err;
-        });
-    } else {
-        let createPath = fs.createWriteStream(apiPath);
-        let controllerData = `
-        const express = require('express');
-
-        var supabaseClient = require('@supabase/supabase-js')
-        require('dotenv').config()
-
-        // Create a single supabase client for interacting with your database
-        const supabase = supabaseClient.createClient(process.env.URL, process.env.ANON_KEY)
-
-        //set variable users as expressRouter
-        var ${controllerFile}controller = express.Router();
-    
-        ${req.body.data}
-
-        module.exports = ${controllerFile}controller;
-        `
-
-        createPath.write(controllerData, function (err) {
-            if (err) return err;
-        })
-        // write into file.
-        // createPath.write(text)
-        // write into index.js   
-    }
-
-    // go to index.js file and add path to the controller file.
-    let indexPath = path.join(CURR_DIR, projectName, 'server', 'index.js');
-    var data = fs.readFileSync(indexPath).toString().split("\n");
-    data.splice(0, 0, `const ${controllerFile}controller = require('./controllers/${controllerFile}');`);
-    var text = data.join("\n");
-    fs.writeFileSync(indexPath, text, function (err) {
-        if (err) return err;
-    })
-    let indexText = `
-    app.use('/${controllerFile}', ${controllerFile}controller);
-    `
-    fs.appendFileSync(indexPath, indexText, function (err) {
-        if (err) return err;
-    });
-
-})
-
-app.post('/conapi', (req, res) => {
-    /* */
-    let projectName = db.get("project.name").value();
-    let tempath = path.join(CURR_DIR, projectName);
-    let jsPath = `${tempath}/client/js/index.js`;
-
-    let method_dummy = `/*Insert Methods Here*/`;
-    let method_data = `
-    /*Insert Methods Here*/
-    ${req.body.data}`;
-
-    // add if chain to check if it's post request to add v-model in data.
-    let return_dummy = '/*Insert Data Here*/';
-
-    // search value in array db.json for [req.body.return_data]. If they are 
-    // present, skip the value below. Else, add the value below.
-    let empty_array = [];
-    req.body.return_data.forEach((element) => {
-        let array = db.get('project.value').map('value').value();
-        if (array.includes(element.value) !== true) {
-            db.get('project.value').push({ value: element.value }).write();
-            empty_array.push(element.value)
-        }
-    }
-    )
-    let return_data = `
-    /*Insert Data Here*/
-    ${empty_array.map((x) => {return `${x}: []`})}
-    `
-
-    console.log(return_data)
-
-    const options = {
-        files: jsPath,
-        from: [method_dummy, return_dummy],
-        to: [method_data, return_data]
-    };
-
-    replaceInFile(options)
-        .then(result => {
-            console.log("Replacement results: ", result);
-        })
-        .catch(error => {
-            console.log(error);
-        });
-
-
-    // store [req.body.return_data] in db.json.
-})
-
-app.post('/createdb', (req, res) => {
-    let anon_key = req.body.anon_key;
-    let url = req.body.url;
-    db.defaults({ db: {} })
-        .write()
-    db.set('db.anon_key', anon_key).write();
-    db.set('db.url', url).write();
-})
-
-app.get('/dbanon', (req, res) => {
-    let anon_key = db.get("db.anon_key").value();
-    res.send(anon_key);
-})
-
-app.get('/dburl', (req, res) => {
-    let url = db.get("db.url").value();
-    res.send(url);
-})
-
-app.get('/pname', (req, res) => {
-    let projectName = db.get("project.name").value();
-    res.send(projectName);
-})
-
-// delete project
-app.delete('/pdelete', (req, res) => {
-    let projectName = db.get("project.name").value();
-    let tartgetPath = path.join(CURR_DIR, projectName);
-    fs.rmdirSync(tartgetPath, { recursive: true, force: true });
-    db.unset('project.name').write();
-})
-
-app.post('/request/:type', (req, res) => {
-    let reqType = req.params.type;
-    db.defaults({ get: [], post: [], delete: [], update: [] })
-        .write();
-    if (reqType == 'full') {
-        db.get('get').push(
-            {
-                "name": req.body.name,
-                "description": req.body.description,
-                "path": req.body.path,
-                // "reqBody": req.body.reqbody
-            }).write();
-        db.get('post').push(
-            {
-                "name": req.body.name,
-                "description": req.body.description,
-                "path": req.body.path,
-                // "reqBody": req.body.reqbody
-            }).write();
-        db.get('delete').push(
-            {
-                "name": req.body.name,
-                "description": req.body.description,
-                "path": req.body.path,
-                // "reqBody": req.body.reqbody
-            }).write();
-        db.get('update').push(
-            {
-                "name": req.body.name,
-                "description": req.body.description,
-                "path": req.body.path,
-                // "reqBody": req.body.reqbody
-            }).write();
-    } else if (reqType == 'create') {
-        db.get('post').push(
-            {
-                "name": req.body.name,
-                "description": req.body.description,
-                "path": req.body.path,
-                // "reqBody": req.body.reqbody
-            }).write();
-    } else if (reqType == 'read') {
-        db.get('get').push(
-            {
-                "name": req.body.name,
-                "description": req.body.description,
-                "path": req.body.path,
-                // "reqBody": req.body.reqbody
-            }).write();
-    } else if (reqType == 'update') {
-        db.get('update').push(
-            {
-                "name": req.body.name,
-                "description": req.body.description,
-                "path": req.body.path,
-                // "reqBody": req.body.reqbody
-            }).write();
-    } else if (reqType == 'delete') {
-        db.get('delete').push(
-            {
-                "name": req.body.name,
-                "description": req.body.description,
-                "path": req.body.path,
-                // "reqBody": req.body.reqbody
-            }).write();
-    }
-})
-
-app.get('/apis/:type', (req, res) => {
-    let reqType = req.params.type;
-    if (reqType == 'create') {
-        let data = db.get("get").value();
-        res.send(data)
-    } else if (reqType == 'read') {
-        let data = db.get("post").value();
-        res.send(data)
-    } else if (reqType == 'update') {
-        let data = db.get("update").value();
-        res.send(data)
-    } else if (reqType == 'delete') {
-        let data = db.get("delete").value();
-        res.send(data)
-    }
-})
-
-app.post('/calldata', (req, res) => {
-    // get file path;
-    let projectName = db.get("project.name").value();
-    let tempath = path.join(CURR_DIR, projectName);
-    let filePath = `${tempath}/client/js/index.js`;
-    // add data fetch to onmount (i.e this.data = fetch())
-    let mounted_dummy = '/*Insert Mounted Here*/'
-    let return_dummy = '/*Insert Data Here*/'
-    //
-    let mounted_data = `
-    /*Insert Mounted Here*/
-    this.${req.body.contain} = await fetch('${req.body.path}').then(response => { return response.json() });
-    `
-    let return_data = `
-    /*Insert Data Here*/
-    ${req.body.contain}: [],
-    `
-
-    const options = {
-        files: filePath,
-        from: [mounted_dummy, return_dummy],
-        to: [mounted_data, return_data]
-    };
-
-    replaceInFile(options)
-        .then(result => {
-            console.log("Replacement results: ", result);
-        })
-        .catch(error => {
-            console.log(error);
-        });
-    // add data to return (i.e data = [])
-})
-
-app.listen(4000, () => console.log('server started successfully at port : 4000....'));
+  const port = process.env.PORT || 1404
+  app.listen(port)
+  console.log(`Server running at http://localhost:${port}`)
+}
