@@ -3,6 +3,7 @@
     "start": "cross-env NODE_ENV=production node ./server"
   },
   "dependencies": {
+    "@emailjs/browser": "^3.11.0",
     "@vitejs/plugin-vue": "^4.2.3",
     "@vue/compiler-sfc": "^3.3.4",
     "@vue/server-renderer": "^3.3.4",
