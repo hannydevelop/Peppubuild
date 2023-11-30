@@ -23,7 +23,6 @@ import FileSync from 'lowdb/adapters/FileSync.js';
 import createProject from './utils/project.js'
 import * as path from 'path';
 import grapesjs from 'grapesjs';
-import cors from 'cors';
 import replaceInFile from 'replace-in-file';
 import open from 'open';
 
