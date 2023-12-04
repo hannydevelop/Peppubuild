@@ -32,7 +32,7 @@ git clone https://github.com/hannydevelop/Peppubuild.git
 Now install the application:
 
 ```
-npm run install
+npm install
 ```
 
 Next start your application with the command below:
