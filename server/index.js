@@ -21,6 +21,8 @@ import * as fs from 'fs';
 import low from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync.js';
 import createProject from './utils/project.js'
+import runUpgrade from './utils/upgrade.js'
+import * as cron from 'node-cron'
 import * as path from 'path';
 import grapesjs from 'grapesjs';
 import replaceInFile from 'replace-in-file';
@@ -64,6 +66,12 @@ async function startServer() {
     ).middlewares
     app.use(viteDevMiddleware)
   }
+
+  // call upgrade here
+  cron.schedule('* * * * *', () => {
+    runUpgrade();
+    console.log('running a task every minute');
+  });
 
   // set route for logout
   app.get('/logout', (_req, res) => {

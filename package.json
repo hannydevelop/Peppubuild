@@ -19,6 +19,7 @@
     "fs": "^0.0.1-security",
     "grapesjs": "^0.21.7",
     "lowdb": "^1.0.0",
+    "node-cron": "^3.0.3",
     "open": "^9.1.0",
     "path": "^0.12.7",
     "peppu-panel": "^0.1.4",
