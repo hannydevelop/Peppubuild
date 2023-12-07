@@ -29,6 +29,11 @@ Peppubuild currently offers a self-hosted option, with our Github repository. Fo
 ```
 git clone https://github.com/hannydevelop/Peppubuild.git
 ```
+Now install the application:
+
+```
+npm install
+```
 
 Next start your application with the command below:
 
