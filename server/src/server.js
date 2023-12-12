@@ -17,8 +17,10 @@ const db = low(adapter);
 
 startServer()
 
-async function startServer() {
+export default async function startServer() {
   const app = express()
+
+  app.use(express.static(path.join(__dirname, "public")));
 
   // parse application/x-www-form-urlencoded
   app.use(bodyParser.urlencoded({ extended: false }))

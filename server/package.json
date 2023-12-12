@@ -6,9 +6,10 @@
     "url": "github.com/hannydevelop/peppubuild.git"
   },
   "scripts": {
-    "start": "node index",
+    "start": "node server",
     "dist": "mkdir -p dist && cp -R node_modules index.js ... dist",
-    "release": "release-it"
+    "release": "release-it",
+    "babel": "babel src -d dist "
   },
   "dependencies": {
     "body-parser": "^1.20.2",
@@ -22,8 +23,10 @@
     "replace-in-file": "^7.0.1",
     "sweetalert": "^2.1.2"
   },
-  "type": "module",
   "devDependencies": {
+    "@babel/cli": "^7.23.4",
+    "@babel/core": "^7.23.6",
+    "@babel/preset-env": "^7.23.6",
     "release-it": "^16.3.0"
   }
 }
