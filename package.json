@@ -1,12 +1,12 @@
 {
   "name": "peppubuild",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "repository": {
     "type": "git",
     "url": "github.com/hannydevelop/peppubuild.git"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=production node ./server",
+    "start": "node ./server",
     "release": "release-it"
   },
   "dependencies": {
@@ -38,7 +38,6 @@
     "vite-plugin-ssr": "^0.4.142",
     "vue": "^3.3.4"
   },
-  "type": "module",
   "devDependencies": {
     "@types/node-cron": "^3.0.11",
     "release-it": "^16.3.0"
