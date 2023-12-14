@@ -5,41 +5,21 @@
     "type": "git",
     "url": "github.com/hannydevelop/peppubuild.git"
   },
-  "scripts": {
-    "start": "node ./server",
-    "release": "release-it"
-  },
+  "main": "./index.js",
   "dependencies": {
-    "@emailjs/browser": "^3.11.0",
-    "@vitejs/plugin-vue": "^4.2.3",
-    "@vue/compiler-sfc": "^3.3.4",
-    "@vue/server-renderer": "^3.3.4",
     "body-parser": "^1.20.2",
-    "bootstrap": "^5.3.2",
-    "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
-    "cross-env": "^7.0.3",
-    "dotenv": "^16.3.1",
-    "emailjs": "^4.0.3",
     "express": "^4.18.2",
-    "firebase": "^10.6.0",
     "fs": "^0.0.1-security",
     "grapesjs": "^0.21.7",
     "lowdb": "^1.0.0",
-    "node-cron": "^3.0.3",
     "open": "^9.1.0",
     "path": "^0.12.7",
     "peppu-panel": "^0.1.4",
     "peppu-sidebar": "^0.1.6",
-    "replace-in-file": "^7.0.1",
-    "sirv": "^2.0.3",
-    "sweetalert": "^2.1.2",
-    "vite": "^4.4.9",
-    "vite-plugin-ssr": "^0.4.142",
-    "vue": "^3.3.4"
+    "replace-in-file": "^7.0.1"
   },
   "devDependencies": {
-    "@types/node-cron": "^3.0.11",
     "release-it": "^16.3.0"
   }
 }

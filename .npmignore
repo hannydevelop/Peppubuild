@@ -1,0 +1,5 @@
+node_modules
+.env
+package-lock.json
+release-it.json
+.github/
