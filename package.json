@@ -6,6 +6,9 @@
     "url": "github.com/hannydevelop/peppubuild.git"
   },
   "main": "./index.js",
+  "scripts": {
+    "release": "release-it"
+  },
   "dependencies": {
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
