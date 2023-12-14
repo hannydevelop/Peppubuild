@@ -5,7 +5,7 @@
     "type": "git",
     "url": "github.com/hannydevelop/peppubuild.git"
   },
-  "main": "./index.js",
+  "main": "./server.js",
   "scripts": {
     "release": "release-it"
   },
