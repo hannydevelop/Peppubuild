@@ -30,10 +30,6 @@ async function startServer() {
 
   app.use(cookieParser())
 
-  app.get('/', (_req, res) => {
-    res.send('This is home page from Express');
-  })
-
   // set route for logout
   app.get('/logout', (_req, res) => {
     res.clearCookie('pepputoken')
