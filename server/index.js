@@ -1,23 +1,23 @@
-import express from 'express'
-import compression from 'compression'
-import cookieParser from 'cookie-parser'
-import bodyParser from 'body-parser'
-import * as fs from 'fs';
-import low from 'lowdb';
-import FileSync from 'lowdb/adapters/FileSync.js';
-import createProject from './utils/project.js'
-import * as path from 'path';
-import grapesjs from 'grapesjs';
-import replaceInFile from 'replace-in-file';
+"use strict";
+exports.__esModule = true;
+exports.startServer = void 0;
 
-const isProduction = process.env.NODE_ENV === 'production'
-const adapter = new FileSync('db.json');
+var express = require('express')
+var cookieParser = require('cookie-parser')
+var bodyParser = require('body-parser')
+var fs = require('fs');
+var low = require('lowdb');
+var FileSync = require('lowdb/adapters/FileSync.js')
+var createProject = require('./utils/project.js')
+var path = require('path')
+var grapesjs = require('grapesjs')
+var replaceInFile= require('replace-in-file')
+
 const CURR_DIR = path.join(process.cwd(), '..');
+const adapter = new FileSync(path.join(CURR_DIR, 'db.json'));
 const db = low(adapter);
 
-startServer()
-
-export default async function startServer() {
+async function startServer() {
   const app = express()
 
   app.use(express.static(path.join(__dirname, "public")));
@@ -28,7 +28,6 @@ export default async function startServer() {
   // parse application/json
   app.use(bodyParser.json())
 
-  app.use(compression())
   app.use(cookieParser())
 
   // set route for logout
@@ -405,7 +404,9 @@ export default async function startServer() {
     });
   })
 
-  const port = process.env.PORT || 1404
-  app.listen(port)
+  const port = 3000;
+  app.listen(port);
   console.log(`started server in ${port}`)
 }
+
+exports.startServer = startServer;

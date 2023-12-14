@@ -1,10 +1,13 @@
-import * as fs from 'fs';
-import * as path from 'path';
+"use strict";
+exports.__esModule = true;
+exports.createDirectoryContents = void 0;
+var fs = require('fs');
+var path = require('path');
 
 const CURR_DIR = path.join(process.cwd(), '..');
 
 // Add contents into the directory
-export default function createDirectoryContents(templatePath, projectName) {
+function createDirectoryContents(templatePath, projectName) {
     // read all files/folders (1 level) from template folder
     const filesToCreate = fs.readdirSync(templatePath);
     // loop each file/folder
@@ -27,3 +30,4 @@ export default function createDirectoryContents(templatePath, projectName) {
         }
     })
 }
+exports.createDirectoryContents = createDirectoryContents;

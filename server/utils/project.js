@@ -1,8 +1,11 @@
-import * as fs from 'fs';
-import chalk from 'chalk';
+"use strict";
+exports.__esModule = true;
+exports.createProject = void 0;
+var fs = require('fs');
+var chalk = require('chalk');
 
 // Create project folder with path
-export default function createProject(projectPath) {
+function createProject(projectPath) {
     // Check if project path already exists
     if (fs.existsSync(projectPath)) {
         console.log(chalk.red(`Folder ${projectPath} exists. Delete or use another name.`));
@@ -13,3 +16,4 @@ export default function createProject(projectPath) {
 
     return true;
 }
+exports.createProject = createProject;
