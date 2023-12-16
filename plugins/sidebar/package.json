@@ -1,0 +1,30 @@
+{
+    "name": "peppu-sidebar",
+    "version": "0.1.6",
+    "description": "Peppubuild Sidebar",
+    "main": "dist/index.min.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/hannydevelop/peppubuild"
+    },
+    "scripts": {
+        "start": "grapesjs-cli serve",
+        "build": "grapesjs-cli build",
+        "build:css": "sass src/styles.scss dist/peppu-sidebar.min.css --style compressed",
+        "watch:scss": "sass --watch src/styles.scss dist/peppu-sidebar.min.css --style compressed",
+        "bump": "npm version patch -m 'Bump v%s'"
+    },
+    "keywords": [
+        "grapesjs",
+        "plugin"
+    ],
+    "devDependencies": {
+        "grapesjs-cli": "^1.0.14",
+        "sass": "^1.32.8"
+    },
+    "author": "Ukpai Ugochi",
+    "license": "MIT",
+    "dependencies": {
+        "sweetalert": "^2.1.2"
+    }
+}
