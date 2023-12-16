@@ -1,4 +1,7 @@
 "use strict";
+exports.__esModule = true;
+exports.startServer = void 0;
+
 var express = require('express')
 var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser')
@@ -8,16 +11,18 @@ var FileSync = require('lowdb/adapters/FileSync.js')
 var createProject = require('./utils/project.js')
 var path = require('path')
 var grapesjs = require('grapesjs')
-var replaceInFile= require('replace-in-file')
+var replaceInFile = require('replace-in-file')
+var os = require('os');
 
-const CURR_DIR = path.join(process.cwd(), '..');
+
+const CURR_DIR = os.homedir();
 const adapter = new FileSync(path.join(CURR_DIR, 'db.json'));
 const db = low(adapter);
 
+const app = express()
 async function startServer() {
-  const app = express()
 
-  app.use(express.static(path.join(__dirname, "public")));
+  // app.use(express.static(path.join(__dirname, "public")));
 
   // parse application/x-www-form-urlencoded
   app.use(bodyParser.urlencoded({ extended: false }))
@@ -30,7 +35,7 @@ async function startServer() {
   // set route for logout
   app.get('/logout', (_req, res) => {
     res.clearCookie('pepputoken')
-    res.send('Cookie have been deleted successfully');
+    res.send(`Cookie have been deleted successfully ${CURR_DIR}`);
   })
 
   // set route for user login
@@ -401,9 +406,10 @@ async function startServer() {
     });
   })
 
-  const port = 3000;
+  const port = 1404;
   app.listen(port);
   console.log(`started server in ${port}`)
 }
 
+exports.app = app;
 exports.startServer = startServer;

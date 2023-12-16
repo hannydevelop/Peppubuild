@@ -4,7 +4,7 @@ exports.createDirectoryContents = void 0;
 var fs = require('fs');
 var path = require('path');
 
-const CURR_DIR = path.join(process.cwd(), '..');
+const CURR_DIR = os.homedir();
 
 // Add contents into the directory
 function createDirectoryContents(templatePath, projectName) {
