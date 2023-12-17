@@ -42,6 +42,7 @@ export default (editor, opts = {}) => {
     }
   ])
 
+  /*
   editor.Panels.addButton('views',
     {
       id: 'publish',
@@ -50,6 +51,7 @@ export default (editor, opts = {}) => {
       command: 'peppu:publish'
     }
   )
+  */
 
   // option value for CSS values
   let cssString = `

@@ -33,4 +33,12 @@ export default (editor, opts = {}) => {
             editor.PagesApp.saveProject();
         }
     })
+    
+    /*
+    cm.add('peppu:publish', {
+        run(editor) {
+            editor.PagesApp.createPublish();
+        }
+    })
+    */
 }

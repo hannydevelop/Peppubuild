@@ -330,7 +330,11 @@ async function startServer() {
     // Call createDirectoryContents
     // createDirectoryContents(templatePath, projectName);
 
-    createFrontend(tartgetPath);
+    createFrontend(tartgetPath).then(
+      console.log('creation of frontend was successful')
+    ).catch(
+      console.log('An error, creation of frontend was not successful')
+    )
     // updateScriptfront(projectName);
   })
 

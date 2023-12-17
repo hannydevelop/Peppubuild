@@ -182,6 +182,7 @@ export default class PagesApp extends UI {
                     text: "Frontend",
                     value: "publishfront",
                 },
+                /* 
                 back: {
                     text: "Backend",
                     value: "publishback",
@@ -190,6 +191,7 @@ export default class PagesApp extends UI {
                     text: "Fullstack",
                     value: "publishfull",
                 }
+                */
             },
         })
             .then((value) => {
@@ -203,6 +205,7 @@ export default class PagesApp extends UI {
                         }
                         break;
 
+                    /* 
                     case "publishback":
                         try {
                             this.createPublish(value);
@@ -220,6 +223,7 @@ export default class PagesApp extends UI {
                             swal("Error", "An error occurred", "error");
                         }
                         break;
+                    */
 
                     default:
 
