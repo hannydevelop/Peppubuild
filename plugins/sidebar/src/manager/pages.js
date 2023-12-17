@@ -174,6 +174,7 @@ export default class PagesApp extends UI {
 
     addProject() {
         let name = prompt('What would you like to name this project?');
+        // if(name !=null && name.length>0) return false;
         localStorage.setItem("projectName", name);
         this.state.projectName = name;
         swal("What type of project will you like to create", {
