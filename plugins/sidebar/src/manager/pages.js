@@ -70,25 +70,37 @@ export default class PagesApp extends UI {
     }
 
     deleteProject() {
+        const { editor } = this;
         localStorage.removeItem("projectName");
         try {
-            fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/pdelete`, {
+            let response = fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/pdelete`, {
                 method: "DELETE", // or 'PUT'
                 headers: {
                     "Content-Type": "application/json",
                 },
-            }).then(swal("Successful!", "Deleted Project", "success"))
+            })
+            if (!response.ok) {
+                swal("Error", `Slow internet detected`, "error")
+            } else {
+                swal("Successful!", "Deleted Project", "success");
+            }
         } catch { swal("Error", "An error occurred", "error") }
     }
 
     deletePage(id) {
+        const { editor } = this;
         try {
-            fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/pagedelete/${id}`, {
+            let response = fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/pagedelete/${id}`, {
                 method: "DELETE", // or 'PUT'
                 headers: {
                     "Content-Type": "application/json",
                 },
-            }).then(swal("Successful!", "Deleted Page", "success"))
+            })
+            if (!response.ok) {
+                swal("Error", `Slow internet detected`, "error")
+            } else {
+                swal("Successful!", "Deleted Page", "success");
+            }
         } catch { swal("Error", "An error occurred", "error") }
     }
 
@@ -101,7 +113,7 @@ export default class PagesApp extends UI {
             else if (localStorage.getItem("projectName") != null) {
                 this.deleteProject();
             }
-            
+
             // this.pm.remove(e.currentTarget.dataset.key);
             // call delete in localhost and possibly db
             this.update();
@@ -136,100 +148,116 @@ export default class PagesApp extends UI {
     }
 
     createPublish(value) {
+        const { editor } = this;
         let name = this.state.projectName;
-        fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/${value}/${name}`, {
-            method: "POST", // or 'PUT'
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
+        try {
+            let response = fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/${value}/${name}`, {
+                method: "POST", // or 'PUT'
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+            if (!response.ok) {
+                swal("Error", `Slow internet detected`, "error")
+            } else {
+                swal("Successful!", "Created Project", "success");
+            }
+        } catch { swal("Error", "An error occurred", "error") }
     }
 
     saveProject() {
+        const { editor } = this;
         let gjsProject = localStorage.getItem('gjsProject');
-        const {editor} = this;
         let id = this.pm.getSelected().id;
         let html = editor.Pages.get(id).getMainComponent().toHTML();
         let css = editor.getCss()
         try {
-            fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/save/${id}`, {
+            let response = fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/save/${id}`, {
                 method: "PUT", // or 'PUT'
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ gjsProject: gjsProject,  html: html, css: css}),
-            }).then(swal("Successful!", "Project Saved", "success"))
+                body: JSON.stringify({ gjsProject: gjsProject, html: html, css: css }),
+            })
+            if (!response.ok) {
+                swal("Error", `Slow internet detected`, "error")
+            } else {
+                swal("Successful!", "Saved Project", "success");
+            }
         } catch { swal("Error", "An error occurred", "error") }
     }
 
     async getProject() {
+        const { editor } = this;
         let data = await fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/projects`).then(response => { return response.json() });
         return data;
     }
 
     async getProjectName() {
+        const { editor } = this;
         let data = fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/pname`).then(response => { return response.text() });
         return data;
     }
 
     addProject() {
-        let name = prompt('What would you like to name this project?');
-        // if(name !=null && name.length>0) return false;
-        localStorage.setItem("projectName", name);
-        this.state.projectName = name;
-        swal("What type of project will you like to create", {
-            buttons: {
-                front: {
-                    text: "Frontend",
-                    value: "publishfront",
-                },
-                /* 
-                back: {
-                    text: "Backend",
-                    value: "publishback",
-                },
-                defeat: {
-                    text: "Fullstack",
-                    value: "publishfull",
-                }
-                */
-            },
-        })
-            .then((value) => {
-                switch (value) {
-                    case "publishfront":
-                        try {
-                            this.createPublish(value);
-                            swal("Successful!", "Frontend bootstrapped", "success");
-                        } catch (error) {
-                            swal("Error", "An error occurred", "error");
-                        }
-                        break;
-
+        swal("What would you like to name this project?", {
+            content: "input",
+        }).then((name) => {
+            localStorage.setItem("projectName", name);
+            this.state.projectName = name;
+            swal("What type of project will you like to create", {
+                buttons: {
+                    front: {
+                        text: "Frontend",
+                        value: "publishfront",
+                    },
                     /* 
-                    case "publishback":
-                        try {
-                            this.createPublish(value);
-                            swal("Successful!", "Backend bootstrapped", "success");
-                        } catch (error) {
-                            swal("Error", "An error occurred", error);
-                        }
-                        break;
-
-                    case "publishfull":
-                        try {
-                            this.createPublish(value);
-                            swal("Successful!", "Fullstack bootstrapped", "success");
-                        } catch (error) {
-                            swal("Error", "An error occurred", "error");
-                        }
-                        break;
+                    back: {
+                        text: "Backend",
+                        value: "publishback",
+                    },
+                    defeat: {
+                        text: "Fullstack",
+                        value: "publishfull",
+                    }
                     */
+                },
+            })
+                .then((value) => {
+                    switch (value) {
+                        case "publishfront":
+                            try {
+                                this.createPublish(value);
+                            } catch (error) {
+                                swal("Error", "An error occurred", error);
+                            }
+                            break;
 
-                    default:
+                        /* 
+                        case "publishback":
+                            try {
+                                this.createPublish(value);
+                                swal("Successful!", "Backend bootstrapped", "success");
+                            } catch (error) {
+                                swal("Error", "An error occurred", error);
+                            }
+                            break;
+    
+                        case "publishfull":
+                            try {
+                                this.createPublish(value);
+                                swal("Successful!", "Fullstack bootstrapped", "success");
+                            } catch (error) {
+                                swal("Error", "An error occurred", "error");
+                            }
+                            break;
+                        */
 
-                }
-            });
+                        default:
+
+                    }
+                });
+        });
         this.update();
     }
 
@@ -267,7 +295,7 @@ export default class PagesApp extends UI {
             <span class="project-text"><i class="fa fa-folder-o" style="margin:5px;"></i>${this.state.projectName}</span>
             <span class="p-delete"><i class="fa fa-trash" style="margin:5px;"></i></span>
             `;
-        }else {
+        } else {
             return 'No project yet'
         }
         // console.log(localStorage.getItem('projectName'))

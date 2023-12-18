@@ -331,10 +331,10 @@ async function startServer() {
     // createDirectoryContents(templatePath, projectName);
 
     createFrontend(tartgetPath).then(
-      console.log('creation of frontend was successful')
-    ).catch(
-      console.log('An error, creation of frontend was not successful')
-    )
+      res.send('creation of frontend was successful')
+    ).catch(err => {
+      res.send(`An error, creation of frontend was not successful, ${err}`)
+    })
     // updateScriptfront(projectName);
   })
 
