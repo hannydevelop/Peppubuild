@@ -319,7 +319,7 @@ async function startServer() {
     let tartgetPath = path.join(CURR_DIR, projectName);
 
     // Call createProject in inquirerPrecss
-    if (!createProject(tartgetPath)) {
+    if (!createProject.createProject(tartgetPath)) {
       return;
     }
 
@@ -347,7 +347,7 @@ async function startServer() {
     let tartgetPath = path.join(CURR_DIR, projectName);
 
     // Call createProject in inquirerPrecss
-    if (!createProject(tartgetPath)) {
+    if (!createProject.createProject(tartgetPath)) {
       return;
     }
 
@@ -371,7 +371,7 @@ async function startServer() {
     let tartgetPath = path.join(CURR_DIR, projectName);
 
     // Call createProject in inquirerPrecss
-    if (!createProject(tartgetPath)) {
+    if (!createProject.createProject(tartgetPath)) {
       return;
     }
     db.defaults({ project: {} })
