@@ -127,6 +127,7 @@ async function startServer() {
   async function createFrontend(tempath) {
     // create client folder.
     fs.mkdirSync(`${tempath}/client`)
+    /*
     // gen package.json()
     const package_json = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/package.json');
     // Get the Blob data
@@ -150,7 +151,7 @@ async function startServer() {
     fs.writeFileSync(`${tempath}/client/.gitignore`, gitignore, function (err) {
       if (err) return err;
     });
-
+     */
     // gen index.js
     fs.mkdirSync(`${tempath}/client/css`)
     fs.mkdirSync(`${tempath}/client/js`)
