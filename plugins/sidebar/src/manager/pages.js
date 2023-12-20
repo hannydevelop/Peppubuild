@@ -60,7 +60,6 @@ export default class PagesApp extends UI {
             const component = e.getMainComponent()
             const html = editor.getHtml({ component });
             const css = editor.getCss({ component });
-            console.log(name)
         })
         return this.pm.getSelected().id === page.id;
     }
@@ -191,9 +190,7 @@ export default class PagesApp extends UI {
                 },
                 body: JSON.stringify({ gjsProject: gjsProject, html: html, css: css }),
             }).then((response) => {
-                if (!response.ok) {
-                    swal("Error", `Slow internet detected`, "error")
-                } else {
+                if (response.ok) {
                     swal("Successful!", "Saved Project", "success");
                 }
             })
