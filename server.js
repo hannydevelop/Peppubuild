@@ -179,7 +179,7 @@ async function startServer() {
       if (err) return err;
     });
 
-    let pages = db.get("pages").value();
+    let pages = db.get("gjsProject.project.pages").value();
     let editor = grapesjs.init({
       headless: true, pageManager: {
         pages: pages
@@ -331,11 +331,7 @@ async function startServer() {
     // Call createDirectoryContents
     // createDirectoryContents(templatePath, projectName);
 
-    createFrontend(tartgetPath).then(
-      res.send('creation of frontend was successful')
-    ).catch(err => {
-      res.send(`An error, creation of frontend was not successful, ${err}`)
-    })
+    createFrontend(tartgetPath);
     // updateScriptfront(projectName);
   })
 

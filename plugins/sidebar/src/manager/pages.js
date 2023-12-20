@@ -35,6 +35,7 @@ export default class PagesApp extends UI {
     }
 
     onRender() {
+        // this.pm.getMain().id = 'home';
         const { pm, setState, editor } = this;
         setState({
             loading: true
@@ -53,6 +54,14 @@ export default class PagesApp extends UI {
     }
 
     isSelected(page) {
+        const { editor } = this;
+        editor.Pages.getAll().forEach(e => {
+            const name = e.id
+            const component = e.getMainComponent()
+            const html = editor.getHtml({ component });
+            const css = editor.getCss({ component });
+            console.log(name)
+        })
         return this.pm.getSelected().id === page.id;
     }
 
@@ -73,34 +82,36 @@ export default class PagesApp extends UI {
         const { editor } = this;
         localStorage.removeItem("projectName");
         try {
-            let response = fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/pdelete`, {
+            fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/pdelete`, {
                 method: "DELETE", // or 'PUT'
                 headers: {
                     "Content-Type": "application/json",
                 },
+            }).then((response) => {
+                if (!response.ok) {
+                    swal("Error", `Slow internet detected`, "error")
+                } else {
+                    swal("Successful!", "Deleted Project", "success");
+                }
             })
-            if (!response.ok) {
-                swal("Error", `Slow internet detected`, "error")
-            } else {
-                swal("Successful!", "Deleted Project", "success");
-            }
         } catch { swal("Error", "An error occurred", "error") }
     }
 
     deletePage(id) {
         const { editor } = this;
         try {
-            let response = fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/pagedelete/${id}`, {
+            fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/pagedelete/${id}`, {
                 method: "DELETE", // or 'PUT'
                 headers: {
                     "Content-Type": "application/json",
                 },
+            }).then((response) => {
+                if (!response.ok) {
+                    swal("Error", `Slow internet detected`, "error")
+                } else {
+                    swal("Successful!", "Deleted Page", "success");
+                }
             })
-            if (!response.ok) {
-                swal("Error", `Slow internet detected`, "error")
-            } else {
-                swal("Successful!", "Deleted Page", "success");
-            }
         } catch { swal("Error", "An error occurred", "error") }
     }
 
@@ -151,17 +162,18 @@ export default class PagesApp extends UI {
         const { editor } = this;
         let name = this.state.projectName;
         try {
-            let response = fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/${value}/${name}`, {
+            fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/${value}/${name}`, {
                 method: "POST", // or 'PUT'
                 headers: {
                     "Content-Type": "application/json",
                 },
+            }).then((response) => {
+                if (!response.ok) {
+                    swal("Error", `Slow internet detected`, "error")
+                } else {
+                    swal("Successful!", "Created Project", "success");
+                }
             })
-            if (!response.ok) {
-                swal("Error", `Slow internet detected`, "error")
-            } else {
-                swal("Successful!", "Created Project", "success");
-            }
         } catch { swal("Error", "An error occurred", "error") }
     }
 
@@ -172,18 +184,19 @@ export default class PagesApp extends UI {
         let html = editor.Pages.get(id).getMainComponent().toHTML();
         let css = editor.getCss()
         try {
-            let response = fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/save/${id}`, {
+            fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/save/${id}`, {
                 method: "PUT", // or 'PUT'
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ gjsProject: gjsProject, html: html, css: css }),
+            }).then((response) => {
+                if (!response.ok) {
+                    swal("Error", `Slow internet detected`, "error")
+                } else {
+                    swal("Successful!", "Saved Project", "success");
+                }
             })
-            if (!response.ok) {
-                swal("Error", `Slow internet detected`, "error")
-            } else {
-                swal("Successful!", "Saved Project", "success");
-            }
         } catch { swal("Error", "An error occurred", "error") }
     }
 
@@ -257,8 +270,8 @@ export default class PagesApp extends UI {
 
                     }
                 });
+            this.update();
         });
-        this.update();
     }
 
     handleNameInput(e) {
@@ -273,7 +286,9 @@ export default class PagesApp extends UI {
 
         if (loading) return opts.loader || '<div>Loading pages...</div>';
 
-        return pages.map((page, i) => `<div 
+        return pages.map((page, i) => `
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+                <div 
                 data-id="${i}" 
                 data-key="${page.get('private') ? '' : (page.id || page.get('name'))}"  
                 class="page ${isSelected(page) ? 'selected' : ''}"
@@ -288,10 +303,12 @@ export default class PagesApp extends UI {
     renderProject() {
         if (!this.state.projectName && localStorage.getItem("projectName") != null) {
             return `
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
             <span class="project-text"><i class="fa fa-folder-o" style="margin:5px;"></i>${localStorage.getItem("projectName")}</span>
             <span class="p-delete"><i class="fa fa-trash" style="margin:5px;"></i></span>`
         } else if (this.state.projectName) {
             return `
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
             <span class="project-text"><i class="fa fa-folder-o" style="margin:5px;"></i>${this.state.projectName}</span>
             <span class="p-delete"><i class="fa fa-trash" style="margin:5px;"></i></span>
             `;
