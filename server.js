@@ -242,38 +242,39 @@ async function startServer() {
     // push the changes into webpack project.
     // where tempath is name of project.
     let projectName = db.get("project.name").value();
-    let tempath = path.join(CURR_DIR, projectName);
-    let filePath = `${tempath}/client/${id}.html`;
-    let cssPath = `${tempath}/client/css/style.css`;
+    if (projectName != null) {
+      let tempath = path.join(CURR_DIR, projectName);
+      let filePath = `${tempath}/client/${id}.html`;
+      let cssPath = `${tempath}/client/css/style.css`;
 
-    let pages = db.get("pages").value();
-    let editor = grapesjs.init({
-      headless: true, pageManager: {
-        pages: pages
-      }
-    });
+      let pages = db.get("pages").value();
+      let editor = grapesjs.init({
+        headless: true, pageManager: {
+          pages: pages
+        }
+      });
 
-    let htmlContent = `
+      let htmlContent = `
     <body id="app">
     ${req.body.html}
     `
-    let myCss = req.body.css;
-    let regex = new RegExp('<body id="app">(.|\n)*?<\/body>')
-    const options = {
-      files: filePath,
-      from: regex,
-      to: htmlContent
-    };
-    if (fs.existsSync(filePath)) {
-      replaceInFile(options)
-        .then(result => {
-          console.log("Replacement results: ", result);
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    } else {
-      let content = `
+      let myCss = req.body.css;
+      let regex = new RegExp('<body id="app">(.|\n)*?<\/body>')
+      const options = {
+        files: filePath,
+        from: regex,
+        to: htmlContent
+      };
+      if (fs.existsSync(filePath)) {
+        replaceInFile(options)
+          .then(result => {
+            console.log("Replacement results: ", result);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      } else {
+        let content = `
       <!DOCTYPE html>
           <html lang="en">
           <head>
@@ -296,19 +297,21 @@ async function startServer() {
           </body>
         </html>
       `
-      fs.writeFileSync(filePath, content, function (err) {
+        fs.writeFileSync(filePath, content, function (err) {
+          if (err) return err;
+        });
+      }
+      /* 
+      fs.writeFileSync(filePath, htmlContent, function (err) {
+          if (err) return err;
+      });
+      */
+
+      fs.writeFileSync(cssPath, myCss, function (err) {
         if (err) return err;
       });
     }
-    /* 
-    fs.writeFileSync(filePath, htmlContent, function (err) {
-        if (err) return err;
-    });
-    */
-
-    fs.writeFileSync(cssPath, myCss, function (err) {
-      if (err) return err;
-    });
+    res.send('Project saved successfully!')
   })
 
   // create frontend project
@@ -333,6 +336,7 @@ async function startServer() {
 
     createFrontend(tartgetPath);
     // updateScriptfront(projectName);
+    res.send('Successfully created Project')
   })
 
   // create backend project

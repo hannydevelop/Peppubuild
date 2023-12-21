@@ -33,9 +33,9 @@ This repository contains the NodeJs code for Peppubuild (backend). The desktop a
 
 ## ✅ Where are we?
 
-- Dec 16 - You can now build a website with HTML and CSS, extract your code and deploy them wherever you like. Checkout this [example]().
+- Dec 16 - You can now build a website with HTML and CSS, extract your code and deploy them wherever you like. Checkout this [example](./example/Create_without_AI.md).
 
-- Dec 18 - You can now instruct AI to create a website for you, using the screenshot of your choice. Checkout this [example]() to see how to setup and create your website.
+- Dec 18 - You can now instruct AI to create a website for you, using the screenshot of your choice. Checkout this [example](./example/Create_with_AI.md) to see how to setup and create your website.
 
 - Dec 20 - You can now receive prompts to update your Peppubuild desktop application whenever there's a new version release.
 
