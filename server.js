@@ -13,8 +13,11 @@ var path = require('path')
 var grapesjs = require('grapesjs')
 var replaceInFile = require('replace-in-file')
 var os = require('os');
+var OpenAI = require('openai');
 
+import OpenAI from "openai";
 
+const openai = new OpenAI();
 const CURR_DIR = os.homedir();
 const adapter = new FileSync(path.join(CURR_DIR, 'db.json'));
 const db = low(adapter);
@@ -409,6 +412,46 @@ async function startServer() {
         console.log(err);
       }
     });
+  })
+  // call image to code.
+  app.get('/ai', (req, res) => {
+    // let img = req.body.img;
+    const response = await openai.chat.completions.create({
+      model: "gpt-4-vision-preview",
+      max_tokens: 4096,
+      temperature: 0,
+      messages: [
+        {
+          role: "system",
+          content: `
+          You are an expert Bootstrap developer.
+
+          - Do not add comments in the code such as "<!-- Add other navigation links as needed -->" and "<!-- ... other news items ... -->" in place of writing the full code. WRITE THE FULL CODE.
+          - Repeat elements as needed. For example, if there are 15 items, the code should have 15 items. DO NOT LEAVE comments like "<!-- Repeat for each news item -->" or bad things will happen.
+          - For images, use placeholder images from https://placehold.co and include a detailed description of the image in the alt text so that an image generation AI can generate the image later.
+
+          In terms of libraries,
+
+          - Use this script to include Bootstrap: <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+          - You can use Google Fonts
+          - Font Awesome for icons: <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+
+          Return only the full code in <html></html> tags.
+          `
+        },
+        {
+          role: "user",
+          content: [
+            { type: "text", text: "Generate code for a web page that looks exactly like this." },
+            {
+              type: "image_url",
+              image_url: 'https://ibb.co/cJNGgBg',
+            },
+          ],
+        },
+      ],
+    });
+    res.send(response)
   })
 
   const port = 1404;
