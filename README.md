@@ -12,7 +12,10 @@ Teams can now build a functional MVP faster, utilising the already available tea
 
 If this doesn't blow your mind, you can checkout the video below to see what a `professional developer` can build with Peppubuild using our drag-and-drop feature.
 
-![X LOGIN EXAMPLE](./example/x-login.gif)
+
+https://github.com/hannydevelop/Peppubuild/assets/62933980/d87be2e0-9a52-4321-a77b-737b57a57e11
+
+
 
 Well, we're still in the works for a no-code backend, checkout the [where are we? section](#where-are-we).
 
