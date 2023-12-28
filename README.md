@@ -1,14 +1,18 @@
 # Peppubuild
 
+Original             |  Built with Peppubuild
+:-------------------------:|:-------------------------:
+![Haaa](./example/twitter-login.png)  |  ![mm](./example/built-with-peppu.png)
+
 Hey, it's still 2023! If you're reading this that means you're interested in what I and some friends are cooking with Peppubuild. The goal of this project is to empower `citizen developers` to create web applications with ease, while also giving `professional developers` the flexibility and speed they need for creating an application. Simply put, anyone can build a web based application and get them running in no time with Peppubuild. 
 
 Teams can now build a functional MVP faster, utilising the already available team members. While this looks like a lot of promises, you can checkout the video below to see what a `citizen developer` can build with Peppubuild + Openai.
 
 ### Video
 
-If this doesn't blow your mind, you can checkout the video below to see what a `professional developer` can build with Peppubuild + CSS + HTML using our drag-and-drop feature.
+If this doesn't blow your mind, you can checkout the video below to see what a `professional developer` can build with Peppubuild using our drag-and-drop feature.
 
-### Video
+![X LOGIN EXAMPLE](./example/x-login.gif)
 
 Well, we're still in the works for a no-code backend, checkout the [where are we? section](#where-are-we).
 
