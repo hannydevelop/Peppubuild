@@ -48,4 +48,4 @@ This repository contains the NodeJs code for Peppubuild (backend). The desktop a
 
 ## ✨ Quick Start
 
-Please checkout the [Instructions](https://github.com/hannydevelop/peppubuild-desktop#instructions) version of the desktop repository on how to setup and start using Peppubuild. If you need more help, try the [documentation guide](https://docs.peppubuild.com).
+Please checkout the [Quick start documentation](https://docs.peppubuild.com/overview/quick-start), to see what you can build with Peppubuild.
