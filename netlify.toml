@@ -2,6 +2,6 @@
   external_node_modules = ["express"]
 [[redirects]]
   force = true
-  from = "/login/*"
+  from = "/api/*"
   status = 200
-  to = "/.netlify/functions/login/:splat"
+  to = "/.netlify/functions/api/:splat"
