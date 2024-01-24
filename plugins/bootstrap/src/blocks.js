@@ -64,7 +64,9 @@ export default (editor, opts = {}) => {
     <line x1="3" y1="20.5" x2="67" y2="20.5" stroke="black" stroke-width="7"/>
     <line x1="3" y1="28.5" x2="67" y2="28.5" stroke="black" stroke-width="7"/>
     </svg>`,
-    content: `<div class="accordion" id="accordionExample">
+    content: `
+    <main>
+    <div class="accordion" id="accordionExample">
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingOne">
         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -101,7 +103,8 @@ export default (editor, opts = {}) => {
         </div>
       </div>
     </div>
-  </div>`,
+  </div>
+  </main>`,
   });
 
   // Card
@@ -473,24 +476,24 @@ export default (editor, opts = {}) => {
         </div>
       </div>
       <div class="carousel-item">
-        <img src="https://fakeimg.pl/1024x400/141111/141111" class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"/></img>
-        <div class="container">
-          <div class="carousel-caption">
-            <h1>Another example headline.</h1>
-            <p>Some representative placeholder content for the second slide of the carousel.</p>
-            <p><a class="btn btn-lg btn-primary" href="#">Learn more</a></p>
-          </div>
+      <img src="https://fakeimg.pl/1024x400/141111/141111" class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"/></img>
+      <div class="container">
+        <div class="carousel-caption text-start">
+          <h1>Example headline.</h1>
+          <p class="opacity-75">Some representative placeholder content for the first slide of the carousel.</p>
+          <p><a class="btn btn-lg btn-primary" href="#">Sign up today</a></p>
         </div>
       </div>
+      </div>
       <div class="carousel-item">
-        <img src="https://fakeimg.pl/1024x400/141111/141111" src="https://fakeimg.pl/1024x400/141111/141111" class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"/></img>
-        <div class="container">
-          <div class="carousel-caption text-end">
-            <h1>One more for good measure.</h1>
-            <p>Some representative placeholder content for the third slide of this carousel.</p>
-            <p><a class="btn btn-lg btn-primary" href="#">Browse gallery</a></p>
-          </div>
+      <img src="https://fakeimg.pl/1024x400/141111/141111" class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"/></img>
+      <div class="container">
+        <div class="carousel-caption text-start">
+          <h1>Example headline.</h1>
+          <p class="opacity-75">Some representative placeholder content for the first slide of the carousel.</p>
+          <p><a class="btn btn-lg btn-primary" href="#">Sign up today</a></p>
         </div>
+      </div>
       </div>
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
