@@ -14,7 +14,7 @@ export default (editor, opts = {}) => {
     <path d="M7 23.5C5.067 23.5 3.5 25.067 3.5 27C3.5 28.933 5.067 30.5 7 30.5L7 23.5ZM7 30.5L36 30.5L36 23.5L7 23.5L7 30.5Z" fill="black"/>
     <path d="M62 30.5C63.933 30.5 65.5 28.933 65.5 27C65.5 25.067 63.933 23.5 62 23.5L62 30.5ZM62 23.5L35 23.5L35 30.5L62 30.5L62 23.5Z" fill="black"/>
     </svg>`,
-    content: `<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    content: `<nav class="navbar navbar-expand-lg fixed-top navbar-light">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">Navbar</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,6 +108,29 @@ export default (editor, opts = {}) => {
   bm.add('Card', {
     label: 'Card',
     category: 'Bootstrap Card',
+    media: `<svg width="70" height="38" viewBox="0 0 70 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="70" height="37.3333" fill="#AAAAAA"/>
+    <line x1="3" y1="3.5" x2="26.3333" y2="3.5" stroke="black" stroke-width="3"/>
+    <rect x="3" y="7" width="18" height="25" fill="black"/>
+    <line x1="5.9984" y1="26.5128" x2="17.9984" y2="26.5" stroke="white" stroke-width="3"/>
+    <line x1="5.99947" y1="19.5128" x2="17.9995" y2="19.5" stroke="white"/>
+    <line x1="5.99947" y1="21.5128" x2="17.9995" y2="21.5" stroke="white"/>
+    <rect x="8" y="10" width="8" height="7.69811" fill="white"/>
+    <rect x="10.8895" y="12.911" width="2.26415" height="1.9407" fill="#D9D9D9"/>
+    <rect x="26" y="7" width="18" height="25" fill="black"/>
+    <line x1="28.9984" y1="26.5128" x2="40.9984" y2="26.5" stroke="white" stroke-width="3"/>
+    <line x1="28.9995" y1="19.5128" x2="40.9995" y2="19.5" stroke="white"/>
+    <line x1="28.9995" y1="21.5128" x2="40.9995" y2="21.5" stroke="white"/>
+    <rect x="31" y="10" width="8" height="7.69811" fill="white"/>
+    <rect x="33.8895" y="12.911" width="2.26415" height="1.9407" fill="#D9D9D9"/>
+    <rect x="49" y="7" width="18" height="25" fill="black"/>
+    <line x1="51.9984" y1="26.5128" x2="63.9984" y2="26.5" stroke="white" stroke-width="3"/>
+    <line x1="51.9995" y1="19.5128" x2="63.9995" y2="19.5" stroke="white"/>
+    <line x1="51.9995" y1="21.5128" x2="63.9995" y2="21.5" stroke="white"/>
+    <rect x="54" y="10" width="8" height="7.69811" fill="white"/>
+    <rect x="56.8895" y="12.911" width="2.26415" height="1.9407" fill="#D9D9D9"/>
+    </svg>
+    `,
     content: `<div class="card" style="width: 18rem;">
     <img src="https://fakeimg.pl/600x400?text=Replace+image" class="card-img-top" alt="...">
     <div class="card-body">
@@ -117,7 +140,7 @@ export default (editor, opts = {}) => {
     </div>
   </div>`,
   });
-
+  /* 
   bm.add('Card-Feature', {
     label: 'Card-Feature',
     category: 'Bootstrap Card',
@@ -149,6 +172,7 @@ export default (editor, opts = {}) => {
     <div class="card-footer bg-transparent border-success">Footer</div>
   </div>`,
   });
+  
 
   bm.add('Breadcrumb', {
     label: 'Breadcrumb',
@@ -161,11 +185,147 @@ export default (editor, opts = {}) => {
     </svg>`,
     content: ``,
   });
+  */
 
   bm.add('Pricing', {
     label: 'Pricing',
     category: 'Bootstrap Component',
-    content: ``,
+    content: `<main class="container py-5">
+    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+      <div class="col">
+        <div class="card mb-4 rounded-3 shadow-sm">
+          <div class="card-header py-3">
+            <h4 class="my-0 fw-normal">Free</h4>
+          </div>
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title">$0<small class="text-body-secondary fw-light">/mo</small></h1>
+            <ul class="list-unstyled mt-3 mb-4">
+              <li>10 users included</li>
+              <li>2 GB of storage</li>
+              <li>Email support</li>
+              <li>Help center access</li>
+            </ul>
+            <button type="button" class="w-100 btn btn-lg btn-outline-primary">Sign up for free</button>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card mb-4 rounded-3 shadow-sm">
+          <div class="card-header py-3">
+            <h4 class="my-0 fw-normal">Pro</h4>
+          </div>
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title">$15<small class="text-body-secondary fw-light">/mo</small></h1>
+            <ul class="list-unstyled mt-3 mb-4">
+              <li>20 users included</li>
+              <li>10 GB of storage</li>
+              <li>Priority email support</li>
+              <li>Help center access</li>
+            </ul>
+            <button type="button" class="w-100 btn btn-lg btn-primary">Get started</button>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card mb-4 rounded-3 shadow-sm border-primary">
+          <div class="card-header py-3 text-bg-primary border-primary">
+            <h4 class="my-0 fw-normal">Enterprise</h4>
+          </div>
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title">$29<small class="text-body-secondary fw-light">/mo</small></h1>
+            <ul class="list-unstyled mt-3 mb-4">
+              <li>30 users included</li>
+              <li>15 GB of storage</li>
+              <li>Phone and email support</li>
+              <li>Help center access</li>
+            </ul>
+            <button type="button" class="w-100 btn btn-lg btn-primary">Contact us</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="display-6 text-center mb-4">Compare plans</h2>
+
+    <div class="table-responsive">
+      <table class="table text-center">
+        <thead>
+          <tr>
+            <th style="width: 34%;"></th>
+            <th style="width: 22%;">Free</th>
+            <th style="width: 22%;">Pro</th>
+            <th style="width: 22%;">Enterprise</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row" class="text-start">Public</th>
+            <td><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+          </svg></td>
+            <td><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+          </svg></td>
+            <td><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+          </svg></td>
+          </tr>
+          <tr>
+            <th scope="row" class="text-start">Private</th>
+            <td></td>
+            <td><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+          </svg></td>
+            <td><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+          </svg></td>
+          </tr>
+        </tbody>
+
+        <tbody>
+          <tr>
+            <th scope="row" class="text-start">Permissions</th>
+            <td><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+          </svg></td>
+            <td><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+          </svg></td>
+            <td><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+          </svg></td>
+          </tr>
+          <tr>
+            <th scope="row" class="text-start">Sharing</th>
+            <td></td>
+            <td><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+          </svg></td>
+            <td><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+          </svg></td>
+          </tr>
+          <tr>
+            <th scope="row" class="text-start">Unlimited members</th>
+            <td></td>
+            <td><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+          </svg></td>
+            <td><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+          </svg></td>
+          </tr>
+          <tr>
+            <th scope="row" class="text-start">Extra security</th>
+            <td></td>
+            <td></td>
+            <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+    `,
     media: `<svg width="70" height="38" viewBox="0 0 70 38" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect width="70" height="37.3333" fill="#AAAAAA"/>
     <line x1="3" y1="3.5" x2="26.3333" y2="3.5" stroke="black" stroke-width="3"/>
@@ -187,8 +347,8 @@ export default (editor, opts = {}) => {
     </svg>`
   });
 
-  bm.add('Testimonial', {
-    label: 'Testimonial',
+  bm.add('Features', {
+    label: 'Features',
     category: 'Bootstrap Component',
     media: `<svg width="70" height="38" viewBox="0 0 70 38" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect width="70" height="37.3333" fill="#AAAAAA"/>
@@ -210,13 +370,70 @@ export default (editor, opts = {}) => {
     <path d="M55.8636 11.7273L55.8864 11.1023L55.358 11.4375L55.2216 11.1989L55.7784 10.9091L55.2216 10.6193L55.358 10.3807L55.8864 10.7159L55.8636 10.0909H56.1364L56.1136 10.7159L56.642 10.3807L56.7784 10.6193L56.2216 10.9091L56.7784 11.1989L56.642 11.4375L56.1136 11.1023L56.1364 11.7273H55.8636ZM57.8636 11.7273L57.8864 11.1023L57.358 11.4375L57.2216 11.1989L57.7784 10.9091L57.2216 10.6193L57.358 10.3807L57.8864 10.7159L57.8636 10.0909H58.1364L58.1136 10.7159L58.642 10.3807L58.7784 10.6193L58.2216 10.9091L58.7784 11.1989L58.642 11.4375L58.1136 11.1023L58.1364 11.7273H57.8636ZM59.8636 11.7273L59.8864 11.1023L59.358 11.4375L59.2216 11.1989L59.7784 10.9091L59.2216 10.6193L59.358 10.3807L59.8864 10.7159L59.8636 10.0909H60.1364L60.1136 10.7159L60.642 10.3807L60.7784 10.6193L60.2216 10.9091L60.7784 11.1989L60.642 11.4375L60.1136 11.1023L60.1364 11.7273H59.8636Z" fill="white"/>
     </svg>
     `,
-    content: ``,
+    content: `
+    <div class="container px-4 py-5" id="hanging-icons">
+    <h2 class="pb-2 border-bottom">Hanging icons</h2>
+    <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+      <div class="col d-flex align-items-start">
+        <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+          <img src='' class="bi" width="100px" height="100px"><use xlink:href="#toggles2"/></img>
+        </div>
+        <div>
+          <h3 class="fs-2 text-body-emphasis">Featured title</h3>
+          <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
+          <a href="#" class="btn btn-primary">
+            Primary button
+          </a>
+        </div>
+      </div>
+      <div class="col d-flex align-items-start">
+        <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+          <img src='' class="bi" width="100px" height="100px"><use xlink:href="#cpu-fill"/></img>
+        </div>
+        <div>
+          <h3 class="fs-2 text-body-emphasis">Featured title</h3>
+          <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
+          <a href="#" class="btn btn-primary">
+            Primary button
+          </a>
+        </div>
+      </div>
+      <div class="col d-flex align-items-start">
+        <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+          <img src='' class="bi" width="100px" height="100px"><use xlink:href="#tools"/></img>
+        </div>
+        <div>
+          <h3 class="fs-2 text-body-emphasis">Featured title</h3>
+          <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
+          <a href="#" class="btn btn-primary">
+            Primary button
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+    `,
   });
 
   bm.add('Hero', {
     label: 'Hero',
     category: 'Bootstrap Component',
-    content: ``,
+    content: `
+    <div class="container col-xxl-8 px-4 py-5">
+      <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+        <div class="col-10 col-sm-8 col-lg-6">
+          <img src="bootstrap-themes.png" class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="700" height="500" loading="lazy">
+        </div>
+        <div class="col-lg-6">
+          <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Responsive left-aligned hero with image</h1>
+          <p class="lead">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system, extensive prebuilt components, and powerful JavaScript plugins.</p>
+          <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+            <button type="button" class="btn btn-primary btn-lg px-4 me-md-2">Primary</button>
+            <button type="button" class="btn btn-outline-secondary btn-lg px-4">Default</button>
+          </div>
+        </div>
+      </div>
+    </div>`,
     media: `<svg width="70" height="38" viewBox="0 0 70 38" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect width="70" height="37.3333" fill="#AAAAAA"/>
     <rect x="6.06665" y="7" width="24.7333" height="23.8" fill="black"/>
@@ -230,12 +447,80 @@ export default (editor, opts = {}) => {
   bm.add('Carousel', {
     label: 'Carousel',
     category: 'Bootstrap Animation',
-    content: `<svg width="70" height="36" viewBox="0 0 70 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+    media: `<svg width="70" height="36" viewBox="0 0 70 36" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect width="70" height="36" fill="#AAAAAA"/>
     <circle cx="28" cy="27" r="1" fill="#D9D9D9"/>
     <circle cx="33" cy="27" r="1" fill="#D9D9D9"/>
     <circle cx="38" cy="27" r="1" fill="#D9D9D9"/>
     <path d="M20.2173 17.0696C20.0085 17.0663 19.7997 17.0265 19.5909 16.9503C19.3821 16.8741 19.1915 16.7456 19.0192 16.565C18.8468 16.3827 18.7085 16.1366 18.604 15.8267C18.4996 15.5152 18.4474 15.1241 18.4474 14.6534C18.4474 14.2027 18.4897 13.8033 18.5742 13.4553C18.6587 13.1056 18.7814 12.8114 18.9421 12.5728C19.1029 12.3325 19.2968 12.1502 19.5238 12.0259C19.7525 11.9016 20.0102 11.8395 20.2969 11.8395C20.5819 11.8395 20.8355 11.8967 21.0575 12.011C21.2813 12.1237 21.4635 12.2811 21.6044 12.4833C21.7453 12.6855 21.8364 12.9183 21.8778 13.1818H21.2713C21.215 12.9531 21.1056 12.7634 20.9432 12.6126C20.7808 12.4618 20.5653 12.3864 20.2969 12.3864C19.9025 12.3864 19.5917 12.5579 19.3647 12.9009C19.1393 13.244 19.0258 13.7254 19.0241 14.3452H19.0639C19.1567 14.2043 19.2669 14.0842 19.3945 13.9847C19.5238 13.8836 19.6663 13.8058 19.8221 13.7511C19.9779 13.6964 20.1428 13.669 20.3168 13.669C20.6084 13.669 20.8752 13.742 21.1172 13.8878C21.3591 14.032 21.553 14.2317 21.6989 14.4869C21.8447 14.7404 21.9176 15.0312 21.9176 15.3594C21.9176 15.6742 21.8472 15.9626 21.7063 16.2244C21.5655 16.4846 21.3674 16.6918 21.1122 16.8459C20.8587 16.9983 20.5604 17.0729 20.2173 17.0696ZM20.2173 16.5227C20.4261 16.5227 20.6134 16.4705 20.7791 16.3661C20.9465 16.2617 21.0782 16.1217 21.1744 15.946C21.2721 15.7704 21.321 15.5748 21.321 15.3594C21.321 15.1489 21.2738 14.9575 21.1793 14.7852C21.0865 14.6112 20.9581 14.4728 20.794 14.37C20.6316 14.2673 20.446 14.2159 20.2372 14.2159C20.0798 14.2159 19.9331 14.2474 19.7972 14.3104C19.6613 14.3717 19.542 14.4562 19.4393 14.5639C19.3382 14.6716 19.2586 14.7951 19.2006 14.9343C19.1426 15.0719 19.1136 15.2169 19.1136 15.3693C19.1136 15.5715 19.1609 15.7604 19.2553 15.9361C19.3514 16.1117 19.4824 16.2534 19.6481 16.3612C19.8155 16.4689 20.0052 16.5227 20.2173 16.5227ZM24.5557 17.0696C24.1811 17.0696 23.8621 16.9677 23.5986 16.7638C23.3351 16.5584 23.1338 16.2609 22.9946 15.8714C22.8554 15.4804 22.7858 15.008 22.7858 14.4545C22.7858 13.9044 22.8554 13.4345 22.9946 13.0451C23.1354 12.654 23.3376 12.3557 23.6011 12.1502C23.8663 11.9431 24.1845 11.8395 24.5557 11.8395C24.9269 11.8395 25.2442 11.9431 25.5077 12.1502C25.7729 12.3557 25.9751 12.654 26.1143 13.0451C26.2551 13.4345 26.3256 13.9044 26.3256 14.4545C26.3256 15.008 26.2559 15.4804 26.1167 15.8714C25.9775 16.2609 25.7762 16.5584 25.5127 16.7638C25.2492 16.9677 24.9302 17.0696 24.5557 17.0696ZM24.5557 16.5227C24.9269 16.5227 25.2152 16.3437 25.4207 15.9858C25.6262 15.6278 25.729 15.1174 25.729 14.4545C25.729 14.0137 25.6817 13.6384 25.5873 13.3285C25.4945 13.0186 25.3602 12.7824 25.1846 12.62C25.0106 12.4576 24.8009 12.3764 24.5557 12.3764C24.1878 12.3764 23.9002 12.5579 23.6931 12.9208C23.4859 13.2821 23.3824 13.7933 23.3824 14.4545C23.3824 14.8954 23.4288 15.2699 23.5216 15.5781C23.6144 15.8864 23.7478 16.1209 23.9218 16.2816C24.0974 16.4424 24.3087 16.5227 24.5557 16.5227ZM28.9307 17.0696C28.5561 17.0696 28.2371 16.9677 27.9736 16.7638C27.7101 16.5584 27.5088 16.2609 27.3696 15.8714C27.2304 15.4804 27.1608 15.008 27.1608 14.4545C27.1608 13.9044 27.2304 13.4345 27.3696 13.0451C27.5104 12.654 27.7126 12.3557 27.9761 12.1502C28.2413 11.9431 28.5595 11.8395 28.9307 11.8395C29.3019 11.8395 29.6192 11.9431 29.8827 12.1502C30.1479 12.3557 30.3501 12.654 30.4893 13.0451C30.6301 13.4345 30.7006 13.9044 30.7006 14.4545C30.7006 15.008 30.6309 15.4804 30.4917 15.8714C30.3525 16.2609 30.1512 16.5584 29.8877 16.7638C29.6242 16.9677 29.3052 17.0696 28.9307 17.0696ZM28.9307 16.5227C29.3019 16.5227 29.5902 16.3437 29.7957 15.9858C30.0012 15.6278 30.104 15.1174 30.104 14.4545C30.104 14.0137 30.0567 13.6384 29.9623 13.3285C29.8695 13.0186 29.7352 12.7824 29.5596 12.62C29.3856 12.4576 29.1759 12.3764 28.9307 12.3764C28.5628 12.3764 28.2752 12.5579 28.0681 12.9208C27.8609 13.2821 27.7574 13.7933 27.7574 14.4545C27.7574 14.8954 27.8038 15.2699 27.8966 15.5781C27.9894 15.8864 28.1228 16.1209 28.2968 16.2816C28.4724 16.4424 28.6837 16.5227 28.9307 16.5227ZM34.0017 11.9091L35.3142 14.027H35.354L36.6665 11.9091H37.3923L35.7915 14.4545L37.3923 17H36.6665L35.354 14.9219H35.3142L34.0017 17H33.2758L34.9165 14.4545L33.2758 11.9091H34.0017ZM41.7642 17.0696C41.5554 17.0663 41.3466 17.0265 41.1378 16.9503C40.929 16.8741 40.7384 16.7456 40.5661 16.565C40.3937 16.3827 40.2553 16.1366 40.1509 15.8267C40.0465 15.5152 39.9943 15.1241 39.9943 14.6534C39.9943 14.2027 40.0366 13.8033 40.1211 13.4553C40.2056 13.1056 40.3282 12.8114 40.489 12.5728C40.6497 12.3325 40.8436 12.1502 41.0707 12.0259C41.2994 11.9016 41.5571 11.8395 41.8438 11.8395C42.1288 11.8395 42.3823 11.8967 42.6044 12.011C42.8281 12.1237 43.0104 12.2811 43.1513 12.4833C43.2921 12.6855 43.3833 12.9183 43.4247 13.1818H42.8182C42.7618 12.9531 42.6525 12.7634 42.4901 12.6126C42.3277 12.4618 42.1122 12.3864 41.8438 12.3864C41.4493 12.3864 41.1386 12.5579 40.9116 12.9009C40.6862 13.244 40.5727 13.7254 40.571 14.3452H40.6108C40.7036 14.2043 40.8138 14.0842 40.9414 13.9847C41.0707 13.8836 41.2132 13.8058 41.369 13.7511C41.5247 13.6964 41.6896 13.669 41.8636 13.669C42.1553 13.669 42.4221 13.742 42.6641 13.8878C42.906 14.032 43.0999 14.2317 43.2457 14.4869C43.3916 14.7404 43.4645 15.0312 43.4645 15.3594C43.4645 15.6742 43.3941 15.9626 43.2532 16.2244C43.1123 16.4846 42.9143 16.6918 42.6591 16.8459C42.4055 16.9983 42.1072 17.0729 41.7642 17.0696ZM41.7642 16.5227C41.973 16.5227 42.1603 16.4705 42.326 16.3661C42.4934 16.2617 42.6251 16.1217 42.7212 15.946C42.819 15.7704 42.8679 15.5748 42.8679 15.3594C42.8679 15.1489 42.8207 14.9575 42.7262 14.7852C42.6334 14.6112 42.505 14.4728 42.3409 14.37C42.1785 14.2673 41.9929 14.2159 41.7841 14.2159C41.6267 14.2159 41.48 14.2474 41.3441 14.3104C41.2082 14.3717 41.0889 14.4562 40.9862 14.5639C40.8851 14.6716 40.8055 14.7951 40.7475 14.9343C40.6895 15.0719 40.6605 15.2169 40.6605 15.3693C40.6605 15.5715 40.7077 15.7604 40.8022 15.9361C40.8983 16.1117 41.0292 16.2534 41.195 16.3612C41.3623 16.4689 41.5521 16.5227 41.7642 16.5227ZM46.1025 17.0696C45.728 17.0696 45.409 16.9677 45.1455 16.7638C44.882 16.5584 44.6807 16.2609 44.5415 15.8714C44.4023 15.4804 44.3327 15.008 44.3327 14.4545C44.3327 13.9044 44.4023 13.4345 44.5415 13.0451C44.6823 12.654 44.8845 12.3557 45.148 12.1502C45.4131 11.9431 45.7313 11.8395 46.1025 11.8395C46.4738 11.8395 46.7911 11.9431 47.0546 12.1502C47.3198 12.3557 47.5219 12.654 47.6611 13.0451C47.802 13.4345 47.8724 13.9044 47.8724 14.4545C47.8724 15.008 47.8028 15.4804 47.6636 15.8714C47.5244 16.2609 47.3231 16.5584 47.0596 16.7638C46.7961 16.9677 46.4771 17.0696 46.1025 17.0696ZM46.1025 16.5227C46.4738 16.5227 46.7621 16.3437 46.9676 15.9858C47.1731 15.6278 47.2758 15.1174 47.2758 14.4545C47.2758 14.0137 47.2286 13.6384 47.1341 13.3285C47.0413 13.0186 46.9071 12.7824 46.7314 12.62C46.5574 12.4576 46.3478 12.3764 46.1025 12.3764C45.7346 12.3764 45.4471 12.5579 45.24 12.9208C45.0328 13.2821 44.9292 13.7933 44.9292 14.4545C44.9292 14.8954 44.9756 15.2699 45.0684 15.5781C45.1613 15.8864 45.2947 16.1209 45.4687 16.2816C45.6443 16.4424 45.8556 16.5227 46.1025 16.5227ZM50.4775 17.0696C50.103 17.0696 49.784 16.9677 49.5205 16.7638C49.257 16.5584 49.0557 16.2609 48.9165 15.8714C48.7773 15.4804 48.7077 15.008 48.7077 14.4545C48.7077 13.9044 48.7773 13.4345 48.9165 13.0451C49.0573 12.654 49.2595 12.3557 49.523 12.1502C49.7881 11.9431 50.1063 11.8395 50.4775 11.8395C50.8488 11.8395 51.1661 11.9431 51.4296 12.1502C51.6948 12.3557 51.8969 12.654 52.0361 13.0451C52.177 13.4345 52.2474 13.9044 52.2474 14.4545C52.2474 15.008 52.1778 15.4804 52.0386 15.8714C51.8994 16.2609 51.6981 16.5584 51.4346 16.7638C51.1711 16.9677 50.8521 17.0696 50.4775 17.0696ZM50.4775 16.5227C50.8488 16.5227 51.1371 16.3437 51.3426 15.9858C51.5481 15.6278 51.6508 15.1174 51.6508 14.4545C51.6508 14.0137 51.6036 13.6384 51.5091 13.3285C51.4163 13.0186 51.2821 12.7824 51.1064 12.62C50.9324 12.4576 50.7228 12.3764 50.4775 12.3764C50.1096 12.3764 49.8221 12.5579 49.615 12.9208C49.4078 13.2821 49.3042 13.7933 49.3042 14.4545C49.3042 14.8954 49.3506 15.2699 49.4434 15.5781C49.5363 15.8864 49.6697 16.1209 49.8437 16.2816C50.0193 16.4424 50.2306 16.5227 50.4775 16.5227Z" fill="black"/>
     </svg>`,
+    content: `
+    <div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="https://fakeimg.pl/1024x400/141111/141111" class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"/></img>
+        <div class="container">
+          <div class="carousel-caption text-start">
+            <h1>Example headline.</h1>
+            <p class="opacity-75">Some representative placeholder content for the first slide of the carousel.</p>
+            <p><a class="btn btn-lg btn-primary" href="#">Sign up today</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="https://fakeimg.pl/1024x400/141111/141111" class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"/></img>
+        <div class="container">
+          <div class="carousel-caption">
+            <h1>Another example headline.</h1>
+            <p>Some representative placeholder content for the second slide of the carousel.</p>
+            <p><a class="btn btn-lg btn-primary" href="#">Learn more</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="https://fakeimg.pl/1024x400/141111/141111" src="https://fakeimg.pl/1024x400/141111/141111" class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"/></img>
+        <div class="container">
+          <div class="carousel-caption text-end">
+            <h1>One more for good measure.</h1>
+            <p>Some representative placeholder content for the third slide of this carousel.</p>
+            <p><a class="btn btn-lg btn-primary" href="#">Browse gallery</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+  <style>
+    /* CUSTOMIZE THE CAROUSEL
+    -------------------------------------------------- */
+
+    /* Carousel base class */
+    .carousel {
+      margin-bottom: 4rem;
+    }
+    /* Since positioning the image, we need to help out the caption */
+    .carousel-caption {
+      bottom: 3rem;
+      z-index: 10;
+    }
+
+    /* Declare heights because of positioning of img element */
+    .carousel-item {
+      height: 32rem;
+    }
+  </style>
+    `
   });
 }
