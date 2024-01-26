@@ -65,8 +65,9 @@ export default (editor, opts = {}) => {
     <line x1="3" y1="28.5" x2="67" y2="28.5" stroke="black" stroke-width="7"/>
     </svg>`,
     content: `
-    <main>
-    <div class="accordion" id="accordionExample">
+  <div>
+    <div class="container col-xxl-8 px-4 py-5 accordion" id="accordionExample">
+    <h2 class="pb-2 border-bottom">Accordion</h2>
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingOne">
         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -104,7 +105,7 @@ export default (editor, opts = {}) => {
       </div>
     </div>
   </div>
-  </main>`,
+  </div>`,
   });
 
   // Card
@@ -175,10 +176,10 @@ export default (editor, opts = {}) => {
     <div class="card-footer bg-transparent border-success">Footer</div>
   </div>`,
   });
-  
+    */
 
-  bm.add('Breadcrumb', {
-    label: 'Breadcrumb',
+  bm.add('Footer', {
+    label: 'Footer',
     category: 'Bootstrap Component',
     media: `<svg width="70" height="36" viewBox="0 0 70 36" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect width="70" height="36" fill="#AAAAAA"/>
@@ -186,14 +187,82 @@ export default (editor, opts = {}) => {
     <line x1="43" y1="19.5" x2="66.3333" y2="19.5" stroke="black" stroke-width="3"/>
     <path d="M36.9077 19.2102L33.706 20.8409V20.2045L36.1619 19.0213L36.142 19.0611V18.9616L36.1619 19.0014L33.706 17.8182V17.1818L36.9077 18.8125V19.2102Z" fill="black"/>
     </svg>`,
-    content: ``,
+    content: `
+  <div class="">
+  <footer class="container py-5">
+    <div class="row">
+      <div class="col-6 col-md-2 mb-3">
+        <h5>Section</h5>
+        <ul class="nav flex-column">
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Home</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Features</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Pricing</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">FAQs</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">About</a></li>
+        </ul>
+      </div>
+
+      <div class="col-6 col-md-2 mb-3">
+        <h5>Section</h5>
+        <ul class="nav flex-column">
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Home</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Features</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Pricing</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">FAQs</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">About</a></li>
+        </ul>
+      </div>
+
+      <div class="col-6 col-md-2 mb-3">
+        <h5>Section</h5>
+        <ul class="nav flex-column">
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Home</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Features</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Pricing</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">FAQs</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">About</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-5 offset-md-1 mb-3">
+        <form>
+          <h5>Subscribe to our newsletter</h5>
+          <p>Monthly digest of what's new and exciting from us.</p>
+          <div class="d-flex flex-column flex-sm-row w-100 gap-2">
+            <label for="newsletter1" class="visually-hidden">Email address</label>
+            <input id="newsletter1" type="text" class="form-control" placeholder="Email address">
+            <button class="btn btn-primary" type="button">Subscribe</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
+      <p>&copy; 2023 Company, Inc. All rights reserved.</p>
+      <ul class="list-unstyled d-flex">
+        <li class="ms-3"><a class="link-body-emphasis" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16">
+        <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518 3.3 3.3 0 0 0 1.447-1.817 6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429 3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218 3.2 3.2 0 0 1-.865.115 3 3 0 0 1-.614-.057 3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15"/>
+      </svg></a></li>
+        <li class="ms-3"><a class="link-body-emphasis" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16">
+        <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z"/>
+      </svg></a></li>
+        <li class="ms-3"><a class="link-body-emphasis" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16">
+        <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334"/>
+      </svg></a></li>
+      </ul>
+    </div>
+  </footer>
+</div>
+    `,
   });
-  */
+
 
   bm.add('Pricing', {
     label: 'Pricing',
     category: 'Bootstrap Component',
-    content: `<main class="container py-5">
+    content: `<div>
+    <div class="container col-sm-8 px-4 py-5">
+    <h2 class="pb-2 border-bottom">Pricing</h2>
     <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
       <div class="col">
         <div class="card mb-4 rounded-3 shadow-sm">
@@ -327,7 +396,8 @@ export default (editor, opts = {}) => {
         </tbody>
       </table>
     </div>
-  </main>
+  </div>
+  </div>
     `,
     media: `<svg width="70" height="38" viewBox="0 0 70 38" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect width="70" height="37.3333" fill="#AAAAAA"/>
@@ -374,8 +444,9 @@ export default (editor, opts = {}) => {
     </svg>
     `,
     content: `
+    <div>
     <div class="container px-4 py-5" id="hanging-icons">
-    <h2 class="pb-2 border-bottom">Hanging icons</h2>
+    <h2 class="pb-2 border-bottom">Features</h2>
     <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
       <div class="col d-flex align-items-start">
         <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
@@ -414,6 +485,7 @@ export default (editor, opts = {}) => {
         </div>
       </div>
     </div>
+  </div>
   </div>
     `,
   });
