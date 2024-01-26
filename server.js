@@ -13,9 +13,14 @@ var path = require('path')
 var grapesjs = require('grapesjs')
 var replaceInFile = require('replace-in-file')
 var os = require('os');
+var fetch = require('node-fetch')
+const ftp = require("basic-ftp");
 
 
 const CURR_DIR = os.homedir();
+const cpanelDomain = 'https://premium92.web-hosting.com';
+const cpanelUsername = 'ammytzib';
+const cpanelApiKey = '4TVDQGJA9WSP0OSRFLNTRTK0TASDC22W';
 const adapter = new FileSync(path.join(CURR_DIR, 'db.json'));
 const db = low(adapter);
 
@@ -31,6 +36,58 @@ async function startServer() {
   app.use(bodyParser.json())
 
   app.use(cookieParser())
+
+
+  app.get('/clientdeploy', (req, res) => {
+
+    async function uploadFiles() {
+      const client = new ftp.Client();
+      const projectname = req.params.projectname;
+
+      try {
+        // Connect to FTP server
+        await client.access({
+          host: "63.250.38.72",
+          user: "ammytzib",
+          password: "My1stbrainchild!",
+        });
+
+        // Set the remote directory (public_html or another directory)
+        await client.cd(projectname);
+
+        // Upload files
+        await client.uploadFromDir(`${CURR_DIR}/${projectname}`);
+
+        console.log("Files uploaded successfully");
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+        // Close the FTP connection
+        client.close();
+      }
+    }
+
+    // Run the function
+    uploadFiles();
+  })
+
+  // set route for logout
+  function createSubdomain(name, root) {
+    const apiUrl = `${cpanelDomain}:2083/cpsess${cpanelApiKey}/execute/SubDomain/addsubdomain?domain=${name}&rootdomain=${root}&dir=${name}.${root}`;
+    fetch(apiUrl, {
+      method: 'GET', headers: {
+        'Authorization': 'cpanel ' + cpanelUsername + ':' + cpanelApiKey,
+      }
+    })
+      .then(response => response.text())
+      .then(data => {
+        // Process the response
+        console.log(data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
 
   // set route for logout
   app.get('/logout', (_req, res) => {
@@ -416,5 +473,4 @@ async function startServer() {
   console.log(`started server in ${port}`)
 }
 
-exports.app = app;
-exports.startServer = startServer;
+startServer();
