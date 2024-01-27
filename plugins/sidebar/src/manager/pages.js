@@ -205,8 +205,8 @@ export default class PagesApp extends UI {
     addProject() {
         swal("What would you like to name this project?", {
             content: "input",
-        }).then((name) => {
-            localStorage.setItem("projectName", name);
+        }).then((val) => {
+            const name = val;
             this.state.projectName = name;
             swal("What type of project will you like to create", {
                 buttons: {
@@ -233,8 +233,9 @@ export default class PagesApp extends UI {
                                 this.createPublish(value).then(async (response) => {
                                     let text = await response.text();
                                     let json = JSON.parse(text);
-                                    console.log(json.ok)
                                     if (json.success) {
+                                        localStorage.setItem("projectName", name);
+                                        this.update();
                                         swal("Successful!", "Created Project", "success");
                                     } else swal("Error", json.error, 'error');
                                 })
@@ -267,7 +268,7 @@ export default class PagesApp extends UI {
 
                     }
                 });
-            this.update();
+            // this.update();
         });
     }
 
