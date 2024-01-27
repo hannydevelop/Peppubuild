@@ -160,20 +160,13 @@ export default class PagesApp extends UI {
     createPublish(value) {
         const { editor } = this;
         let name = this.state.projectName;
-        try {
-            fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/${value}/${name}`, {
-                method: "POST", // or 'PUT'
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }).then((response) => {
-                if (!response.ok) {
-                    swal("Error", `Slow internet detected`, "error")
-                } else {
-                    swal("Successful!", "Created Project", "success");
-                }
-            })
-        } catch { swal("Error", "An error occurred", "error") }
+        let data = fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/${value}/${name}`, {
+            method: "POST", // or 'PUT'
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        return data;
     }
 
     saveProject() {
@@ -237,9 +230,16 @@ export default class PagesApp extends UI {
                     switch (value) {
                         case "publishfront":
                             try {
-                                this.createPublish(value);
+                                this.createPublish(value).then(async (response) => {
+                                    let text = await response.text();
+                                    let json = JSON.parse(text);
+                                    console.log(json.ok)
+                                    if (json.success) {
+                                        swal("Successful!", "Created Project", "success");
+                                    } else swal("Error", json.error, 'error');
+                                })
                             } catch (error) {
-                                swal("Error", "An error occurred", error);
+                                swal("Error", "An error occurred", 'error');
                             }
                             break;
 
