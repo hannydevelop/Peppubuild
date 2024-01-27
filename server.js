@@ -14,12 +14,13 @@ var grapesjs = require('grapesjs')
 var replaceInFile = require('replace-in-file')
 var os = require('os');
 var fetch = require('node-fetch')
-const ftp = require("basic-ftp");
-
+var ftp = require("basic-ftp");
+var cors = require('cors')
 
 const CURR_DIR = os.homedir();
 const cpanelDomain = 'https://premium92.web-hosting.com';
 const cpanelUsername = 'ammytzib';
+const root = 'ammyraj.com';
 const cpanelApiKey = '4TVDQGJA9WSP0OSRFLNTRTK0TASDC22W';
 const adapter = new FileSync(path.join(CURR_DIR, 'db.json'));
 const db = low(adapter);
@@ -36,6 +37,8 @@ async function startServer() {
   app.use(bodyParser.json())
 
   app.use(cookieParser())
+
+  app.use(cors())
 
 
   app.get('/clientdeploy', (req, res) => {
@@ -72,21 +75,14 @@ async function startServer() {
   })
 
   // set route for logout
-  function createSubdomain(name, root) {
+  function createSub(name) {
     const apiUrl = `${cpanelDomain}:2083/cpsess${cpanelApiKey}/execute/SubDomain/addsubdomain?domain=${name}&rootdomain=${root}&dir=${name}.${root}`;
-    fetch(apiUrl, {
+    let data = fetch(apiUrl, {
       method: 'GET', headers: {
         'Authorization': 'cpanel ' + cpanelUsername + ':' + cpanelApiKey,
       }
     })
-      .then(response => response.text())
-      .then(data => {
-        // Process the response
-        console.log(data);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+    return data;
   }
 
   // set route for logout
@@ -379,21 +375,32 @@ async function startServer() {
     // let projectType = req.body.projectType;
     let tartgetPath = path.join(CURR_DIR, projectName);
 
-    // Call createProject in inquirerPrecss
-    if (!createProject.createProject(tartgetPath)) {
-      return;
-    }
-
-    db.defaults({ project: {} })
-      .write()
-    db.set('project.name', projectName).write()
-
     // Call createDirectoryContents
     // createDirectoryContents(templatePath, projectName);
+    createSub(projectName).then(async (response) => {
+      let text = await response.text();
+      let json = JSON.parse(text);
+      if (response.ok && json.errors != null) {
+        // return Error(json.errors[0]);
+        res.status(500).send({error: json.errors[0]});
+        throw new Error(json.errors[0])
+      } else {
+        // Call createProject in inquirerPrecss
+        if (!createProject.createProject(tartgetPath)) {
+          return;
+        }
 
-    createFrontend(tartgetPath);
+        db.defaults({ project: {} })
+          .write()
+        db.set('project.name', projectName).write()
+        createFrontend(tartgetPath);
+        res.send({success: 'Successfully created project'});
+      }
+    }).catch(error => {
+      return error;
+    });
     // updateScriptfront(projectName);
-    res.send('Successfully created Project')
+    // res.send('Successfully created Project')
   })
 
   // create backend project
@@ -416,7 +423,7 @@ async function startServer() {
     // Call createDirectoryContents
     // createDirectoryContents(templatePath, projectName);
 
-    createBackend(tartgetPath);
+    createBackend(tartgetPath)
     // updateScriptserver(projectName);
   })
 
