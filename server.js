@@ -41,11 +41,11 @@ async function startServer() {
   app.use(cors())
 
 
-  app.get('/clientdeploy', (req, res) => {
+  app.get('/clientdeploy/:name', (req, res) => {
 
     async function uploadFiles() {
       const client = new ftp.Client();
-      const projectname = req.params.projectname;
+      const projectname = req.params.name;
 
       try {
         // Connect to FTP server

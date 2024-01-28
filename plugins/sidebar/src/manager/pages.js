@@ -13,6 +13,7 @@ export default class PagesApp extends UI {
         this.openEdit = this.openEdit.bind(this);
         this.createPublish = this.createPublish.bind(this);
         this.saveProject = this.saveProject.bind(this);
+        this.publishProject = this.publishProject.bind(this);
         this.getProject = this.getProject.bind(this);
         this.getProjectName = this.getProjectName.bind(this);
         this.openDelete = this.openDelete.bind(this);
@@ -188,6 +189,26 @@ export default class PagesApp extends UI {
                 }
             })
         } catch { swal("Error", "An error occurred", "error") }
+    }
+
+    publishProject() {
+        this.saveProject();
+        let name = this.state.projectName;
+        try {
+            fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/clientdeploy/${name}`, {
+                method: "GET", // or 'PUT'
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }).then((response) => {
+                if (response.ok) {
+                    swal("Successful!", `Your project is now live at ${name}.ammyraj.com`, "success");
+                } else swal("Error!", `An error occurred`, "error");
+            })
+        } catch (error) {
+            swal("Error!", error, "error");
+        }
+        // call /clientdeploy.
     }
 
     async getProject() {
