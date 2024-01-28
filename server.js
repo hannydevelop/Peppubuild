@@ -179,7 +179,7 @@ async function startServer() {
   // Save Frontend changes.
   async function createFrontend(tempath) {
     // create client folder.
-    fs.mkdirSync(`${tempath}/client`)
+    fs.mkdirSync(`${tempath}`)
     /*
     // gen package.json()
     const package_json = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/package.json');
@@ -206,31 +206,33 @@ async function startServer() {
     });
      */
     // gen index.js
-    fs.mkdirSync(`${tempath}/client/css`)
-    fs.mkdirSync(`${tempath}/client/js`)
+    fs.mkdirSync(`${tempath}/css`)
+    // fs.mkdirSync(`${tempath}/js`)
 
-    let index_content = `
-    import axios from 'axios';
+    // let index_content = `
+    // import axios from 'axios';
     
-    export default {
+    // export default {
         /*Insert Imports Here*/ 
 
-        setup() {
-          return { 
+        // setup() {
+          // return { 
             /*Insert Data Here*/
-          }
-        },
-        methods: {
+         //  }
+        // },
+        // methods: {
             /*Insert Methods Here*/
-        },
-        async mounted() {
+        // },
+        // async mounted() {
             /*Insert Mounted Here*/
-        }
-    }
-    `;
+        // }
+    // }
+    // `;
+    /* 
     fs.writeFileSync(`${tempath}/client/js/index.js`, index_content, function (err) {
       if (err) return err;
     });
+    */
 
     let pages = db.get("gjsProject.project.pages").value();
     let editor = grapesjs.init({
@@ -253,30 +255,23 @@ async function startServer() {
               <meta http-equiv="X-UA-Compatible" content="IE=edge">
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
               <title>Document</title>
-              <link rel="stylesheet" type="text/css" href="./css/style.css">
-              <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.0/axios.min.js" integrity="sha512-aoTNnqZcT8B4AmeCFmiSnDlc4Nj/KPaZyB5G7JnOnUEkdNpCZs1LCankiYi01sLTyWy+m2P+W4XM+BuQ3Q4/Dg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-              <script type="module">
-                  import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
-
-                  import Index from './js/index.js'
-
-                  createApp(Index).mount('#app')
-              </script>
+              <link rel="stylesheet" type="text/css" href="./css/${name}.css">
           </head>
-          <body id="app">
+          <body>
           ${html}
           </body>
         </html>`
-      fs.writeFileSync(`${tempath}/client/${name}.html`, htmlContent, function (err) {
+      fs.writeFileSync(`${tempath}/${name}.html`, htmlContent, function (err) {
         if (err) return err;
       });
-      fs.writeFileSync(`${tempath}/client/css/style.css`, myCss += css, function (err) {
+      fs.writeFileSync(`${tempath}/css/${name}.css`, css, function (err) {
         if (err) return err;
       });
     })
 
     // create ENV
   }
+
 
   // get all of the projects from db in gjsProject format.
   app.get('/projects', (req, res) => {
@@ -298,7 +293,7 @@ async function startServer() {
     if (projectName != null) {
       let tempath = path.join(CURR_DIR, projectName);
       let filePath = `${tempath}/client/${id}.html`;
-      let cssPath = `${tempath}/client/css/style.css`;
+      let cssPath = `${tempath}/client/css/${id}.css`;
 
       let pages = db.get("pages").value();
       let editor = grapesjs.init({
@@ -308,11 +303,11 @@ async function startServer() {
       });
 
       let htmlContent = `
-    <body id="app">
+    <body>
     ${req.body.html}
     `
       let myCss = req.body.css;
-      let regex = new RegExp('<body id="app">(.|\n)*?<\/body>')
+      let regex = new RegExp('<body>(.|\n)*?<\/body>')
       const options = {
         files: filePath,
         from: regex,
@@ -335,15 +330,7 @@ async function startServer() {
               <meta http-equiv="X-UA-Compatible" content="IE=edge">
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
               <title>Document</title>
-              <link rel="stylesheet" type="text/css" href="./css/style.css">
-              <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.0/axios.min.js" integrity="sha512-aoTNnqZcT8B4AmeCFmiSnDlc4Nj/KPaZyB5G7JnOnUEkdNpCZs1LCankiYi01sLTyWy+m2P+W4XM+BuQ3Q4/Dg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-              <script type="module">
-                  import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
-
-                  import Index from './js/index.js'
-
-                  createApp(Index).mount('#app')
-              </script>
+              <link rel="stylesheet" type="text/css" href="./css/${id}.css">
           </head>
           <body id="app">
           ${req.body.html}

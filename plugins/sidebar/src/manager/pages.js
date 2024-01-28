@@ -71,7 +71,7 @@ export default class PagesApp extends UI {
     }
 
     removePage(e) {
-        if (this.opts.confirmDeletePage()) {
+        if (this.opts.confirmDeletePage() /* &&  this.pm.getSelected().id !== 'index' throw a can't delete home page*/) {
             this.pm.remove(e.currentTarget.dataset.key);
             this.deletePage(e.currentTarget.dataset.key);
             this.update();
