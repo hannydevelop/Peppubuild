@@ -179,7 +179,7 @@ async function startServer() {
   // Save Frontend changes.
   async function createFrontend(tempath) {
     // create client folder.
-    fs.mkdirSync(`${tempath}`)
+    // fs.mkdirSync(`${tempath}`)
     /*
     // gen package.json()
     const package_json = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/package.json');
@@ -364,7 +364,17 @@ async function startServer() {
 
     // Call createDirectoryContents
     // createDirectoryContents(templatePath, projectName);
-    createSub(projectName).then(async (response) => {
+    // Call createProject in inquirerPrecss
+    if (!createProject.createProject(tartgetPath)) {
+      return;
+    }
+
+    db.defaults({ project: {} })
+      .write()
+    db.set('project.name', projectName).write()
+    createFrontend(tartgetPath);
+    res.send({success: 'Successfully created project'});
+    /*createSub(projectName).then(async (response) => {
       let text = await response.text();
       let json = JSON.parse(text);
       if (response.ok && json.errors != null) {
@@ -372,20 +382,12 @@ async function startServer() {
         res.status(500).send({error: json.errors[0]});
         throw new Error(json.errors[0])
       } else {
-        // Call createProject in inquirerPrecss
-        if (!createProject.createProject(tartgetPath)) {
-          return;
-        }
-
-        db.defaults({ project: {} })
-          .write()
-        db.set('project.name', projectName).write()
-        createFrontend(tartgetPath);
-        res.send({success: 'Successfully created project'});
+        
       }
     }).catch(error => {
       return error;
-    });
+    }); */
+    
     // updateScriptfront(projectName);
     // res.send('Successfully created Project')
   })
