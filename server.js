@@ -171,108 +171,102 @@ async function startServer() {
     });
 
   }
+// Save Frontend changes.
+async function createFrontend(tempath) {
+  // create client folder.
+  // fs.mkdirSync(`${tempath}`)
+  /*
+  // gen package.json()
+  const package_json = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/package.json');
+  // Get the Blob data
+  const json = await package_json.text();
+  fs.writeFileSync(`${tempath}/client/package.json`, json, function (err) {
+    if (err) return err;
+  });
 
-  // Save Frontend changes.
-  async function createFrontend(tempath) {
-    // create client folder.
-    fs.mkdirSync(`${tempath}/client`)
-    /*
-    // gen package.json()
-    const package_json = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/package.json');
-    // Get the Blob data
-    const json = await package_json.text();
-    fs.writeFileSync(`${tempath}/client/package.json`, json, function (err) {
-      if (err) return err;
-    });
+  // gen outer package.json()
+  const package_json_outer = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/package.json');
+  // Get the Blob data
+  const json_file = await package_json_outer.text();
+  fs.writeFileSync(`${tempath}/package.json`, json_file, function (err) {
+    if (err) return err;
+  });
 
-    // gen outer package.json()
-    const package_json_outer = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/package.json');
-    // Get the Blob data
-    const json_file = await package_json_outer.text();
-    fs.writeFileSync(`${tempath}/package.json`, json_file, function (err) {
-      if (err) return err;
-    });
+  // gen gitignore
+  const gitignore_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/.gitignore');
+  // Get the Blob data
+  const gitignore = await gitignore_file.text();
+  fs.writeFileSync(`${tempath}/client/.gitignore`, gitignore, function (err) {
+    if (err) return err;
+  });
+   */
+  // gen index.js
+  fs.mkdirSync(`${tempath}/css`)
+  // fs.mkdirSync(`${tempath}/js`)
 
-    // gen gitignore
-    const gitignore_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/.gitignore');
-    // Get the Blob data
-    const gitignore = await gitignore_file.text();
-    fs.writeFileSync(`${tempath}/client/.gitignore`, gitignore, function (err) {
-      if (err) return err;
-    });
-     */
-    // gen index.js
-    fs.mkdirSync(`${tempath}/client/css`)
-    fs.mkdirSync(`${tempath}/client/js`)
+  // let index_content = `
+  // import axios from 'axios';
+  
+  // export default {
+      /*Insert Imports Here*/ 
 
-    let index_content = `
-    import axios from 'axios';
-    
-    export default {
-        /*Insert Imports Here*/ 
+      // setup() {
+        // return { 
+          /*Insert Data Here*/
+       //  }
+      // },
+      // methods: {
+          /*Insert Methods Here*/
+      // },
+      // async mounted() {
+          /*Insert Mounted Here*/
+      // }
+  // }
+  // `;
+  /* 
+  fs.writeFileSync(`${tempath}/client/js/index.js`, index_content, function (err) {
+    if (err) return err;
+  });
+  */
 
-        setup() {
-          return { 
-            /*Insert Data Here*/
-          }
-        },
-        methods: {
-            /*Insert Methods Here*/
-        },
-        async mounted() {
-            /*Insert Mounted Here*/
-        }
+  let pages = db.get("gjsProject.project.pages").value();
+  // delete the content of db.json
+  let editor = grapesjs.init({
+    headless: true, pageManager: {
+      pages: pages
     }
-    `;
-    fs.writeFileSync(`${tempath}/client/js/index.js`, index_content, function (err) {
+  });
+  // gen html and css files.
+  var myCss = ''
+  editor.Pages.getAll().forEach(e => {
+    const name = e.id
+    const component = e.getMainComponent()
+    const html = editor.getHtml({ component });
+    const css = editor.getCss({ component });
+    let htmlContent = `
+      <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Document</title>
+            <link rel="stylesheet" type="text/css" href="./css/${name}.css">
+        </head>
+        <body>
+        ${html}
+        </body>
+      </html>`
+    fs.writeFileSync(`${tempath}/${name}.html`, htmlContent, function (err) {
       if (err) return err;
     });
-
-    let pages = db.get("gjsProject.project.pages").value();
-    let editor = grapesjs.init({
-      headless: true, pageManager: {
-        pages: pages
-      }
+    fs.writeFileSync(`${tempath}/css/${name}.css`, css, function (err) {
+      if (err) return err;
     });
-    // gen html and css files.
-    var myCss = ''
-    editor.Pages.getAll().forEach(e => {
-      const name = e.id
-      const component = e.getMainComponent()
-      const html = editor.getHtml({ component });
-      const css = editor.getCss({ component });
-      let htmlContent = `
-        <!DOCTYPE html>
-          <html lang="en">
-          <head>
-              <meta charset="UTF-8">
-              <meta http-equiv="X-UA-Compatible" content="IE=edge">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>Document</title>
-              <link rel="stylesheet" type="text/css" href="./css/style.css">
-              <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.0/axios.min.js" integrity="sha512-aoTNnqZcT8B4AmeCFmiSnDlc4Nj/KPaZyB5G7JnOnUEkdNpCZs1LCankiYi01sLTyWy+m2P+W4XM+BuQ3Q4/Dg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-              <script type="module">
-                  import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+  })
 
-                  import Index from './js/index.js'
-
-                  createApp(Index).mount('#app')
-              </script>
-          </head>
-          <body id="app">
-          ${html}
-          </body>
-        </html>`
-      fs.writeFileSync(`${tempath}/client/${name}.html`, htmlContent, function (err) {
-        if (err) return err;
-      });
-      fs.writeFileSync(`${tempath}/client/css/style.css`, myCss += css, function (err) {
-        if (err) return err;
-      });
-    })
-
-    // create ENV
-  }
+  // create ENV
+}
 
   // get all of the projects from db in gjsProject format.
   app.get('/projects', (req, res) => {
@@ -294,7 +288,7 @@ async function startServer() {
     if (projectName != null) {
       let tempath = path.join(CURR_DIR, projectName);
       let filePath = `${tempath}/client/${id}.html`;
-      let cssPath = `${tempath}/client/css/style.css`;
+      let cssPath = `${tempath}/client/css/${id}.css`;
 
       let pages = db.get("pages").value();
       let editor = grapesjs.init({
@@ -304,11 +298,10 @@ async function startServer() {
       });
 
       let htmlContent = `
-    <body id="app">
     ${req.body.html}
     `
       let myCss = req.body.css;
-      let regex = new RegExp('<body id="app">(.|\n)*?<\/body>')
+      let regex = new RegExp('<body>(.|\n)*?<\/body>')
       const options = {
         files: filePath,
         from: regex,
@@ -331,17 +324,9 @@ async function startServer() {
               <meta http-equiv="X-UA-Compatible" content="IE=edge">
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
               <title>Document</title>
-              <link rel="stylesheet" type="text/css" href="./css/style.css">
-              <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.0/axios.min.js" integrity="sha512-aoTNnqZcT8B4AmeCFmiSnDlc4Nj/KPaZyB5G7JnOnUEkdNpCZs1LCankiYi01sLTyWy+m2P+W4XM+BuQ3Q4/Dg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-              <script type="module">
-                  import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
-
-                  import Index from './js/index.js'
-
-                  createApp(Index).mount('#app')
-              </script>
+              <link rel="stylesheet" type="text/css" href="./css/${id}.css">
           </head>
-          <body id="app">
+          <body>
           ${req.body.html}
           </body>
         </html>
