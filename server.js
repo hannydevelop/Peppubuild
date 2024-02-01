@@ -235,6 +235,7 @@ async function startServer() {
     */
 
     let pages = db.get("gjsProject.project.pages").value();
+    // delete the content of db.json
     let editor = grapesjs.init({
       headless: true, pageManager: {
         pages: pages
