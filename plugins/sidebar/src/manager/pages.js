@@ -19,6 +19,7 @@ export default class PagesApp extends UI {
         this.openDelete = this.openDelete.bind(this);
         this.deleteProject = this.deleteProject.bind(this);
         this.deletePage = this.deletePage.bind(this)
+        this.readText = this.readText.bind(this)
 
         /* Set initial app state */
         this.state = {
@@ -282,8 +283,10 @@ export default class PagesApp extends UI {
 
     async readText(event) {
         const file = event.target.files.item(0)
-  const text = await file.text();
-  console.log(text)
+        const text = await file.text();
+        const { editor } = this;
+     
+        editor.loadProjectData(JSON.parse(text))
     }
 
     handleNameInput(e) {
