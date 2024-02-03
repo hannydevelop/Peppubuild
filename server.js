@@ -350,6 +350,15 @@ async function createFrontend(tempath) {
       fs.writeFileSync(cssPath, myCss, function (err) {
         if (err) return err;
       });
+      
+      // copy content from db.json into file's db.json
+      let dbContent = fs.readFileSync(`${CURR_DIR}/db.json`, 'utf8', function (err) {
+        if (err) return err;
+      })
+
+      fs.writeFileSync(`${tempath}/db.json`, dbContent, function (err) {
+        if (err) return err;
+      });
     }
     res.send('Project saved successfully!')
   })
@@ -466,6 +475,6 @@ async function createFrontend(tempath) {
   app.listen(port);
   console.log(`started server in ${port}`)
 }
-
+// startServer()
 exports.app = app;
 exports.startServer = startServer;
