@@ -36,7 +36,8 @@ async function startServer() {
   app.use(bodyParser.json())
 
   app.use(cookieParser())
-
+  
+  /*
   app.get('/clientdeploy', (req, res) => {
 
     async function uploadFiles() {
@@ -69,6 +70,7 @@ async function startServer() {
     // Run the function
     uploadFiles();
   })
+  */
 
   // set route for logout
   function createSub(name) {
