@@ -6,6 +6,7 @@ export default class PagesApp extends UI {
         super(editor, opts);
         this.addPage = this.addPage.bind(this);
         this.addProject = this.addProject.bind(this);
+        this.loadProject = this.loadProject.bind(this);
         this.selectPage = this.selectPage.bind(this);
         this.removePage = this.removePage.bind(this);
         this.isSelected = this.isSelected.bind(this);
@@ -271,6 +272,20 @@ export default class PagesApp extends UI {
         });
     }
 
+    loadProject() {
+        // allow users choose the folder of choice.
+        // look for db.json file in the root of the folder.
+        // save the gjsProject in localhost.
+        // call reload.
+        // reference: index line 72 - 74
+    }
+
+    async readText(event) {
+        const file = event.target.files.item(0)
+  const text = await file.text();
+  console.log(text)
+    }
+
     handleNameInput(e) {
         this.setStateSilent({
             nameText: e.target.value.trim()
@@ -353,11 +368,18 @@ export default class PagesApp extends UI {
                 <div class="add-project">
                     ${editor.I18n.t('peppu-sidebar.project.new')}
                 </div>
+                <div>
+                <label for="file-upload" class="tm-input sm">
+                    Load Project
+                </label>
+                    <input type="file" class="load-project" id="file-upload"/>
+                </div>
             </div>`);
         cont.find('.add-page').on('click', this.addPage);
         cont.find('input').on('change', this.handleNameInput);
 
         cont.find('.add-project').on('click', this.addProject);
+        cont.find('.load-project').on('change', this.readText);
 
         this.$el = cont;
         return cont;
