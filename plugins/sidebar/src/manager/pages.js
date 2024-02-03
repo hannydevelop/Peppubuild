@@ -285,8 +285,9 @@ export default class PagesApp extends UI {
         const file = event.target.files.item(0)
         const text = await file.text();
         const { editor } = this;
-     
-        editor.loadProjectData(JSON.parse(text))
+        let data = JSON.parse(text);
+        let value = data.gjsProject.project;
+        editor.loadProjectData(value)
     }
 
     handleNameInput(e) {
