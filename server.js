@@ -233,6 +233,14 @@ async function createFrontend(tempath) {
     if (err) return err;
   });
   */
+  // copy content from db.json into file's db.json
+  let dbContent = fs.readFileSync(`${CURR_DIR}/db.json`, 'utf8', function (err) {
+    if (err) return err;
+  })
+
+  fs.writeFileSync(`${tempath}/db.json`, dbContent, function (err) {
+    if (err) return err;
+  });
 
   let pages = db.get("gjsProject.project.pages").value();
   // delete the content of db.json
@@ -294,8 +302,8 @@ async function createFrontend(tempath) {
     let projectName = db.get("project.name").value();
     if (projectName != null) {
       let tempath = path.join(CURR_DIR, projectName);
-      let filePath = `${tempath}/client/${id}.html`;
-      let cssPath = `${tempath}/client/css/${id}.css`;
+      let filePath = `${tempath}/${id}.html`;
+      let cssPath = `${tempath}/css/${id}.css`;
 
       let pages = db.get("pages").value();
       let editor = grapesjs.init({
@@ -376,6 +384,17 @@ async function createFrontend(tempath) {
 
     // Call createDirectoryContents
     // createDirectoryContents(templatePath, projectName);
+    // Call createProject in inquirerPrecss
+    if (!createProject.createProject(tartgetPath)) {
+      return;
+    }
+
+    db.defaults({ project: {} })
+      .write()
+    db.set('project.name', projectName).write()
+    createFrontend(tartgetPath);
+    res.send({success: 'Successfully created project'});
+    /*
     createSub(projectName).then(async (response) => {
       let text = await response.text();
       let json = JSON.parse(text);
@@ -398,6 +417,7 @@ async function createFrontend(tempath) {
     }).catch(error => {
       return error;
     });
+    */
     // updateScriptfront(projectName);
     // res.send('Successfully created Project')
   })
@@ -466,7 +486,7 @@ async function createFrontend(tempath) {
     let id = req.params.id;
     let projectName = db.get("project.name").value();
     let tartgetPath = path.join(CURR_DIR, projectName);
-    let filePath = `${tartgetPath}/client/${id}.html`;
+    let filePath = `${tartgetPath}/${id}.html`;
     fs.unlink(filePath, (err) => {
       if (err) {
         console.log(err);
