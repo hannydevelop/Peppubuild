@@ -70,6 +70,7 @@ export default (editor, opts = {}) => {
         return;
       } else {
         let data = await editor.PagesApp.getProject();
+        console.log(data)
         localStorage.setItem("gjsProject", JSON.stringify(data));
         location.reload();      }
     });

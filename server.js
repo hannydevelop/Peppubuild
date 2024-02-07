@@ -15,6 +15,7 @@ var replaceInFile = require('replace-in-file')
 var os = require('os');
 var fetch = require('node-fetch')
 var ftp = require("basic-ftp");
+var cors = require('cors')
 
 const CURR_DIR = os.homedir();
 const cpanelDomain = 'https://premium92.web-hosting.com';
@@ -32,11 +33,14 @@ async function startServer() {
   // parse application/x-www-form-urlencoded
   app.use(bodyParser.urlencoded({ extended: false }))
 
+   app.use(cors())
+   app.use(express.json({ limit: '50mb' }))
   // parse application/json
   app.use(bodyParser.json())
 
   app.use(cookieParser())
-
+  
+  /*
   app.get('/clientdeploy', (req, res) => {
 
     async function uploadFiles() {
@@ -69,6 +73,7 @@ async function startServer() {
     // Run the function
     uploadFiles();
   })
+  */
 
   // set route for logout
   function createSub(name) {
@@ -171,108 +176,112 @@ async function startServer() {
     });
 
   }
+// Save Frontend changes.
+async function createFrontend(tempath) {
+  // create client folder.
+  // fs.mkdirSync(`${tempath}`)
+  /*
+  // gen package.json()
+  const package_json = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/package.json');
+  // Get the Blob data
+  const json = await package_json.text();
+  fs.writeFileSync(`${tempath}/client/package.json`, json, function (err) {
+    if (err) return err;
+  });
 
-  // Save Frontend changes.
-  async function createFrontend(tempath) {
-    // create client folder.
-    fs.mkdirSync(`${tempath}/client`)
-    /*
-    // gen package.json()
-    const package_json = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/package.json');
-    // Get the Blob data
-    const json = await package_json.text();
-    fs.writeFileSync(`${tempath}/client/package.json`, json, function (err) {
-      if (err) return err;
-    });
+  // gen outer package.json()
+  const package_json_outer = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/package.json');
+  // Get the Blob data
+  const json_file = await package_json_outer.text();
+  fs.writeFileSync(`${tempath}/package.json`, json_file, function (err) {
+    if (err) return err;
+  });
 
-    // gen outer package.json()
-    const package_json_outer = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/package.json');
-    // Get the Blob data
-    const json_file = await package_json_outer.text();
-    fs.writeFileSync(`${tempath}/package.json`, json_file, function (err) {
-      if (err) return err;
-    });
+  // gen gitignore
+  const gitignore_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/.gitignore');
+  // Get the Blob data
+  const gitignore = await gitignore_file.text();
+  fs.writeFileSync(`${tempath}/client/.gitignore`, gitignore, function (err) {
+    if (err) return err;
+  });
+   */
+  // gen index.js
+  fs.mkdirSync(`${tempath}/css`)
+  // fs.mkdirSync(`${tempath}/js`)
 
-    // gen gitignore
-    const gitignore_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/.gitignore');
-    // Get the Blob data
-    const gitignore = await gitignore_file.text();
-    fs.writeFileSync(`${tempath}/client/.gitignore`, gitignore, function (err) {
-      if (err) return err;
-    });
-     */
-    // gen index.js
-    fs.mkdirSync(`${tempath}/client/css`)
-    fs.mkdirSync(`${tempath}/client/js`)
+  // let index_content = `
+  // import axios from 'axios';
+  
+  // export default {
+      /*Insert Imports Here*/ 
 
-    let index_content = `
-    import axios from 'axios';
-    
-    export default {
-        /*Insert Imports Here*/ 
+      // setup() {
+        // return { 
+          /*Insert Data Here*/
+       //  }
+      // },
+      // methods: {
+          /*Insert Methods Here*/
+      // },
+      // async mounted() {
+          /*Insert Mounted Here*/
+      // }
+  // }
+  // `;
+  /* 
+  fs.writeFileSync(`${tempath}/client/js/index.js`, index_content, function (err) {
+    if (err) return err;
+  });
+  */
+  // copy content from db.json into file's db.json
+  let dbContent = fs.readFileSync(`${CURR_DIR}/db.json`, 'utf8', function (err) {
+    if (err) return err;
+  })
 
-        setup() {
-          return { 
-            /*Insert Data Here*/
-          }
-        },
-        methods: {
-            /*Insert Methods Here*/
-        },
-        async mounted() {
-            /*Insert Mounted Here*/
-        }
+  fs.writeFileSync(`${tempath}/db.json`, dbContent, function (err) {
+    if (err) return err;
+  });
+
+  let pages = db.get("gjsProject.project.pages").value();
+  // delete the content of db.json
+  let editor = grapesjs.init({
+    headless: true, pageManager: {
+      pages: pages
     }
-    `;
-    fs.writeFileSync(`${tempath}/client/js/index.js`, index_content, function (err) {
+  });
+  // gen html and css files.
+  var myCss = ''
+  editor.Pages.getAll().forEach(e => {
+    const name = e.id
+    const component = e.getMainComponent()
+    const html = editor.getHtml({ component });
+    const css = editor.getCss({ component });
+    let htmlContent = `
+      <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
+            <title>Document</title>
+            <link rel="stylesheet" type="text/css" href="./css/${name}.css">
+        </head>
+        <body>
+        ${html}
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+        </body>
+      </html>`
+    fs.writeFileSync(`${tempath}/${name}.html`, htmlContent, function (err) {
       if (err) return err;
     });
-
-    let pages = db.get("gjsProject.project.pages").value();
-    let editor = grapesjs.init({
-      headless: true, pageManager: {
-        pages: pages
-      }
+    fs.writeFileSync(`${tempath}/css/${name}.css`, css, function (err) {
+      if (err) return err;
     });
-    // gen html and css files.
-    var myCss = ''
-    editor.Pages.getAll().forEach(e => {
-      const name = e.id
-      const component = e.getMainComponent()
-      const html = editor.getHtml({ component });
-      const css = editor.getCss({ component });
-      let htmlContent = `
-        <!DOCTYPE html>
-          <html lang="en">
-          <head>
-              <meta charset="UTF-8">
-              <meta http-equiv="X-UA-Compatible" content="IE=edge">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>Document</title>
-              <link rel="stylesheet" type="text/css" href="./css/style.css">
-              <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.0/axios.min.js" integrity="sha512-aoTNnqZcT8B4AmeCFmiSnDlc4Nj/KPaZyB5G7JnOnUEkdNpCZs1LCankiYi01sLTyWy+m2P+W4XM+BuQ3Q4/Dg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-              <script type="module">
-                  import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+  })
 
-                  import Index from './js/index.js'
-
-                  createApp(Index).mount('#app')
-              </script>
-          </head>
-          <body id="app">
-          ${html}
-          </body>
-        </html>`
-      fs.writeFileSync(`${tempath}/client/${name}.html`, htmlContent, function (err) {
-        if (err) return err;
-      });
-      fs.writeFileSync(`${tempath}/client/css/style.css`, myCss += css, function (err) {
-        if (err) return err;
-      });
-    })
-
-    // create ENV
-  }
+  // create ENV
+}
 
   // get all of the projects from db in gjsProject format.
   app.get('/projects', (req, res) => {
@@ -293,8 +302,8 @@ async function startServer() {
     let projectName = db.get("project.name").value();
     if (projectName != null) {
       let tempath = path.join(CURR_DIR, projectName);
-      let filePath = `${tempath}/client/${id}.html`;
-      let cssPath = `${tempath}/client/css/style.css`;
+      let filePath = `${tempath}/${id}.html`;
+      let cssPath = `${tempath}/css/${id}.css`;
 
       let pages = db.get("pages").value();
       let editor = grapesjs.init({
@@ -304,11 +313,10 @@ async function startServer() {
       });
 
       let htmlContent = `
-    <body id="app">
     ${req.body.html}
     `
       let myCss = req.body.css;
-      let regex = new RegExp('<body id="app">(.|\n)*?<\/body>')
+      let regex = new RegExp('<body>(.|\n)*?<\/body>')
       const options = {
         files: filePath,
         from: regex,
@@ -330,19 +338,13 @@ async function startServer() {
               <meta charset="UTF-8">
               <meta http-equiv="X-UA-Compatible" content="IE=edge">
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
               <title>Document</title>
-              <link rel="stylesheet" type="text/css" href="./css/style.css">
-              <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.0/axios.min.js" integrity="sha512-aoTNnqZcT8B4AmeCFmiSnDlc4Nj/KPaZyB5G7JnOnUEkdNpCZs1LCankiYi01sLTyWy+m2P+W4XM+BuQ3Q4/Dg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-              <script type="module">
-                  import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
-
-                  import Index from './js/index.js'
-
-                  createApp(Index).mount('#app')
-              </script>
+              <link rel="stylesheet" type="text/css" href="./css/${id}.css">
           </head>
-          <body id="app">
+          <body>
           ${req.body.html}
+          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
           </body>
         </html>
       `
@@ -359,6 +361,15 @@ async function startServer() {
       fs.writeFileSync(cssPath, myCss, function (err) {
         if (err) return err;
       });
+      
+      // copy content from db.json into file's db.json
+      let dbContent = fs.readFileSync(`${CURR_DIR}/db.json`, 'utf8', function (err) {
+        if (err) return err;
+      })
+
+      fs.writeFileSync(`${tempath}/db.json`, dbContent, function (err) {
+        if (err) return err;
+      });
     }
     res.send('Project saved successfully!')
   })
@@ -371,8 +382,22 @@ async function startServer() {
     // let projectType = req.body.projectType;
     let tartgetPath = path.join(CURR_DIR, projectName);
 
+    let gjsProject = req.body.gjsProject;
+    db.set('gjsProject.project', gjsProject).write();
+
     // Call createDirectoryContents
     // createDirectoryContents(templatePath, projectName);
+    // Call createProject in inquirerPrecss
+    if (!createProject.createProject(tartgetPath)) {
+      return;
+    }
+
+    db.defaults({ project: {} })
+      .write()
+    db.set('project.name', projectName).write()
+    createFrontend(tartgetPath);
+    res.send({success: 'Successfully created project'});
+    /*
     createSub(projectName).then(async (response) => {
       let text = await response.text();
       let json = JSON.parse(text);
@@ -395,6 +420,7 @@ async function startServer() {
     }).catch(error => {
       return error;
     });
+    */
     // updateScriptfront(projectName);
     // res.send('Successfully created Project')
   })
@@ -463,8 +489,14 @@ async function startServer() {
     let id = req.params.id;
     let projectName = db.get("project.name").value();
     let tartgetPath = path.join(CURR_DIR, projectName);
-    let filePath = `${tartgetPath}/client/${id}.html`;
+    let filePath = `${tartgetPath}/${id}.html`;
+    let filePathCSS = `${tartgetPath}/css/${id}.html`;
     fs.unlink(filePath, (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+    fs.unlink(filePathCSS, (err) => {
       if (err) {
         console.log(err);
       }
@@ -475,6 +507,6 @@ async function startServer() {
   app.listen(port);
   console.log(`started server in ${port}`)
 }
-
-exports.app = app;
-exports.startServer = startServer;
+startServer()
+// exports.app = app;
+// exports.startServer = startServer;
