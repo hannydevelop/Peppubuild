@@ -6,6 +6,7 @@ export default class PagesApp extends UI {
         super(editor, opts);
         this.addPage = this.addPage.bind(this);
         this.addProject = this.addProject.bind(this);
+        this.loadProject = this.loadProject.bind(this);
         this.selectPage = this.selectPage.bind(this);
         this.removePage = this.removePage.bind(this);
         this.isSelected = this.isSelected.bind(this);
@@ -18,6 +19,7 @@ export default class PagesApp extends UI {
         this.openDelete = this.openDelete.bind(this);
         this.deleteProject = this.deleteProject.bind(this);
         this.deletePage = this.deletePage.bind(this)
+        this.readText = this.readText.bind(this)
 
         /* Set initial app state */
         this.state = {
@@ -138,6 +140,7 @@ export default class PagesApp extends UI {
         editor.Modal.close();
         editor.SettingsApp.setTab('page');
         editor.runCommand('open-settings');
+        // call command to rename page in directory
     }
 
     editPage(id, name) {
@@ -159,12 +162,14 @@ export default class PagesApp extends UI {
 
     createPublish(value) {
         const { editor } = this;
+        const projectdata = editor.getProjectData();
         let name = this.state.projectName;
         let data = fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/${value}/${name}`, {
             method: "POST", // or 'PUT'
             headers: {
                 "Content-Type": "application/json",
             },
+            body: JSON.stringify({gjsProject: projectdata})
         })
         return data;
     }
@@ -271,6 +276,23 @@ export default class PagesApp extends UI {
         });
     }
 
+    loadProject() {
+        // allow users choose the folder of choice.
+        // look for db.json file in the root of the folder.
+        // save the gjsProject in localhost.
+        // call reload.
+        // reference: index line 72 - 74
+    }
+
+    async readText(event) {
+        const file = event.target.files.item(0)
+        const text = await file.text();
+        const { editor } = this;
+        let data = JSON.parse(text);
+        let value = data.gjsProject.project;
+        editor.loadProjectData(value)
+    }
+
     handleNameInput(e) {
         this.setStateSilent({
             nameText: e.target.value.trim()
@@ -353,11 +375,18 @@ export default class PagesApp extends UI {
                 <div class="add-project">
                     ${editor.I18n.t('peppu-sidebar.project.new')}
                 </div>
+                <div>
+                <label for="file-upload" class="tm-input sm">
+                    Load Project
+                </label>
+                    <input type="file" class="load-project" id="file-upload"/>
+                </div>
             </div>`);
         cont.find('.add-page').on('click', this.addPage);
         cont.find('input').on('change', this.handleNameInput);
 
         cont.find('.add-project').on('click', this.addProject);
+        cont.find('.load-project').on('change', this.readText);
 
         this.$el = cont;
         return cont;
