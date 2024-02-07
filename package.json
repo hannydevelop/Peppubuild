@@ -1,6 +1,6 @@
 {
   "name": "peppubuild-server",
-  "version": "0.0.9",
+  "version": "0.0.11",
   "repository": {
     "type": "git",
     "url": "github.com/hannydevelop/peppubuild.git"
