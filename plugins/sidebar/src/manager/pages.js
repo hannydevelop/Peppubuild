@@ -140,6 +140,7 @@ export default class PagesApp extends UI {
         editor.Modal.close();
         editor.SettingsApp.setTab('page');
         editor.runCommand('open-settings');
+        // call command to rename page in directory
     }
 
     editPage(id, name) {
@@ -161,12 +162,14 @@ export default class PagesApp extends UI {
 
     createPublish(value) {
         const { editor } = this;
+        const projectdata = editor.getProjectData();
         let name = this.state.projectName;
         let data = fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/${value}/${name}`, {
             method: "POST", // or 'PUT'
             headers: {
                 "Content-Type": "application/json",
             },
+            body: JSON.stringify({gjsProject: projectdata})
         })
         return data;
     }
