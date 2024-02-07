@@ -33,8 +33,8 @@ async function startServer() {
   // parse application/x-www-form-urlencoded
   app.use(bodyParser.urlencoded({ extended: false }))
 
-  app.use(cors())
-  app.use(express.json({ limit: '50mb' }))
+   app.use(cors())
+   app.use(express.json({ limit: '50mb' }))
   // parse application/json
   app.use(bodyParser.json())
 
@@ -382,6 +382,9 @@ async function createFrontend(tempath) {
     // let projectType = req.body.projectType;
     let tartgetPath = path.join(CURR_DIR, projectName);
 
+    let gjsProject = req.body.gjsProject;
+    db.set('gjsProject.project', gjsProject).write();
+
     // Call createDirectoryContents
     // createDirectoryContents(templatePath, projectName);
     // Call createProject in inquirerPrecss
@@ -487,7 +490,13 @@ async function createFrontend(tempath) {
     let projectName = db.get("project.name").value();
     let tartgetPath = path.join(CURR_DIR, projectName);
     let filePath = `${tartgetPath}/${id}.html`;
+    let filePathCSS = `${tartgetPath}/css/${id}.html`;
     fs.unlink(filePath, (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+    fs.unlink(filePathCSS, (err) => {
       if (err) {
         console.log(err);
       }
