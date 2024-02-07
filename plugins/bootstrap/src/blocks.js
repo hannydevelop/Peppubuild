@@ -109,7 +109,7 @@ export default (editor, opts = {}) => {
   });
 
   // Card
-  bm.add('Card', {
+  bm.add('B-CARD', {
     label: 'Card',
     category: 'Bootstrap Card',
     media: `<svg width="70" height="38" viewBox="0 0 70 38" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -135,14 +135,7 @@ export default (editor, opts = {}) => {
     <rect x="56.8895" y="12.911" width="2.26415" height="1.9407" fill="#D9D9D9"/>
     </svg>
     `,
-    content: `<div class="card" style="width: 18rem;">
-    <img src="https://fakeimg.pl/600x400?text=Replace+image" class="card-img-top" alt="...">
-    <div class="card-body">
-      <h5 class="card-title">Card title</h5>
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-      <a href="#" class="btn btn-primary">Go somewhere</a>
-    </div>
-  </div>`,
+    content: { type: 'B-CARD'}
   });
   /* 
   bm.add('Card-Feature', {
