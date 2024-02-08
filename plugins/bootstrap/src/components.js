@@ -1,6 +1,7 @@
 export default (editor, opts = {}) => {
   const domc = editor.DomComponents;
 
+  // Bootstrap card component
   domc.addType('B-CARD', {
     model: {
       defaults: {
@@ -50,4 +51,67 @@ export default (editor, opts = {}) => {
 
     },
   });
+
+  // Bootstrap hero component
+  domc.addType('B-HERO', {
+    model: {
+      defaults: {
+        tagName: 'div',
+        attributes: { class: 'container col-xxl-8 px-4 py-5' },
+        components: [{
+          tagName: 'div',
+          attributes: { class: 'row flex-lg-row-reverse align-items-center g-5 py-5' },
+          components: [
+            {
+              tagName: 'div',
+              attributes: { class: 'col-10 col-sm-8 col-lg-6' },
+              components: [{
+                type: 'image',
+                attributes: { src: 'https://fakeimg.pl/600x400?text=Replace+image', style: 'width: 700; height: 500', alt: '', class: 'd-block mx-lg-auto img-fluid' },
+              }],
+            },
+            {
+              tagName: 'div',
+              attributes: { class: 'col-lg-6' },
+              components: [
+                {
+                  tagName: 'h1',
+                  type: 'text',
+                  attributes: { class: 'display-5 fw-bold text-body-emphasis lh-1 mb-3' },
+                  components: [{
+                    type: 'textnode',
+                    content: 'Responsive left-aligned hero with image'
+                  }]
+                },
+                {
+                  tagName: 'p',
+                  type: 'text',
+                  attributes: { class: 'lead' },
+                  components: [{
+                    type: 'textnode',
+                    content: `Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system, extensive prebuilt components, and powerful JavaScript plugins.`
+                  }]
+                },
+                {
+                  tagName: 'div',
+                  attributes: { class: 'd-grid gap-2 d-md-flex justify-content-md-start' },
+                  components: [
+                    {
+                      type: 'B-BUTTON',
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+
+        }]
+      }
+    },
+    view: {
+
+    },
+  });
+
+  
 };

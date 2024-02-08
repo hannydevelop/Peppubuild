@@ -486,6 +486,7 @@ export default (editor, opts = {}) => {
   bm.add('Hero', {
     label: 'Hero',
     category: 'Bootstrap Component',
+    /*
     content: `
     <div class="container col-xxl-8 px-4 py-5">
       <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
@@ -502,6 +503,8 @@ export default (editor, opts = {}) => {
         </div>
       </div>
     </div>`,
+    */
+   content: {type: 'B-HERO'},
     media: `<svg width="70" height="38" viewBox="0 0 70 38" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect width="70" height="37.3333" fill="#AAAAAA"/>
     <rect x="6.06665" y="7" width="24.7333" height="23.8" fill="black"/>
