@@ -515,6 +515,13 @@ export default (editor, opts = {}) => {
     </svg>`
   });
 
+  bm.add('Button', {
+    label: 'Button',
+    category: 'Bootstrap Component',
+   content: {type: 'B-BUTTON'},
+   attributes: {class: "fa fa-square-o"}
+  });
+
   bm.add('Carousel', {
     label: 'Carousel',
     category: 'Bootstrap Animation',
