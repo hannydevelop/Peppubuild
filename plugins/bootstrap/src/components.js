@@ -113,5 +113,46 @@ export default (editor, opts = {}) => {
     },
   });
 
-  
+  domc.addType('B-BUTTON', {
+    isComponent: el => el.tagName == 'BUTTON',
+
+    model: {
+      defaults: {
+        tagName: 'button',
+        attributes: { type: 'button', class: 'btn btn-primary' },
+        text: 'Send',
+        traits: [
+          {
+            name: 'text',
+            changeProp: true,
+          }, {
+            type: 'select',
+            name: 'type',
+            options: [
+              { value: 'button' },
+              { value: 'submit' },
+              { value: 'reset' },
+            ]
+          }]
+      },
+
+      init() {
+        const comps = this.components();
+        const tChild = comps.length === 1 && comps.models[0];
+        const chCnt = (tChild && tChild.is('textnode') && tChild.get('content')) || '';
+        const text = chCnt || this.get('text');
+        this.set('text', text);
+        this.on('change:text', this.__onTextChange);
+        (text !== chCnt) && this.__onTextChange();
+      },
+
+      __onTextChange() {
+        this.components(this.get('text'));
+      },
+    },
+
+    view: {
+
+    },
+  });
 };
