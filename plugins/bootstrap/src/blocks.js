@@ -18,9 +18,10 @@ export default (editor, opts = {}) => {
     content: `<nav class="navbar navbar-expand-lg fixed-top navbar-light">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">Navbar</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      <button type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler">Send</button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
@@ -52,7 +53,8 @@ export default (editor, opts = {}) => {
     </div>
   </nav>`
   */
- content: {type: 'B-NAVBAR'}
+    content: { type: 'B-NAVBAR' }
+
     // media: '<svg>...</svg>',
   });
 
@@ -67,8 +69,9 @@ export default (editor, opts = {}) => {
     <line x1="3" y1="20.5" x2="67" y2="20.5" stroke="black" stroke-width="7"/>
     <line x1="3" y1="28.5" x2="67" y2="28.5" stroke="black" stroke-width="7"/>
     </svg>`,
+    /* 
     content: `
-  <div>
+
     <div class="container col-xxl-8 px-4 py-5 accordion" id="accordionExample">
     <h2 class="pb-2 border-bottom">Accordion</h2>
     <div class="accordion-item">
@@ -108,7 +111,9 @@ export default (editor, opts = {}) => {
       </div>
     </div>
   </div>
-  </div>`,
+`,
+  */
+    content: { type: 'B-ACCORDION' }
   });
 
   // Card
@@ -138,7 +143,7 @@ export default (editor, opts = {}) => {
     <rect x="56.8895" y="12.911" width="2.26415" height="1.9407" fill="#D9D9D9"/>
     </svg>
     `,
-    content: { type: 'B-CARD'}
+    content: { type: 'B-CARD' }
   });
   /* 
   bm.add('Card-Feature', {
@@ -507,7 +512,7 @@ export default (editor, opts = {}) => {
       </div>
     </div>`,
     */
-   content: {type: 'B-HERO'},
+    content: { type: 'B-HERO' },
     media: `<svg width="70" height="38" viewBox="0 0 70 38" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect width="70" height="37.3333" fill="#AAAAAA"/>
     <rect x="6.06665" y="7" width="24.7333" height="23.8" fill="black"/>
@@ -521,8 +526,8 @@ export default (editor, opts = {}) => {
   bm.add('Button', {
     label: 'Button',
     category: 'Bootstrap Component',
-   content: {type: 'B-BUTTON'},
-   attributes: {class: "fa fa-square-o"}
+    content: { type: 'B-BUTTON' },
+    attributes: { class: "fa fa-square-o" }
   });
 
   bm.add('Carousel', {
