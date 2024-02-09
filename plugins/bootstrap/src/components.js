@@ -113,6 +113,148 @@ export default (editor, opts = {}) => {
     },
   });
 
+  // Bootstrap Navbar
+  domc.addType('B-NAVBAR', {
+    model: {
+      defaults: {
+        tagName: 'nav',
+        attributes: { class: 'navbar navbar-expand-lg fixed-top' },
+        components: [{
+          tagName: 'div',
+          attributes: { class: 'container-fluid' },
+          components: [
+            {
+              type: 'link',
+              attributes: { class: 'navbar-brand', href: '#' }
+            },
+            {
+              tagName: 'button',
+              attributes: { class: 'navbar-toggler', type: 'button' },
+              components: [{
+                tagName: 'span',
+                attributes: { class: 'navbar-toggler-icon' },
+              }]
+            },
+            {
+              tagName: 'div',
+              attributes: { class: 'collapse navbar-collapse', id: 'navbarSupportedContent' },
+              components: [
+                {
+                  tagName: 'ul',
+                  attributes: { class: 'navbar-nav me-auto mb-2 mb-lg-0' },
+                  components: [
+                    {
+                      tagName: 'li',
+                      attributes: { class: 'nav-item' },
+                      components: [{
+                        type: 'link',
+                        attributes: { class: 'nav-link active', 'aria-current': 'page', href: '#' },
+                        components: [{
+                          type: 'textnode',
+                          content: 'Home'
+                        }]
+                      }]
+                    },
+                    {
+                      tagName: 'li',
+                      attributes: { class: 'nav-item' },
+                      components: [{
+                        type: 'link',
+                        attributes: { class: 'nav-link', 'aria-current': 'page', href: '#' },
+                        components: [{
+                          type: 'textnode',
+                          content: 'Link'
+                        }]
+                      }]
+                    },
+                    {
+                      tagName: 'li',
+                      attributes: { class: 'nav-item dropdown' },
+                      components: [
+                        {
+                          type: 'link',
+                          attributes: { class: 'nav-link dropdown-toggle', id: 'navbarDropdown', href: '#', role: 'button' },
+                          components: [{
+                            type: 'textnode',
+                            content: 'Dropdown'
+                          }]
+                        },
+                        {
+                          tagName: 'ul',
+                          attributes: { class: 'dropdown-menu', 'aria-labelledby': 'navbarDropdown' },
+                          components: [
+                            {
+                              tagName: 'li',
+                              components: [{
+                                type: 'link',
+                                attributes: { class: 'dropdown-item', href: '#' },
+                                components: [{
+                                  type: 'textnode',
+                                  content: 'Action'
+                                }]
+                              }]
+                            },
+                            {
+                              tagName: 'li',
+                              components: [{
+                                type: 'link',
+                                attributes: { class: 'dropdown-item', href: '#' },
+                                components: [{
+                                  type: 'textnode',
+                                  content: 'Action'
+                                }]
+                              }]
+                            },
+                            {
+                              tagName: 'li',
+                              components: [{
+                                tagName: 'hr',
+                                attributes: { class: 'dropdown-divider' },
+                              }]
+                            },
+                            {
+                              tagName: 'li',
+                              components: [{
+                                type: 'link',
+                                attributes: { class: 'dropdown-item', href: '#' },
+                                components: [{
+                                  type: 'textnode',
+                                  content: 'Action'
+                                }]
+                              }]
+                            },
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  tagName: 'form',
+                  attributes: { class: 'd-flex' },
+                  components: [
+                    {
+                      tagName: 'input',
+                      attributes: { class: 'form-control me-2', type: 'search', placeholder: 'Search', 'aria-label': 'Search' }
+                    },
+                    {
+                      type: 'B-BUTTON',
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }]
+      },
+    },
+
+    view: {
+
+    },
+  });
+
+  // Bootstrap Button
   domc.addType('B-BUTTON', {
     isComponent: el => el.tagName == 'BUTTON',
 

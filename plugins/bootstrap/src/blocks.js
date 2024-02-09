@@ -14,6 +14,7 @@ export default (editor, opts = {}) => {
     <path d="M7 23.5C5.067 23.5 3.5 25.067 3.5 27C3.5 28.933 5.067 30.5 7 30.5L7 23.5ZM7 30.5L36 30.5L36 23.5L7 23.5L7 30.5Z" fill="black"/>
     <path d="M62 30.5C63.933 30.5 65.5 28.933 65.5 27C65.5 25.067 63.933 23.5 62 23.5L62 30.5ZM62 23.5L35 23.5L35 30.5L62 30.5L62 23.5Z" fill="black"/>
     </svg>`,
+    /* 
     content: `<nav class="navbar navbar-expand-lg fixed-top navbar-light">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">Navbar</a>
@@ -50,6 +51,8 @@ export default (editor, opts = {}) => {
       </div>
     </div>
   </nav>`
+  */
+ content: {type: 'B-NAVBAR'}
     // media: '<svg>...</svg>',
   });
 
