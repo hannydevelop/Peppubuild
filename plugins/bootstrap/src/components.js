@@ -603,4 +603,100 @@ export default (editor, opts = {}) => {
 
     },
   });
+
+    // Bootstrap Features part
+    domc.addType('B-FEATURES-PT', {  
+      model: {
+        defaults: {
+          tagName: 'div',
+          attributes: { class: 'col d-flex align-items-start' },
+          components: [
+            {
+              tagName: 'div',
+              attributes: { class: 'icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3' },
+              components: [
+                {
+                  type: 'image',
+                  attributes: { class: 'bi', style: 'width: 100px; height: 100px'}
+                }
+              ]
+            },
+            {
+              tagName: 'div',
+              components: [
+                {
+                  tagName: 'h3',
+                  type: 'text',
+                  attributes: { class: 'fs-2 text-body-emphasis' },
+                  components: [{
+                    type: 'textnode',
+                    content: 'Featured title'
+                  }]
+                },
+                {
+                  tagName: 'p',
+                  type: 'text',
+                  components: [{
+                    type: 'textnode',
+                    content: `Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.`
+                  }]
+                },
+                {
+                  type: 'link',
+                  attributes: { href: '#', class: 'btn btn-primary' },
+                  components: [{
+                    type: 'textnode',
+                    content: 'Primary button'
+                  }]
+                },
+              ]
+            }
+          ]
+        },
+      },
+  
+      view: {
+  
+      },
+    });
+
+  // Bootstrap Features
+  domc.addType('B-FEATURES', {
+    model: {
+      defaults: {
+        tagName: 'div',
+        attributes: { id: 'hanging-icons', class: 'container px-4 py-5' },
+        components: [
+          {
+            tagName: 'h2',
+            type: 'text',
+            attributes: { class: 'pb-2 border-bottom' },
+            components: [{
+              type: 'textnode',
+              content: 'Features'
+            }]
+          },
+          {
+            tagName: 'div',
+            attributes: { class: 'row g-4 py-5 row-cols-1 row-cols-lg-3' },
+            components: [
+              {
+                type: 'B-FEATURES-PT',
+              },
+              {
+                type: 'B-FEATURES-PT',
+              },
+              {
+                type: 'B-FEATURES-PT',
+              },
+            ]
+          },
+        ]
+      },
+    },
+
+    view: {
+
+    },
+  });
 };
