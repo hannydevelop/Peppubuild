@@ -699,4 +699,241 @@ export default (editor, opts = {}) => {
 
     },
   });
+
+  // Bootstrap Carousel
+  domc.addType('B-CAROUSEL', {  
+    model: {
+      defaults: {
+        tagName: 'div',
+        attributes: {class: 'carousel slide mb-6', id: 'myCarousel', 'data-bs-ride':"carousel"},
+        components: [
+          {
+            tagName: 'div',
+            attributes: {class: 'carousel-indicators'},
+            components: [
+              {
+                tagName: 'button',
+                attributes: {class: 'active', type: 'button', 'data-bs-target':"#myCarousel", 'data-bs-slide-to': '0', 'aria-current':"true", 'aria-label':"Slide 1"},
+              },
+              {
+                tagName: 'button',
+                attributes: {type: 'button', 'data-bs-target':"#myCarousel", 'data-bs-slide-to': '1', 'aria-label':"Slide 2"},
+              },
+              {
+                tagName: 'button',
+                attributes: {type: 'button', 'data-bs-target':"#myCarousel", 'data-bs-slide-to': '2', 'aria-label':"Slide 3"},
+              },
+            ]
+          },
+          {
+            tagName: 'div',
+            attributes: {class: 'carousel-inner'},
+            components: [
+              {
+                tagName: 'div',
+                attributes: {class: 'carousel-item active', style: 'height: 32em'},
+                components: [
+                  {
+                    type: 'image',
+                    attributes: { src: 'https://fakeimg.pl/1024x400/141111/141111', style: 'width:100%; height: 100%', alt: '', class: 'bd-placeholder-img' },
+                  },
+                  {
+                    tagName: 'div',
+                    attributes: {class: 'container'},
+                    components: [
+                      {
+                        tagName: 'div',
+                        attributes: {class: 'carousel-caption text-start'},
+                        components: [
+                          {
+                            tagName: 'h1',
+                            type: 'text',
+                            components: [{
+                              type: 'textnode',
+                              content: 'Example headline.'
+                            }]
+                          },
+                          {
+                            tagName: 'p',
+                            type: 'text',
+                            attributes: {class: 'opacity-75'},
+                            components: [{
+                              type: 'textnode',
+                              content: 'Some representative placeholder content for the first slide of the carousel.'
+                            }]
+                          },
+                          {
+                            tagName: 'p',
+                            type: 'text',
+                            components: [
+                              {
+                                type: 'link',
+                                attributes: { href: '#', class: 'btn btn-lg btn-primary' },
+                                components: [{
+                                  type: 'textnode',
+                                  content: 'Sign up today'
+                                }]
+                              },
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                tagName: 'div',
+                attributes: {class: 'carousel-item', style: 'height: 32em'},
+                components: [
+                  {
+                    type: 'image',
+                    attributes: { src: 'https://fakeimg.pl/1024x400/141111/141111', style: 'width:100%; height: 100%', alt: '', class: 'bd-placeholder-img' },
+                  },
+                  {
+                    tagName: 'div',
+                    attributes: {class: 'container'},
+                    components: [
+                      {
+                        tagName: 'div',
+                        attributes: {class: 'carousel-caption text-start'},
+                        components: [
+                          {
+                            tagName: 'h1',
+                            type: 'text',
+                            components: [{
+                              type: 'textnode',
+                              content: 'Example headline.'
+                            }]
+                          },
+                          {
+                            tagName: 'p',
+                            type: 'text',
+                            attributes: {class: 'opacity-75'},
+                            components: [{
+                              type: 'textnode',
+                              content: 'Some representative placeholder content for the first slide of the carousel.'
+                            }]
+                          },
+                          {
+                            tagName: 'p',
+                            type: 'text',
+                            components: [
+                              {
+                                type: 'link',
+                                attributes: { href: '#', class: 'btn btn-lg btn-primary' },
+                                components: [{
+                                  type: 'textnode',
+                                  content: 'Sign up today'
+                                }]
+                              },
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                tagName: 'div',
+                attributes: {class: 'carousel-item active', style: 'height: 32em'},
+                components: [
+                  {
+                    type: 'image',
+                    attributes: { src: 'https://fakeimg.pl/1024x400/141111/141111', style: 'width:100%; height: 100%', alt: '', class: 'bd-placeholder-img' },
+                  },
+                  {
+                    tagName: 'div',
+                    attributes: {class: 'container'},
+                    components: [
+                      {
+                        tagName: 'div',
+                        attributes: {class: 'carousel-caption text-start'},
+                        components: [
+                          {
+                            tagName: 'h1',
+                            type: 'text',
+                            components: [{
+                              type: 'textnode',
+                              content: 'Example headline.'
+                            }]
+                          },
+                          {
+                            tagName: 'p',
+                            type: 'text',
+                            attributes: {class: 'opacity-75'},
+                            components: [{
+                              type: 'textnode',
+                              content: 'Some representative placeholder content for the first slide of the carousel.'
+                            }]
+                          },
+                          {
+                            tagName: 'p',
+                            type: 'text',
+                            components: [
+                              {
+                                type: 'link',
+                                attributes: { href: '#', class: 'btn btn-lg btn-primary' },
+                                components: [{
+                                  type: 'textnode',
+                                  content: 'Sign up today'
+                                }]
+                              },
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                tagName: 'button',
+                attributes: {class: 'carousel-control-prev', 'data-bs-target':"#myCarousel", type:'button', 'data-bs-slide':"prev"},
+                components: [
+                  {
+                    tagName: 'span',
+                    attributes: {class: 'carousel-control-prev-icon', 'aria-hidden':"true"}
+                  },
+                  {
+                    tagName: 'span',
+                    type: 'text',
+                    attributes: {class: 'visually-hidden'},
+                    components: [{
+                      type: 'textnode',
+                      content: 'Previous'
+                    }]
+                  },
+                ]
+              },
+              {
+                tagName: 'button',
+                attributes: {class: 'carousel-control-next', 'data-bs-target':"#myCarousel", type:'button', 'data-bs-slide':"next"},
+                components: [
+                  {
+                    tagName: 'span',
+                    attributes: {class: 'carousel-control-next-icon', 'aria-hidden':"true"}
+                  },
+                  {
+                    tagName: 'span',
+                    type: 'text',
+                    attributes: {class: 'visually-hidden'},
+                    components: [{
+                      type: 'textnode',
+                      content: 'Next'
+                    }]
+                  },
+                ]
+              }
+            ]
+          }
+        ]
+      },
+    },
+
+    view: {
+
+    },
+  });
 };
