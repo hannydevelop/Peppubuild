@@ -133,7 +133,7 @@ export default (editor, opts = {}) => {
             },
             {
               tagName: 'button',
-              attributes: { class: 'navbar-toggler', type: 'button', 'data-bs-toggle':"collapse", 'data-bs-target':"#navbarSupportedContent" },
+              attributes: { class: 'navbar-toggler', type: 'button', 'data-bs-toggle': "collapse", 'data-bs-target': "#navbarSupportedContent" },
               components: [{
                 tagName: 'span',
                 attributes: { class: 'navbar-toggler-icon' },
@@ -177,7 +177,7 @@ export default (editor, opts = {}) => {
                       components: [
                         {
                           type: 'link',
-                          attributes: { class: 'nav-link dropdown-toggle', id: 'navbarDropdown', href: '#', role: 'button', 'data-bs-toggle':"dropdown" },
+                          attributes: { class: 'nav-link dropdown-toggle', id: 'navbarDropdown', href: '#', role: 'button', 'data-bs-toggle': "dropdown" },
                           components: [{
                             type: 'textnode',
                             content: 'Dropdown'
@@ -303,7 +303,6 @@ export default (editor, opts = {}) => {
   });
 
   // Bootstrap Accordion.
-  // Bootstrap Button
   domc.addType('B-ACCORDION', {
     model: {
       defaults: {
@@ -327,7 +326,7 @@ export default (editor, opts = {}) => {
                 attributes: { class: 'accordion-header', id: 'headingOne' },
                 components: [{
                   tagName: 'button',
-                  attributes: { class: 'accordion-button', type: 'button', 'data-bs-toggle': "collapse", 'data-bs-target':"#collapseOne", 'aria-expanded':"true", 'aria-controls':"collapseOne" },
+                  attributes: { class: 'accordion-button', type: 'button', 'data-bs-toggle': "collapse", 'data-bs-target': "#collapseOne", 'aria-expanded': "true", 'aria-controls': "collapseOne" },
                   components: [{
                     type: 'textnode',
                     content: 'Accordion Item #1'
@@ -336,7 +335,7 @@ export default (editor, opts = {}) => {
               },
               {
                 tagName: 'div',
-                attributes: { class: 'accordion-collapse collapse show', id: 'collapseOne', 'aria-labelledby':"headingOne", 'data-bs-parent':"#accordionExample" },
+                attributes: { class: 'accordion-collapse collapse show', id: 'collapseOne', 'aria-labelledby': "headingOne", 'data-bs-parent': "#accordionExample" },
                 components: [
                   {
                     tagName: 'div',
@@ -368,7 +367,7 @@ export default (editor, opts = {}) => {
                 attributes: { class: 'accordion-header', id: 'headingTwo' },
                 components: [{
                   tagName: 'button',
-                  attributes: { class: 'accordion-button', type: 'button', 'data-bs-toggle': "collapse", 'data-bs-target':"#collapseTwo", 'aria-expanded':"true", 'aria-controls':"collapseTwo" },
+                  attributes: { class: 'accordion-button', type: 'button', 'data-bs-toggle': "collapse", 'data-bs-target': "#collapseTwo", 'aria-expanded': "true", 'aria-controls': "collapseTwo" },
                   components: [{
                     type: 'textnode',
                     content: 'Accordion Item #1'
@@ -377,7 +376,7 @@ export default (editor, opts = {}) => {
               },
               {
                 tagName: 'div',
-                attributes: { class: 'accordion-collapse collapse show', id: 'collapseTwo', 'aria-labelledby':"headingTwo", 'data-bs-parent':"#accordionExample" },
+                attributes: { class: 'accordion-collapse collapse show', id: 'collapseTwo', 'aria-labelledby': "headingTwo", 'data-bs-parent': "#accordionExample" },
                 components: [
                   {
                     tagName: 'div',
@@ -393,6 +392,202 @@ export default (editor, opts = {}) => {
                       {
                         type: 'textnode',
                         content: `It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the accordion-body, though the transition does limit overflow`
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+    },
+
+    view: {
+
+    },
+  });
+
+  // Bootstrap Footer part
+  domc.addType('B-FOOTER-PT', {
+    model: {
+      defaults: {
+        tagName: 'div',
+        attributes: { class: 'col-6 col-md-2 mb-3' },
+        components: [
+          {
+            tagName: 'h5',
+            type: 'text',
+            components: [{
+              type: 'textnode',
+              content: 'Section'
+            }]
+          },
+          {
+            tagName: 'ul',
+            attributes: { class: 'nav flex-column' },
+            components: [
+              {
+                tagName: 'li',
+                attributes: { class: 'nav-item mb-2' },
+                components: [{
+                  type: 'link',
+                  attributes: { href: '#', class: 'nav-link p-0 text-body-secondary' },
+                  components: [{
+                    type: 'textnode',
+                    content: 'Home'
+                  }]
+                }]
+              },
+              {
+                tagName: 'li',
+                attributes: { class: 'nav-item mb-2' },
+                components: [{
+                  type: 'link',
+                  attributes: { href: '#', class: 'nav-link p-0 text-body-secondary' },
+                  components: [{
+                    type: 'textnode',
+                    content: 'Features'
+                  }]
+                }]
+              },
+              {
+                tagName: 'li',
+                attributes: { class: 'nav-item mb-2' },
+                components: [{
+                  type: 'link',
+                  attributes: { href: '#', class: 'nav-link p-0 text-body-secondary' },
+                  components: [{
+                    type: 'textnode',
+                    content: 'Pricing'
+                  }]
+                }]
+              },
+              {
+                tagName: 'li',
+                attributes: { class: 'nav-item mb-2' },
+                components: [{
+                  type: 'link',
+                  attributes: { href: '#', class: 'nav-link p-0 text-body-secondary' },
+                  components: [{
+                    type: 'textnode',
+                    content: 'FAQs'
+                  }]
+                }]
+              },
+              {
+                tagName: 'li',
+                attributes: { class: 'nav-item mb-2' },
+                components: [{
+                  type: 'link',
+                  attributes: { href: '#', class: 'nav-link p-0 text-body-secondary' },
+                  components: [{
+                    type: 'textnode',
+                    content: 'About'
+                  }]
+                }]
+              },
+            ]
+          }
+        ]
+      },
+    },
+
+    view: {
+
+    },
+  });
+
+  // Bootstrap Footer
+  domc.addType('B-FOOTER', {
+    model: {
+      defaults: {
+        tagName: 'footer',
+        attributes: { class: 'container py-5' },
+        components: [
+          {
+            tagName: 'div',
+            attributes: { class: 'row' },
+            components: [
+              {
+                type: 'B-FOOTER-PT',
+              },
+              {
+                type: 'B-FOOTER-PT',
+              },
+              {
+                type: 'B-FOOTER-PT',
+              },
+              {
+                tagName: 'div',
+                attributes: { class: 'col-md-5 offset-md-1 mb-3' },
+                components: [{
+                  tagName: 'form',
+                  components: [
+                    {
+                      tagName: 'h5',
+                      type: 'text',
+                      components: [{
+                        type: 'textnode',
+                        content: 'Subscribe to our newsletter'
+                      }]
+                    },
+                    {
+                      tagName: 'p',
+                      type: 'text',
+                      components: [{
+                        type: 'textnode',
+                        content: `Monthly digest of what's new and exciting from us.`
+                      }]
+                    },
+                    {
+                      tagName: 'div',
+                      attributes: {class: 'd-flex flex-column flex-sm-row w-100 gap-2'},
+                      components: [
+                        {
+                          tagName: 'label',
+                          type: 'text',
+                          attributes: {class: 'visually-hidden', for: 'newsletter1'},
+                          components: [{
+                            type: 'textnode',
+                            content: `Email address`
+                          }]
+                        },
+                        {
+                          tagName: 'input',
+                          attributes: {class: 'form-control', id: 'newsletter1', type: 'text', placeholder: 'Email address'},
+                          components: [{
+                            type: 'textnode',
+                            content: `Email address`
+                          }]
+                        },
+                        {
+                          type: 'B-BUTTON',
+                        },
+                      ]
+                    }
+                  ]
+                }]
+              },
+              {
+                tagName: 'div',
+                attributes: {class: 'd-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top'},
+                components: [
+                  {
+                      tagName: 'p',
+                      type: 'text',
+                      components: [{
+                        type: 'textnode',
+                        content: `&copy; 2023 Company, Inc. All rights reserved.`
+                      }]
+                  },
+                  {
+                    tagName: 'div',
+                    attributes: {class: 'list-unstyled d-flex'},
+                    components: [
+                      {
+                        tagName: 'li',
+                        attributes: {class: 'ms-3'},
                       }
                     ]
                   }
