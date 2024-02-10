@@ -188,6 +188,7 @@ export default (editor, opts = {}) => {
     <line x1="43" y1="19.5" x2="66.3333" y2="19.5" stroke="black" stroke-width="3"/>
     <path d="M36.9077 19.2102L33.706 20.8409V20.2045L36.1619 19.0213L36.142 19.0611V18.9616L36.1619 19.0014L33.706 17.8182V17.1818L36.9077 18.8125V19.2102Z" fill="black"/>
     </svg>`,
+    /*
     content: `
   <div class="">
   <footer class="container py-5">
@@ -254,7 +255,9 @@ export default (editor, opts = {}) => {
     </div>
   </footer>
 </div>
-    `,
+    `
+    */
+   content: {type: 'B-FOOTER'}
   });
 
 
