@@ -311,6 +311,7 @@ export default (editor, opts = {}) => {
         components: [
           {
             tagName: 'h2',
+            type: 'text',
             attributes: { class: 'pb-2 border-bottom' },
             components: [{
               type: 'textnode',
@@ -542,12 +543,12 @@ export default (editor, opts = {}) => {
                     },
                     {
                       tagName: 'div',
-                      attributes: {class: 'd-flex flex-column flex-sm-row w-100 gap-2'},
+                      attributes: { class: 'd-flex flex-column flex-sm-row w-100 gap-2' },
                       components: [
                         {
                           tagName: 'label',
                           type: 'text',
-                          attributes: {class: 'visually-hidden', for: 'newsletter1'},
+                          attributes: { class: 'visually-hidden', for: 'newsletter1' },
                           components: [{
                             type: 'textnode',
                             content: `Email address`
@@ -555,7 +556,7 @@ export default (editor, opts = {}) => {
                         },
                         {
                           tagName: 'input',
-                          attributes: {class: 'form-control', id: 'newsletter1', type: 'text', placeholder: 'Email address'},
+                          attributes: { class: 'form-control', id: 'newsletter1', type: 'text', placeholder: 'Email address' },
                           components: [{
                             type: 'textnode',
                             content: `Email address`
@@ -571,23 +572,23 @@ export default (editor, opts = {}) => {
               },
               {
                 tagName: 'div',
-                attributes: {class: 'd-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top'},
+                attributes: { class: 'd-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top' },
                 components: [
                   {
-                      tagName: 'p',
-                      type: 'text',
-                      components: [{
-                        type: 'textnode',
-                        content: `&copy; 2023 Company, Inc. All rights reserved.`
-                      }]
+                    tagName: 'p',
+                    type: 'text',
+                    components: [{
+                      type: 'textnode',
+                      content: `&copy; 2023 Company, Inc. All rights reserved.`
+                    }]
                   },
                   {
                     tagName: 'div',
-                    attributes: {class: 'list-unstyled d-flex'},
+                    attributes: { class: 'list-unstyled d-flex' },
                     components: [
                       {
                         tagName: 'li',
-                        attributes: {class: 'ms-3'},
+                        attributes: { class: 'ms-3' },
                       }
                     ]
                   }
@@ -604,61 +605,61 @@ export default (editor, opts = {}) => {
     },
   });
 
-    // Bootstrap Features part
-    domc.addType('B-FEATURES-PT', {  
-      model: {
-        defaults: {
-          tagName: 'div',
-          attributes: { class: 'col d-flex align-items-start' },
-          components: [
-            {
-              tagName: 'div',
-              attributes: { class: 'icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3' },
-              components: [
-                {
-                  type: 'image',
-                  attributes: { class: 'bi', style: 'width: 100px; height: 100px'}
-                }
-              ]
-            },
-            {
-              tagName: 'div',
-              components: [
-                {
-                  tagName: 'h3',
-                  type: 'text',
-                  attributes: { class: 'fs-2 text-body-emphasis' },
-                  components: [{
-                    type: 'textnode',
-                    content: 'Featured title'
-                  }]
-                },
-                {
-                  tagName: 'p',
-                  type: 'text',
-                  components: [{
-                    type: 'textnode',
-                    content: `Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.`
-                  }]
-                },
-                {
-                  type: 'link',
-                  attributes: { href: '#', class: 'btn btn-primary' },
-                  components: [{
-                    type: 'textnode',
-                    content: 'Primary button'
-                  }]
-                },
-              ]
-            }
-          ]
-        },
+  // Bootstrap Features part
+  domc.addType('B-FEATURES-PT', {
+    model: {
+      defaults: {
+        tagName: 'div',
+        attributes: { class: 'col d-flex align-items-start' },
+        components: [
+          {
+            tagName: 'div',
+            attributes: { class: 'icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3' },
+            components: [
+              {
+                type: 'image',
+                attributes: { class: 'bi', style: 'width: 100px; height: 100px' }
+              }
+            ]
+          },
+          {
+            tagName: 'div',
+            components: [
+              {
+                tagName: 'h3',
+                type: 'text',
+                attributes: { class: 'fs-2 text-body-emphasis' },
+                components: [{
+                  type: 'textnode',
+                  content: 'Featured title'
+                }]
+              },
+              {
+                tagName: 'p',
+                type: 'text',
+                components: [{
+                  type: 'textnode',
+                  content: `Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.`
+                }]
+              },
+              {
+                type: 'link',
+                attributes: { href: '#', class: 'btn btn-primary' },
+                components: [{
+                  type: 'textnode',
+                  content: 'Primary button'
+                }]
+              },
+            ]
+          }
+        ]
       },
-  
-      view: {
-  
-      },
-    });
+    },
+
+    view: {
+
+    },
+  });
 
   // Bootstrap Features
   domc.addType('B-FEATURES', {
@@ -701,37 +702,37 @@ export default (editor, opts = {}) => {
   });
 
   // Bootstrap Carousel
-  domc.addType('B-CAROUSEL', {  
+  domc.addType('B-CAROUSEL', {
     model: {
       defaults: {
         tagName: 'div',
-        attributes: {class: 'carousel slide mb-6', id: 'myCarousel', 'data-bs-ride':"carousel"},
+        attributes: { class: 'carousel slide mb-6', id: 'myCarousel', 'data-bs-ride': "carousel" },
         components: [
           {
             tagName: 'div',
-            attributes: {class: 'carousel-indicators'},
+            attributes: { class: 'carousel-indicators' },
             components: [
               {
                 tagName: 'button',
-                attributes: {class: 'active', type: 'button', 'data-bs-target':"#myCarousel", 'data-bs-slide-to': '0', 'aria-current':"true", 'aria-label':"Slide 1"},
+                attributes: { class: 'active', type: 'button', 'data-bs-target': "#myCarousel", 'data-bs-slide-to': '0', 'aria-current': "true", 'aria-label': "Slide 1" },
               },
               {
                 tagName: 'button',
-                attributes: {type: 'button', 'data-bs-target':"#myCarousel", 'data-bs-slide-to': '1', 'aria-label':"Slide 2"},
+                attributes: { type: 'button', 'data-bs-target': "#myCarousel", 'data-bs-slide-to': '1', 'aria-label': "Slide 2" },
               },
               {
                 tagName: 'button',
-                attributes: {type: 'button', 'data-bs-target':"#myCarousel", 'data-bs-slide-to': '2', 'aria-label':"Slide 3"},
+                attributes: { type: 'button', 'data-bs-target': "#myCarousel", 'data-bs-slide-to': '2', 'aria-label': "Slide 3" },
               },
             ]
           },
           {
             tagName: 'div',
-            attributes: {class: 'carousel-inner'},
+            attributes: { class: 'carousel-inner' },
             components: [
               {
                 tagName: 'div',
-                attributes: {class: 'carousel-item active', style: 'height: 32em'},
+                attributes: { class: 'carousel-item active', style: 'height: 32em' },
                 components: [
                   {
                     type: 'image',
@@ -739,11 +740,11 @@ export default (editor, opts = {}) => {
                   },
                   {
                     tagName: 'div',
-                    attributes: {class: 'container'},
+                    attributes: { class: 'container' },
                     components: [
                       {
                         tagName: 'div',
-                        attributes: {class: 'carousel-caption text-start'},
+                        attributes: { class: 'carousel-caption text-start' },
                         components: [
                           {
                             tagName: 'h1',
@@ -756,7 +757,7 @@ export default (editor, opts = {}) => {
                           {
                             tagName: 'p',
                             type: 'text',
-                            attributes: {class: 'opacity-75'},
+                            attributes: { class: 'opacity-75' },
                             components: [{
                               type: 'textnode',
                               content: 'Some representative placeholder content for the first slide of the carousel.'
@@ -784,7 +785,7 @@ export default (editor, opts = {}) => {
               },
               {
                 tagName: 'div',
-                attributes: {class: 'carousel-item', style: 'height: 32em'},
+                attributes: { class: 'carousel-item', style: 'height: 32em' },
                 components: [
                   {
                     type: 'image',
@@ -792,11 +793,11 @@ export default (editor, opts = {}) => {
                   },
                   {
                     tagName: 'div',
-                    attributes: {class: 'container'},
+                    attributes: { class: 'container' },
                     components: [
                       {
                         tagName: 'div',
-                        attributes: {class: 'carousel-caption text-start'},
+                        attributes: { class: 'carousel-caption text-start' },
                         components: [
                           {
                             tagName: 'h1',
@@ -809,7 +810,7 @@ export default (editor, opts = {}) => {
                           {
                             tagName: 'p',
                             type: 'text',
-                            attributes: {class: 'opacity-75'},
+                            attributes: { class: 'opacity-75' },
                             components: [{
                               type: 'textnode',
                               content: 'Some representative placeholder content for the first slide of the carousel.'
@@ -837,7 +838,7 @@ export default (editor, opts = {}) => {
               },
               {
                 tagName: 'div',
-                attributes: {class: 'carousel-item active', style: 'height: 32em'},
+                attributes: { class: 'carousel-item active', style: 'height: 32em' },
                 components: [
                   {
                     type: 'image',
@@ -845,11 +846,11 @@ export default (editor, opts = {}) => {
                   },
                   {
                     tagName: 'div',
-                    attributes: {class: 'container'},
+                    attributes: { class: 'container' },
                     components: [
                       {
                         tagName: 'div',
-                        attributes: {class: 'carousel-caption text-start'},
+                        attributes: { class: 'carousel-caption text-start' },
                         components: [
                           {
                             tagName: 'h1',
@@ -862,7 +863,7 @@ export default (editor, opts = {}) => {
                           {
                             tagName: 'p',
                             type: 'text',
-                            attributes: {class: 'opacity-75'},
+                            attributes: { class: 'opacity-75' },
                             components: [{
                               type: 'textnode',
                               content: 'Some representative placeholder content for the first slide of the carousel.'
@@ -890,16 +891,16 @@ export default (editor, opts = {}) => {
               },
               {
                 tagName: 'button',
-                attributes: {class: 'carousel-control-prev', 'data-bs-target':"#myCarousel", type:'button', 'data-bs-slide':"prev"},
+                attributes: { class: 'carousel-control-prev', 'data-bs-target': "#myCarousel", type: 'button', 'data-bs-slide': "prev" },
                 components: [
                   {
                     tagName: 'span',
-                    attributes: {class: 'carousel-control-prev-icon', 'aria-hidden':"true"}
+                    attributes: { class: 'carousel-control-prev-icon', 'aria-hidden': "true" }
                   },
                   {
                     tagName: 'span',
                     type: 'text',
-                    attributes: {class: 'visually-hidden'},
+                    attributes: { class: 'visually-hidden' },
                     components: [{
                       type: 'textnode',
                       content: 'Previous'
@@ -909,22 +910,164 @@ export default (editor, opts = {}) => {
               },
               {
                 tagName: 'button',
-                attributes: {class: 'carousel-control-next', 'data-bs-target':"#myCarousel", type:'button', 'data-bs-slide':"next"},
+                attributes: { class: 'carousel-control-next', 'data-bs-target': "#myCarousel", type: 'button', 'data-bs-slide': "next" },
                 components: [
                   {
                     tagName: 'span',
-                    attributes: {class: 'carousel-control-next-icon', 'aria-hidden':"true"}
+                    attributes: { class: 'carousel-control-next-icon', 'aria-hidden': "true" }
                   },
                   {
                     tagName: 'span',
                     type: 'text',
-                    attributes: {class: 'visually-hidden'},
+                    attributes: { class: 'visually-hidden' },
                     components: [{
                       type: 'textnode',
                       content: 'Next'
                     }]
                   },
                 ]
+              }
+            ]
+          }
+        ]
+      },
+    },
+
+    view: {
+
+    },
+  });
+
+  // Pricing part
+  domc.addType('B-PRICING-PT', {
+    model: {
+      defaults: {
+        tagName: 'div',
+        attributes: { class: 'col' },
+        components: [
+          {
+            tagName: 'div',
+            attributes: { class: 'card mb-4 rounded-3 shadow-sm' },
+            components: [
+              {
+                tagName: 'div',
+                attributes: { class: 'card-header py-3' },
+                components: [
+                  {
+                    tagName: 'h4',
+                    type: 'text',
+                    attributes: { class: 'my-0 fw-normal' },
+                    components: [{
+                      type: 'textnode',
+                      content: 'Pro'
+                    }]
+                  }
+                ]
+              },
+              {
+                tagName: 'div',
+                attributes: { class: 'card-body' },
+                components: [
+                  {
+                    tagName: 'h1',
+                    type: 'text',
+                    attributes: { class: 'card-title pricing-card-title' },
+                    components: [
+                      {
+                        type: 'textnode',
+                        content: '$15'
+                      },
+                      {
+                        tagName: 'small',
+                        type: 'text',
+                        attributes: { class: 'text-body-secondary fw-light' },
+                        components: [
+                          {
+                            type: 'textnode',
+                            content: '/mo'
+                          },
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    tagName: 'ul',
+                    attributes: { class: 'list-unstyled mt-3 mb-4' },
+                    components: [
+                      {
+                        tagName: 'li',
+                        components: [{
+                          type: 'textnode',
+                          content: '20 users included'
+                        }]
+                      },
+                      {
+                        tagName: 'li',
+                        components: [{
+                          type: 'textnode',
+                          content: '10 GB of storage'
+                        }]
+                      }, {
+                        tagName: 'li',
+                        components: [{
+                          type: 'textnode',
+                          content: 'Priority email support'
+                        }]
+                      }, {
+                        tagName: 'li',
+                        components: [{
+                          type: 'textnode',
+                          content: 'Help center access'
+                        }]
+                      },
+                    ]
+                  },
+                  {
+                    tagName: 'button',
+                    type: 'button',
+                    attributes: { class: 'w-100 btn btn-lg btn-primary' },
+                    components: [{
+                      type: 'textnode',
+                      content: 'Sign up for free'
+                    }]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  });
+
+  // Pricing
+  domc.addType('B-PRICING', {
+    model: {
+      defaults: {
+        tagName: 'div',
+        attributes: { class: 'container col-sm-8 px-4 py-5' },
+        components: [
+          {
+            tagName: 'h2',
+            type: 'text',
+            attributes: { class: 'pb-2 border-bottom' },
+            components: [{
+              type: 'textnode',
+              content: 'Pricing'
+            }]
+          },
+          {
+            tagName: 'div',
+            attributes: { class: 'row row-cols-1 row-cols-md-3 mb-3 text-center' },
+            components: [
+              {
+                type: 'B-PRICING-PT',
+              },
+              {
+                type: 'B-PRICING-PT',
+              },
+              {
+                type: 'B-PRICING-PT',
               }
             ]
           }
