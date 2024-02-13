@@ -260,10 +260,11 @@ export default (editor, opts = {}) => {
    content: {type: 'B-FOOTER'}
   });
 
-
+ 
   bm.add('Pricing', {
     label: 'Pricing',
     category: 'Bootstrap Component',
+    /*
     content: `<div>
     <div class="container col-sm-8 px-4 py-5">
     <h2 class="pb-2 border-bottom">Pricing</h2>
@@ -402,7 +403,9 @@ export default (editor, opts = {}) => {
     </div>
   </div>
   </div>
-    `,
+    `
+    */
+    content: {type: 'B-PRICING'},
     media: `<svg width="70" height="38" viewBox="0 0 70 38" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect width="70" height="37.3333" fill="#AAAAAA"/>
     <line x1="3" y1="3.5" x2="26.3333" y2="3.5" stroke="black" stroke-width="3"/>
