@@ -15,7 +15,7 @@ var replaceInFile = require('replace-in-file')
 var os = require('os');
 var fetch = require('node-fetch')
 var ftp = require("basic-ftp");
-var cors = require('cors')
+// var cors = require('cors')
 
 const CURR_DIR = os.homedir();
 const cpanelDomain = 'https://premium92.web-hosting.com';
@@ -33,13 +33,13 @@ async function startServer() {
   // parse application/x-www-form-urlencoded
   app.use(bodyParser.urlencoded({ extended: false }))
 
-   app.use(cors())
-   app.use(express.json({ limit: '50mb' }))
+  // app.use(cors())
+  // app.use(express.json({ limit: '50mb' }))
   // parse application/json
   app.use(bodyParser.json())
 
   app.use(cookieParser())
-  
+
   /*
   app.get('/clientdeploy', (req, res) => {
 
@@ -176,87 +176,86 @@ async function startServer() {
     });
 
   }
-// Save Frontend changes.
-async function createFrontend(tempath) {
-  // create client folder.
-  // fs.mkdirSync(`${tempath}`)
-  /*
-  // gen package.json()
-  const package_json = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/package.json');
-  // Get the Blob data
-  const json = await package_json.text();
-  fs.writeFileSync(`${tempath}/client/package.json`, json, function (err) {
-    if (err) return err;
-  });
-
-  // gen outer package.json()
-  const package_json_outer = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/package.json');
-  // Get the Blob data
-  const json_file = await package_json_outer.text();
-  fs.writeFileSync(`${tempath}/package.json`, json_file, function (err) {
-    if (err) return err;
-  });
-
-  // gen gitignore
-  const gitignore_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/.gitignore');
-  // Get the Blob data
-  const gitignore = await gitignore_file.text();
-  fs.writeFileSync(`${tempath}/client/.gitignore`, gitignore, function (err) {
-    if (err) return err;
-  });
-   */
-  // gen index.js
-  fs.mkdirSync(`${tempath}/css`)
-  // fs.mkdirSync(`${tempath}/js`)
-
-  // let index_content = `
-  // import axios from 'axios';
+  // Save Frontend changes.
+  async function createFrontend(tempath) {
+    // create client folder.
+    // fs.mkdirSync(`${tempath}`)
+    /*
+    // gen package.json()
+    const package_json = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/package.json');
+    // Get the Blob data
+    const json = await package_json.text();
+    fs.writeFileSync(`${tempath}/client/package.json`, json, function (err) {
+      if (err) return err;
+    });
   
-  // export default {
-      /*Insert Imports Here*/ 
+    // gen outer package.json()
+    const package_json_outer = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/package.json');
+    // Get the Blob data
+    const json_file = await package_json_outer.text();
+    fs.writeFileSync(`${tempath}/package.json`, json_file, function (err) {
+      if (err) return err;
+    });
+  
+    // gen gitignore
+    const gitignore_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/.gitignore');
+    // Get the Blob data
+    const gitignore = await gitignore_file.text();
+    fs.writeFileSync(`${tempath}/client/.gitignore`, gitignore, function (err) {
+      if (err) return err;
+    });
+     */
+    // gen index.js
+    fs.mkdirSync(`${tempath}/css`)
+    // fs.mkdirSync(`${tempath}/js`)
 
-      // setup() {
-        // return { 
-          /*Insert Data Here*/
-       //  }
-      // },
-      // methods: {
-          /*Insert Methods Here*/
-      // },
-      // async mounted() {
-          /*Insert Mounted Here*/
-      // }
-  // }
-  // `;
-  /* 
-  fs.writeFileSync(`${tempath}/client/js/index.js`, index_content, function (err) {
-    if (err) return err;
-  });
-  */
-  // copy content from db.json into file's db.json
-  let dbContent = fs.readFileSync(`${CURR_DIR}/db.json`, 'utf8', function (err) {
-    if (err) return err;
-  })
+    // let index_content = `
+    // import axios from 'axios';
 
-  fs.writeFileSync(`${tempath}/db.json`, dbContent, function (err) {
-    if (err) return err;
-  });
+    // export default {
+    /*Insert Imports Here*/
 
-  let pages = db.get("gjsProject.project.pages").value();
-  // delete the content of db.json
-  let editor = grapesjs.init({
-    headless: true, pageManager: {
-      pages: pages
-    }
-  });
-  // gen html and css files.
-  var myCss = ''
-  editor.Pages.getAll().forEach(e => {
-    const name = e.id
-    const component = e.getMainComponent()
-    const html = editor.getHtml({ component });
-    const css = editor.getCss({ component });
-    let htmlContent = `
+    // setup() {
+    // return { 
+    /*Insert Data Here*/
+    //  }
+    // },
+    // methods: {
+    /*Insert Methods Here*/
+    // },
+    // async mounted() {
+    /*Insert Mounted Here*/
+    // }
+    // }
+    // `;
+    /* 
+    fs.writeFileSync(`${tempath}/client/js/index.js`, index_content, function (err) {
+      if (err) return err;
+    });
+    */
+    // copy content from db.json into file's db.json
+    let dbContent = fs.readFileSync(`${CURR_DIR}/db.json`, 'utf8', function (err) {
+      if (err) return err;
+    })
+
+    fs.writeFileSync(`${tempath}/db.json`, dbContent, function (err) {
+      if (err) return err;
+    });
+
+    let pages = db.get("gjsProject.project.pages").value();
+
+    let editor = grapesjs.init({
+      headless: true, pageManager: {
+        pages: pages
+      }
+    });
+    // gen html and css files.
+    editor.Pages.getAll().forEach(e => {
+      const name = e.id
+      const component = e.getMainComponent()
+      const html = editor.getHtml({ component });
+      const css = editor.getCss({ component });
+      let htmlContent = `
       <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -272,16 +271,16 @@ async function createFrontend(tempath) {
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
         </body>
       </html>`
-    fs.writeFileSync(`${tempath}/${name}.html`, htmlContent, function (err) {
-      if (err) return err;
-    });
-    fs.writeFileSync(`${tempath}/css/${name}.css`, css, function (err) {
-      if (err) return err;
-    });
-  })
+      fs.writeFileSync(`${tempath}/${name}.html`, htmlContent, function (err) {
+        if (err) return err;
+      });
+      fs.writeFileSync(`${tempath}/css/${name}.css`, css, function (err) {
+        if (err) return err;
+      });
+    })
 
-  // create ENV
-}
+    // create ENV
+  }
 
   // get all of the projects from db in gjsProject format.
   app.get('/projects', (req, res) => {
@@ -361,7 +360,7 @@ async function createFrontend(tempath) {
       fs.writeFileSync(cssPath, myCss, function (err) {
         if (err) return err;
       });
-      
+
       // copy content from db.json into file's db.json
       let dbContent = fs.readFileSync(`${CURR_DIR}/db.json`, 'utf8', function (err) {
         if (err) return err;
@@ -396,7 +395,7 @@ async function createFrontend(tempath) {
       .write()
     db.set('project.name', projectName).write()
     createFrontend(tartgetPath);
-    res.send({success: 'Successfully created project'});
+    res.send({ success: 'Successfully created project' });
     /*
     createSub(projectName).then(async (response) => {
       let text = await response.text();
@@ -478,6 +477,23 @@ async function createFrontend(tempath) {
     res.send(projectName);
   })
 
+  // rename project
+  app.post('/prename/:fileName/:newName', (req, res) => {
+    let projectName = db.get("project.name").value();
+    let fileName = req.params.fileName;
+    let newName = req.params.newName;
+
+    // rename html
+    fs.rename(`${CURR_DIR}/${projectName}/${fileName}.html`, `${CURR_DIR}/${projectName}/${newName}.html`, function (err) {
+      if (err) console.log('ERROR: ' + err);
+    });
+
+    // rename css
+    fs.rename(`${CURR_DIR}/${projectName}/css/${fileName}.css`, `${CURR_DIR}/${projectName}/css/${newName}.css`, function (err) {
+      if (err) console.log('ERROR: ' + err);
+    });
+  })
+
   // delete project from db and disk
   app.delete('/pdelete', (req, res) => {
     let projectName = db.get("project.name").value();
@@ -507,6 +523,6 @@ async function createFrontend(tempath) {
   app.listen(port);
   console.log(`started server in ${port}`)
 }
-startServer()
-// exports.app = app;
-// exports.startServer = startServer;
+// startServer()
+exports.app = app;
+exports.startServer = startServer;
