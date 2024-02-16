@@ -15,7 +15,7 @@ var replaceInFile = require('replace-in-file')
 var os = require('os');
 var fetch = require('node-fetch')
 var ftp = require("basic-ftp");
-var cors = require('cors')
+// var cors = require('cors')
 
 const CURR_DIR = os.homedir();
 const cpanelDomain = 'https://premium92.web-hosting.com';
@@ -33,8 +33,8 @@ async function startServer() {
   // parse application/x-www-form-urlencoded
   app.use(bodyParser.urlencoded({ extended: false }))
 
-  app.use(cors())
-  app.use(express.json({ limit: '50mb' }))
+  // app.use(cors())
+  // app.use(express.json({ limit: '50mb' }))
   // parse application/json
   app.use(bodyParser.json())
 
@@ -523,6 +523,6 @@ async function startServer() {
   app.listen(port);
   console.log(`started server in ${port}`)
 }
-startServer()
-// exports.app = app;
-// exports.startServer = startServer;
+// startServer()
+exports.app = app;
+exports.startServer = startServer;
