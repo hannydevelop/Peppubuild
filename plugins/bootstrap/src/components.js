@@ -6,11 +6,11 @@ export default (editor, opts = {}) => {
     model: {
       defaults: {
         tagName: 'div',
-        attributes: { class: 'card', style: 'width: 18rem' },
+        attributes: { class: 'card' },
         components: [
           {
             type: 'image',
-            attributes: { src: 'https://fakeimg.pl/600x400?text=Replace+image', style: 'card-img-top', alt: '' },
+            attributes: { src: 'https://fakeimg.pl/600x400?text=Replace+image', alt: '' },
           },
           {
             tagName: 'div',
@@ -44,7 +44,15 @@ export default (editor, opts = {}) => {
               },
             ]
           }
-        ]
+        ],
+        styles: `
+        .card img {
+          card-img-top
+        }
+        .card {
+          width: 18rem;
+        }
+        `
       },
     },
     view: {
@@ -64,10 +72,10 @@ export default (editor, opts = {}) => {
           components: [
             {
               tagName: 'div',
-              attributes: { class: 'col-10 col-sm-8 col-lg-6' },
+              attributes: { class: 'col-10 col-sm-8 col-lg-6 himg' },
               components: [{
                 type: 'image',
-                attributes: { src: 'https://fakeimg.pl/600x400?text=Replace+image', style: 'width: 700; height: 500', alt: '', class: 'd-block mx-lg-auto img-fluid' },
+                attributes: { src: 'https://fakeimg.pl/600x400?text=Replace+image', alt: '', class: 'd-block mx-lg-auto img-fluid' },
               }],
             },
             {
@@ -104,8 +112,13 @@ export default (editor, opts = {}) => {
               ]
             }
           ],
-
-        }]
+        }],
+        styles: `
+        .himg img {
+          width: 700; 
+          height: 500;
+        }
+        `
       }
     },
     view: {
@@ -117,7 +130,7 @@ export default (editor, opts = {}) => {
   domc.addType('B-NAVBAR', {
     model: {
       defaults: {
-        tagName: 'nav',
+        tagName: 'div',
         attributes: { class: 'navbar navbar-expand-lg fixed-top' },
         components: [{
           tagName: 'div',
@@ -128,7 +141,7 @@ export default (editor, opts = {}) => {
               attributes: { class: 'navbar-brand', href: '#' },
               components: [{
                 type: 'image',
-                attributes: { src: 'https://fakeimg.pl/600x400?text=Replace+image', style: 'width: 50px; height: 30px' },
+                attributes: { src: 'https://fakeimg.pl/600x400?text=Replace+image' },
               }]
             },
             {
@@ -249,7 +262,13 @@ export default (editor, opts = {}) => {
               ]
             }
           ]
-        }]
+        }],
+        styles: `
+        .container-fluid img {
+          width: 50px; 
+          height: 30px
+        }
+        `
       },
     },
 
@@ -324,6 +343,7 @@ export default (editor, opts = {}) => {
             components: [
               {
                 tagName: 'h2',
+                type: 'text',
                 attributes: { class: 'accordion-header', id: 'headingOne' },
                 components: [{
                   tagName: 'button',
@@ -340,6 +360,7 @@ export default (editor, opts = {}) => {
                 components: [
                   {
                     tagName: 'div',
+                    type: 'text',
                     attributes: { class: 'accordion-body' },
                     components: [
                       {
@@ -365,6 +386,7 @@ export default (editor, opts = {}) => {
             components: [
               {
                 tagName: 'h2',
+                type: 'text',
                 attributes: { class: 'accordion-header', id: 'headingTwo' },
                 components: [{
                   tagName: 'button',
@@ -381,6 +403,7 @@ export default (editor, opts = {}) => {
                 components: [
                   {
                     tagName: 'div',
+                    type: 'text',
                     attributes: { class: 'accordion-body' },
                     components: [
                       {
@@ -618,7 +641,7 @@ export default (editor, opts = {}) => {
             components: [
               {
                 type: 'image',
-                attributes: { class: 'bi', style: 'width: 100px; height: 100px' }
+                attributes: { class: 'bi square' }
               }
             ]
           },
@@ -652,7 +675,13 @@ export default (editor, opts = {}) => {
               },
             ]
           }
-        ]
+        ],
+        styles: `
+        .square {
+          width: 100px; 
+          height: 100px;
+        }
+        `
       },
     },
 
@@ -732,11 +761,11 @@ export default (editor, opts = {}) => {
             components: [
               {
                 tagName: 'div',
-                attributes: { class: 'carousel-item active', style: 'height: 32em' },
+                attributes: { class: 'carousel-item active cactive' },
                 components: [
                   {
                     type: 'image',
-                    attributes: { src: 'https://fakeimg.pl/1024x400/141111/141111', style: 'width:100%; height: 100%', alt: '', class: 'bd-placeholder-img' },
+                    attributes: { src: 'https://fakeimg.pl/1024x400/141111/141111', alt: '', class: 'bd-placeholder-img' },
                   },
                   {
                     tagName: 'div',
@@ -785,11 +814,11 @@ export default (editor, opts = {}) => {
               },
               {
                 tagName: 'div',
-                attributes: { class: 'carousel-item', style: 'height: 32em' },
+                attributes: { class: 'carousel-item citem' },
                 components: [
                   {
                     type: 'image',
-                    attributes: { src: 'https://fakeimg.pl/1024x400/141111/141111', style: 'width:100%; height: 100%', alt: '', class: 'bd-placeholder-img' },
+                    attributes: { src: 'https://fakeimg.pl/1024x400/141111/141111', alt: '', class: 'bd-placeholder-img' },
                   },
                   {
                     tagName: 'div',
@@ -838,11 +867,11 @@ export default (editor, opts = {}) => {
               },
               {
                 tagName: 'div',
-                attributes: { class: 'carousel-item active', style: 'height: 32em' },
+                attributes: { class: 'carousel-item cactive' },
                 components: [
                   {
                     type: 'image',
-                    attributes: { src: 'https://fakeimg.pl/1024x400/141111/141111', style: 'width:100%; height: 100%', alt: '', class: 'bd-placeholder-img' },
+                    attributes: { src: 'https://fakeimg.pl/1024x400/141111/141111', alt: '', class: 'bd-placeholder-img' },
                   },
                   {
                     tagName: 'div',
@@ -929,7 +958,21 @@ export default (editor, opts = {}) => {
               }
             ]
           }
-        ]
+        ],
+        styles: `
+        .cactive {
+          height: 32em;
+        }
+
+        .cactive img {
+          width:100%; 
+          height: 100%;
+        }
+
+        .citem {
+          height: 32em;
+        }
+        `
       },
     },
 
