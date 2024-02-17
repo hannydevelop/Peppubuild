@@ -14,14 +14,16 @@ var grapesjs = require('grapesjs')
 var replaceInFile = require('replace-in-file')
 var os = require('os');
 var fetch = require('node-fetch')
-var ftp = require("basic-ftp");
+// var ftp = require("basic-ftp");
 // var cors = require('cors')
 
 const CURR_DIR = os.homedir();
+/*
 const cpanelDomain = 'https://premium92.web-hosting.com';
 const cpanelUsername = 'ammytzib';
 const root = 'ammyraj.com';
 const cpanelApiKey = '4TVDQGJA9WSP0OSRFLNTRTK0TASDC22W';
+*/
 const adapter = new FileSync(path.join(CURR_DIR, 'db.json'));
 const db = low(adapter);
 
@@ -74,8 +76,8 @@ async function startServer() {
     uploadFiles();
   })
   */
-
-  // set route for logout
+  /*
+   // set route for logout
   function createSub(name) {
     const apiUrl = `${cpanelDomain}:2083/cpsess${cpanelApiKey}/execute/SubDomain/addsubdomain?domain=${name}&rootdomain=${root}&dir=${name}.${root}`;
     let data = fetch(apiUrl, {
@@ -85,6 +87,8 @@ async function startServer() {
     })
     return data;
   }
+  */
+
 
   // set route for logout
   app.get('/logout', (_req, res) => {
@@ -177,7 +181,7 @@ async function startServer() {
 
   }
   // Save Frontend changes.
-  async function createFrontend(tempath) {
+  async function createFrontend(tempath, projectName) {
     // create client folder.
     // fs.mkdirSync(`${tempath}`)
     /*
@@ -238,7 +242,7 @@ async function startServer() {
       if (err) return err;
     })
 
-    fs.writeFileSync(`${tempath}/db.json`, dbContent, function (err) {
+    fs.writeFileSync(`${tempath}/${projectName}.json`, dbContent, function (err) {
       if (err) return err;
     });
 
@@ -266,10 +270,10 @@ async function startServer() {
             <title>Document</title>
             <link rel="stylesheet" type="text/css" href="./css/${name}.css">
         </head>
-        <body>
+        <peppubuild>
         ${html}
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-        </body>
+        </peppubuild>
       </html>`
       fs.writeFileSync(`${tempath}/${name}.html`, htmlContent, function (err) {
         if (err) return err;
@@ -312,10 +316,12 @@ async function startServer() {
       });
 
       let htmlContent = `
-    ${req.body.html}
-    `
+      <peppubuild>
+      ${req.body.html}
+      </peppubuild>
+      `
       let myCss = req.body.css;
-      let regex = new RegExp('<body>(.|\n)*?<\/body>')
+      let regex = new RegExp('<peppubuild>(.|\n)*?<\/peppubuild>')
       const options = {
         files: filePath,
         from: regex,
@@ -341,10 +347,10 @@ async function startServer() {
               <title>Document</title>
               <link rel="stylesheet" type="text/css" href="./css/${id}.css">
           </head>
-          <body>
+          <peppubuild>
           ${req.body.html}
           <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-          </body>
+          </peppubuild>
         </html>
       `
         fs.writeFileSync(filePath, content, function (err) {
@@ -366,7 +372,7 @@ async function startServer() {
         if (err) return err;
       })
 
-      fs.writeFileSync(`${tempath}/db.json`, dbContent, function (err) {
+      fs.writeFileSync(`${tempath}/${projectName}.json`, dbContent, function (err) {
         if (err) return err;
       });
     }
@@ -394,7 +400,7 @@ async function startServer() {
     db.defaults({ project: {} })
       .write()
     db.set('project.name', projectName).write()
-    createFrontend(tartgetPath);
+    createFrontend(tartgetPath, projectName);
     res.send({ success: 'Successfully created project' });
     /*
     createSub(projectName).then(async (response) => {
@@ -465,7 +471,7 @@ async function startServer() {
     db.set('project.name', projectName).write()
     // Call createDirectoryContents         
     // createDirectoryContents(templatePath, projectName);
-    createFrontend(tartgetPath);
+    createFrontend(tartgetPath, projectName);
     createBackend(tartgetPath);
     // updateScriptfront(projectName);
     // updateScriptserver(projectName);
@@ -475,6 +481,13 @@ async function startServer() {
   app.get('/pname', (req, res) => {
     let projectName = db.get("project.name").value();
     res.send(projectName);
+  })
+
+  // set project name
+  // retrieve project name from db
+  app.post('/setname/:name', (req, res) => {
+    let projectName = req.params.name;
+    db.set('project.name', projectName).write();
   })
 
   // rename project
