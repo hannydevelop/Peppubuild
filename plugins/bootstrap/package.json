@@ -1,6 +1,6 @@
 {
   "name": "peppu-bootstrap",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "peppu-bootstrap",
   "main": "dist/index.js",
   "repository": {
