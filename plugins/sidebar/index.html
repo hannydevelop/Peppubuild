@@ -6,6 +6,9 @@
   <title>peppu-sidebar</title>
   <link href="https://unpkg.com/grapesjs/dist/css/grapes.min.css" rel="stylesheet">
   <script src="https://unpkg.com/grapesjs@v0.21.7"></script>
+  <script src="https://unpkg.com/peppu-sidebar"></script>
+  <script src="https://unpkg.com/peppu-panel"></script>
+
   <style>
     body,
     html {
@@ -36,14 +39,15 @@
         fromElement: true,
         noticeOnUnload: false,
         storageManager: false,
-        plugins: ['peppu-sidebar'],
+        plugins: ['peppu-sidebar', 'peppu-panel'],
         pluginsOpts: {
-          'peppu-sidebar': { /* Test here your options  */ }
+          'peppu-sidebar': { /* Test here your options  */ },
+          'peppu-panel': {}
         }
       });
       const pn = editor.Panels;
         
-        pn.addButton('views', {
+        pn.addButton('options', {
             id: 'peppu:open',
             className: 'fa fa-file-o',
             attributes: {
@@ -53,7 +57,7 @@
             togglable: false
         });
 
-        pn.addButton('views', {
+        pn.addButton('options', {
             id: 'peppu:save',
             className: 'fa fa-folder-o',
             attributes: {
