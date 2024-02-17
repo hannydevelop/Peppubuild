@@ -169,14 +169,15 @@ export default class PagesApp extends UI {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({gjsProject: projectdata})
+            body: JSON.stringify({ gjsProject: projectdata })
         })
         return data;
     }
 
     saveProject() {
         const { editor } = this;
-        let gjsProject = localStorage.getItem('gjsProject');
+        const projectdata = editor.getProjectData();
+        let gjsProject = JSON.stringify(projectdata)
         let id = this.pm.getSelected().id;
         let html = editor.Pages.get(id).getMainComponent().toHTML();
         let css = editor.getCss()
@@ -211,7 +212,10 @@ export default class PagesApp extends UI {
         swal("What would you like to name this project?", {
             content: "input",
         }).then((name) => {
-            localStorage.setItem("projectName", name);
+            if (name == null) {
+                return
+            } else
+                localStorage.setItem("projectName", name);
             this.state.projectName = name;
             swal("What type of project will you like to create", {
                 buttons: {
@@ -290,7 +294,23 @@ export default class PagesApp extends UI {
         const { editor } = this;
         let data = JSON.parse(text);
         let value = data.gjsProject.project;
-        editor.loadProjectData(value)
+        editor.loadProjectData(value);
+        var input = file.name;
+        var output = input.substring(0, input.lastIndexOf('.')) || input;
+        this.state.projectName = output;
+        localStorage.setItem("projectName", output);
+        await this.setProjectName(output);
+        this.update();
+    }
+
+    async setProjectName(name) {
+        const { editor } = this;
+        fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/setname/${name}`, {
+            method: "POST", // or 'PUT'
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
     }
 
     handleNameInput(e) {
