@@ -33,6 +33,15 @@
   // Size of the editor
   // Disable the storage manager for the moment
   storageManager: false,
+  pageManager: {
+   pages: [
+     {
+       id: 'page-id',
+       styles: `.my-class { color: red }`, // or a JSON of styles
+       component: '<div class="my-class">My element</div>', // or a JSON of components
+     }
+  ]
+ },      
 });
     },
       100);
