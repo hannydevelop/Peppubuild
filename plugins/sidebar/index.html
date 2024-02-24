@@ -511,37 +511,15 @@
     // Wait for the plugin to be injected by the dev server
     setTimeout(() => {
       window.editor = grapesjs.init({
-        height: '100%',
-        container: '#gjs',
-        showOffsets: true,
-        fromElement: true,
-        noticeOnUnload: false,
-        pageManager: {
-          pages: [
-            {
-              id: 'index',
-              styles: '.my-page1-el { color: red }',
-              component: '<div class="my-page1-el">Page 1</div>',
-            }
-          ]
-        },
-        plugins: ['peppu-sidebar', 'peppu-bootstrap', 'peppu-panel', 'gjs-blocks-basic', 'grapesjs-style-bg', 'grapesjs-touch' ],
-        pluginsOpts: {
-          'peppu-sidebar': { /* Test here your options  */ },
-          'peppu-panel': {},
-          'peppu-bootstrap': {},
-          'grapesjs-style-bg': {},
-          'gjs-blocks-basic': { flexGrid: true },
-        },
-        canvas: {
-          styles: [
-            "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-          ],
-          scripts: [
-            "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-          ],
-        }
-      });
+  // Indicate where to init the editor. You can also pass an HTMLElement
+  container: '#gjs',
+  // Get the content for the canvas directly from the element
+  // As an alternative we could use: `components: '<h1>Hello World Component!</h1>'`,
+  fromElement: true,
+  // Size of the editor
+  // Disable the storage manager for the moment
+  storageManager: false,
+});
     },
       100);
   </script>
