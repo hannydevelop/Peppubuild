@@ -493,3 +493,97 @@ Navbar here
     margin-top: 20px;
     margin-bottom: 10px;
 }
+
+/*
+################
+Dashboard here
+################
+*/
+
+
+.margin {
+    margin: 1vw;
+}
+
+img {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+img:hover {
+    box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+}
+
+.thumb-link {
+    margin-top: 5vw;
+    margin-bottom: 5vw;
+}
+
+.text {
+    margin-top: 1vw;
+    margin-bottom: 1vw;
+}
+
+.dash-content {
+    transition: all 0.5s ease;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.one-container {
+    display: block;
+    width: 100%;
+    padding-top: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+}
+
+.one-child {
+    padding: 20px;
+    background-color: #d0edd8;
+    border-radius: 10px;
+}
+
+.i0sf {
+    font-size: 18px;
+    font-weight: 550;
+    padding-bottom: 20px;
+}
+
+#i2sw {
+    padding: 3%;
+    text-align: left;
+    font-family: Helvetica, sans-serif;
+    font-size: 25px;
+    font-weight: 500;
+}
+
+.action_btn {
+    width: 200px;
+    margin: 30px;
+    display: inline;
+}
+
+#inyx {
+    padding: 10px;
+    text-align: center;
+    font-family: Helvetica, sans-serif;
+}
+
+@media screen and (max-width: 800px) {
+    .one-container {
+        display: block;
+        width: 100%;
+        padding-top: 20px;
+        padding-right: 20px;
+        padding-bottom: 20px;
+        padding-left: 20px;
+    }
+
+    .dash-content {
+        width: 100%;
+        margin-left: 0%;
+    }
+}
