@@ -291,7 +291,7 @@ const Auth = {
       </div>
       <div class="google-btn github-bk" @click="githubLogin()">
         <div class="google-icon-wrapper">
-          <img class="google-icon" src="./assets/img/github.svg" />
+          <img class="google-icon" src="img/github.svg" />
         </div>
         <p class="btn-text"><b>Sign in with Github</b></p>
       </div>
