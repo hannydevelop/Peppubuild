@@ -229,6 +229,62 @@ const Home = {
         editor.setStyle();
     }
 }
+const Dashboard = {
+    template: `
+        <div class="dash-content" id="d-cont">
+            <div id="i2sw">My Dashboard
+            </div>
+            <section-one>
+                <div class="one-container">
+                    <div class="one-child">
+                        <p class="i0sf">
+                            Hi, welcome back!
+                        </p>
+                        <p class="i0sg">
+                            We hope you're having a great day and are
+                            ready to dive back and start creating magic.
+                        </p>
+                    </div>
+                </div>
+                <div id="inyx">
+                    <div class="action_btn">
+                        <h2>Unfinished Project</h2>
+                        Please note that you can only save one unfinished project at a time. If you save another project
+                        before completing your current work, your current work will be lost forever.
+                        <div class="thumb-link">
+                            <a target="_blank" href="/workspace/editor/unfinished">
+                                <img src="https://source.unsplash.com/weRQAu9TA-A" alt="Paris" style="width:150px">
+                            </a>
+                        </div>
+                        <div>
+                        <button type="button" class="action_btn btn btn-primary">Load Project</button>
+                        <button type="button" class="action_btn btn btn-success">New Project</button>
+                        <div>
+                    </div>
+                </div>
+            </section-one>
+        </div>
+    `,
+    data() {
+        return {
+        };
+    },
+
+    methods: {
+        showSide() {
+            var x = document.getElementById("dedee");
+            var y = document.getElementById("d-cont");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+                y.style.marginLeft = "225px";
+            } else {
+                x.style.display = "none";
+                y.style.width = "100%";
+                y.style.marginLeft = "0%";
+            }
+        }
+    }
+}
 const Auth = {
     template: `
     <div class="background">
@@ -473,6 +529,7 @@ const routes = [
     { path: '/', component: Home, name: 'Home' },
     { path: '/auth', component: Auth, name: 'Auth' },
     { path: '/contact', component: Contact, name: 'Contact' },
+    { path: '/dashboard', component: Dashboard, name: 'Dashboard' },
 ];
 
 
