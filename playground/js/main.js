@@ -14,7 +14,7 @@ const Home = {
 `,
     mounted() {
         // initialize grapesjs
-        var editor = grapesjs.init({
+        const editor = grapesjs.init({
             container: '#gjs',
             height: '100vh',
             width: 'auto',
@@ -308,7 +308,13 @@ const Dashboard = {
             }
         },
         templateProject() {
-
+            localStorage.removeItem('gjsProject');
+            let name = prompt('What will you like to name your project?');
+            if(name) {
+                localStorage.setItem('projectName', name);
+                window.location.href = "/";
+                console.log(editor)
+            }        
         }
     }
 }
