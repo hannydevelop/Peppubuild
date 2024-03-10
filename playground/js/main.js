@@ -20,6 +20,7 @@ const Home = {
             width: 'auto',
             showOffsets: true,
             fromElement: true,
+            StorageManager: true,
             noticeOnUnload: false,
             pageManager: true,
             styleManager: {
@@ -225,8 +226,6 @@ const Home = {
                 ],
             }
         });
-        editor.setComponents();
-        editor.setStyle();
     }
 }
 const Dashboard = {
@@ -257,11 +256,29 @@ const Dashboard = {
                             </a>
                         </div>
                         <div>
-                        <button type="button" class="action_btn btn btn-primary">Load Project</button>
-                        <button type="button" class="action_btn btn btn-success">New Project</button>
+                        <button type="button" class="action_btn btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">New Project</button>
                         <div>
                     </div>
                 </div>
+                <!-- Modal -->
+                
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="exampleModalLabel">New Project</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      Choose if you'd like to create from an empty workspace or using a template
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" @click="emptyProject">Empty Workspace</button>
+                      <button type="button" class="btn btn-primary" @click="templateProject">Template</button>
+                    </div>
+                  </div>
+                </div>
+              </div>            
             </section-one>
         </div>
     `,
@@ -282,6 +299,13 @@ const Dashboard = {
                 y.style.width = "100%";
                 y.style.marginLeft = "0%";
             }
+        },
+        emptyProject() {
+            localStorage.removeItem('gjsProject');
+            window.location.href = "/";
+        },
+        templateProject() {
+
         }
     }
 }
