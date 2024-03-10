@@ -248,10 +248,9 @@ const Dashboard = {
                 <div id="inyx">
                     <div class="action_btn">
                         <h2>Unfinished Project</h2>
-                        Please note that you can only save one unfinished project at a time. If you save another project
-                        before completing your current work, your current work will be lost forever.
+                        Continue from where you left off. Please note that projects not saved will be lost.
                         <div class="thumb-link">
-                            <a target="_blank" href="/workspace/editor/unfinished">
+                            <a target="_blank" href="/">
                                 <img src="https://source.unsplash.com/weRQAu9TA-A" alt="Paris" style="width:150px">
                             </a>
                         </div>
