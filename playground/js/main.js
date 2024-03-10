@@ -301,7 +301,11 @@ const Dashboard = {
         },
         emptyProject() {
             localStorage.removeItem('gjsProject');
-            window.location.href = "/";
+            let name = prompt('What will you like to name your project?');
+            if(name) {
+                localStorage.setItem('pname', name);
+                window.location.href = "/";
+            }
         },
         templateProject() {
 
@@ -558,7 +562,7 @@ const routes = [
 
 // create the router instance
 const router = new VueRouter({
-    routes
+    routes,
 })
 
 // guard routes
