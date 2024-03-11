@@ -22,7 +22,13 @@ const Home = {
             fromElement: true,
             StorageManager: true,
             noticeOnUnload: false,
-            pageManager: true,
+            pageManager: {
+                pages: [
+                    {
+                        id: 'index'
+                    }
+                ]
+            },
             styleManager: {
                 sectors: [{
                     name: 'General',
@@ -211,7 +217,7 @@ const Home = {
                 ],
             },
             // Add peppu and other plugins.
-            plugins: ['peppu-sidebar', 'peppu-bootstrap', 'peppu-panel', "gjs-blocks-basic", "grapesjs-plugin-forms", 'grapesjs-style-bg'],
+            plugins: ['peppu-sidebar', 'peppu-bootstrap', 'peppu-panel', "gjs-blocks-basic", "grapesjs-plugin-forms", 'grapesjs-style-bg', 'grapesjs-touch'],
             pluginsOpts: {
                 'peppu-sidebar': { /* Test here your options  */ },
                 'peppu-bootstrap': {},
@@ -281,6 +287,12 @@ const Dashboard = {
             </section-one>
         </div>
     `,
+    mounted() {
+        const link = document.createElement('meta');
+        link.name = 'viewport';
+        link.content = 'width=device-width, initial-scale=1.0';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    },
     data() {
         return {
         };
@@ -302,7 +314,7 @@ const Dashboard = {
         emptyProject() {
             localStorage.removeItem('gjsProject');
             let name = prompt('What will you like to name your project?');
-            if(name) {
+            if (name) {
                 localStorage.setItem('projectName', name);
                 window.location.href = "/";
             }
@@ -310,11 +322,11 @@ const Dashboard = {
         templateProject() {
             localStorage.removeItem('gjsProject');
             let name = prompt('What will you like to name your project?');
-            if(name) {
+            if (name) {
                 localStorage.setItem('projectName', name);
                 window.location.href = "/";
                 console.log(editor)
-            }        
+            }
         }
     }
 }
@@ -387,6 +399,12 @@ const Auth = {
     </div>
   </div>
     `,
+    mounted() {
+        const link = document.createElement('meta');
+        link.name = 'viewport';
+        link.content = 'width=device-width, initial-scale=1.0';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    },
     data() {
         return {
             email: "",
@@ -533,6 +551,12 @@ const Contact = {
         </form>
     </div>
 `,
+    mounted() {
+        const link = document.createElement('meta');
+        link.name = 'viewport';
+        link.content = 'width=device-width, initial-scale=1.0';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    },
     methods: {
         submitReq() {
             emailjs.sendForm('service_ye8ngya', 'template_hjuc4sp', this.$refs.form, 'gaqDvZ1uPiEy0Z2CO')
