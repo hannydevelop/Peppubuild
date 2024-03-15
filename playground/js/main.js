@@ -1,4 +1,5 @@
 import { userAuth } from './firebase.js';
+import { cpanelSubConfig } from './firebase.js';
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
@@ -299,6 +300,15 @@ const Dashboard = {
     },
 
     methods: {
+        createSub(name) {
+            const subUrl = `${ cpanelSubConfig.cpanelDomain}:2083/cpsess${cpanelSubConfig.cpanelApiKey}/execute/SubDomain/addsubdomain?domain=${name}&rootdomain=${cpanelSubConfig.root}&dir=${name}.${root}`;
+            let data = fetch(subUrl, {
+                method: 'GET', headers: {
+                    'Authorization': 'cpanel ' + cpanelSubConfig.cpanelUsername + ':' + cpanelSubConfig.cpanelApiKey,
+                }
+            })
+            return data;
+        },
         showSide() {
             var x = document.getElementById("dedee");
             var y = document.getElementById("d-cont");
@@ -312,11 +322,24 @@ const Dashboard = {
             }
         },
         emptyProject() {
-            localStorage.removeItem('gjsProject');
-            let name = prompt('What will you like to name your project?');
-            if (name) {
-                localStorage.setItem('projectName', name);
-                window.location.href = "/";
+            let project = localStorage.getItem('gjsProject');
+            if (project) {
+                alert('You already have a project. Finish your pending project, publish, and use the desktop application')
+            } else {
+                let name = prompt('What will you like to name your project?');
+                if (name) {
+                    this.createSub(name).then(async (response) => {
+                        let text = await response.text();
+                        let json = JSON.parse(text);
+                        if (response.ok && json.errors == null) {
+                            localStorage.setItem('projectName', name);
+                            window.location.href = "/";
+                        } else {
+                            alert(`${name}.peppubuild.com already exists, choose another name`)
+                        }
+                    }
+                    )
+                }
             }
         },
         templateProject() {
