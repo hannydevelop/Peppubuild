@@ -3,6 +3,10 @@
 global styles
 ################
 */
+.gjs-mdl-dialog {
+    background-color: white;
+    color: #333;
+}
 body {
     margin: 0;
     font-family: sans-serif;
