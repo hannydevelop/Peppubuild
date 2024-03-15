@@ -235,8 +235,7 @@ const Home = {
         });
         const mdl = editor.Modal;
         editor.on('block:drag:stop', (component, block) => {
-            console.log(component.attributes)
-            if (component.attributes.name == 'B-NAVBAR') {
+            if (component.attributes.type == 'B-NAVBAR') {
                 mdl.open({
                     title: 'This is s Navigation Bar',
                     content: `You just dropped a navigation bar. Navigation bars are usually a list of links, 
