@@ -235,7 +235,7 @@ const Home = {
         });
         const mdl = editor.Modal;
         editor.on('block:drag:stop', (component, block) => {
-            console.log(component.attributes.name)
+            console.log(component.attributes)
             if (component.attributes.name == 'B-NAVBAR') {
                 mdl.open({
                     title: 'This is s Navigation Bar',
