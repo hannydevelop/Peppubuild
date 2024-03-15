@@ -241,10 +241,12 @@ const Home = {
                     content: `You just dropped a navigation bar. Navigation bars are usually a list of links, 
                     useful to aid visitors to access information faster. This navigation bar is built with Bootstrap, to create
                     yours, add the following to your HTML file:
+
                     <a>Hi iii</a>
-                    
                     <nav class="navbar navbar-expand-lg fixed-top navbar-light">
                     <div class="container-fluid">
+
+                
                     <a class="navbar-brand" href="#">Navbar</a>
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
