@@ -233,6 +233,9 @@ const Home = {
                 ],
             }
         });
+        editor.on('block:drag:stop', (component, block) => {
+            console.log(component)
+        });
     }
 }
 const Dashboard = {
@@ -301,7 +304,7 @@ const Dashboard = {
 
     methods: {
         createSub(name) {
-            const subUrl = `${ cpanelSubConfig.cpanelDomain}:2083/cpsess${cpanelSubConfig.cpanelApiKey}/execute/SubDomain/addsubdomain?domain=${name}&rootdomain=${cpanelSubConfig.root}&dir=${name}.${root}`;
+            const subUrl = `${ cpanelSubConfig.cpanelDomain}:2083/cpsess${cpanelSubConfig.cpanelApiKey}/execute/SubDomain/addsubdomain?domain=${name}&rootdomain=${cpanelSubConfig.root}&dir=${name}.${cpanelSubConfig.root}`;
             let data = fetch(subUrl, {
                 method: 'GET', headers: {
                     'Authorization': 'cpanel ' + cpanelSubConfig.cpanelUsername + ':' + cpanelSubConfig.cpanelApiKey,
