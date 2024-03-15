@@ -8,7 +8,6 @@ import {
     GoogleAuthProvider,
     GithubAuthProvider
 } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js";
-const mdl = editor.Modal;
 // Create route components
 const Home = {
     template: `
@@ -234,6 +233,7 @@ const Home = {
                 ],
             }
         });
+        const mdl = editor.Modal;
         editor.on('block:drag:stop', (component, block) => {
             if (component.attributes.name == 'B-NAVBAR') {
                 mdl.open({
