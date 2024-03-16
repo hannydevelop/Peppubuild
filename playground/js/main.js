@@ -234,54 +234,141 @@ const Home = {
             }
         });
         const mdl = editor.Modal;
+        editor.on('load', (some, argument) => {
+            mdl.open({
+                title: 'Quickstart',
+                content: `
+                <div class="container" style="background-color: black;">
+                  The 'View Code' icon contains the HTML and CSS code added to the editor.<br>
+                  To get started, you need to install VSCode and create a HTML/CSS file.<br>
+                  In the HTML file, you can start with a scaffold by typing '!' and hitting enter.<br>
+                  For bootstrap components, add the Bootstrap CSS and HTML.<br>
+      
+                  <div class="mb-3">
+                      <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+                      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">"></textarea>
+                  </div>
+                  Always start with the basic blocks if you're just starting out.<br>
+                  Remember that you can change the style of any component in the editor from the style panel.
+                </div>`,
+            })
+        })
         editor.on('block:drag:stop', (component, block) => {
             if (component.attributes.type == 'B-NAVBAR') {
                 mdl.open({
-                    title: 'This is s Navigation Bar',
-                    content: `You just dropped a navigation bar. Navigation bars are usually a list of links, 
-                    useful to aid visitors to access information faster. This navigation bar is built with Bootstrap, to create
-                    yours, add the following to your HTML file:
-
-                    <a>Hi iii</a>
-                    <nav class="navbar navbar-expand-lg fixed-top navbar-light">
-                    <div class="container-fluid">
-
-                
-                    <a class="navbar-brand" href="#">Navbar</a>
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                        </button>
-                    <button type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler">Send</button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Dropdown
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                        </li>
-                        </ul>
-                        <form class="d-flex">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                        </form>
+                    title: 'This is a Navigation Bar',
+                    content: `
+                    <div class="container" style="background-color: black;">
+                    You just dropped a navigation bar.<br> Navigation bars are usually a list of links, 
+                    useful to aid visitors to access information faster.<br> This navigation bar is built with Bootstrap, to create
+                    yours, check the 'View code' component and add the HTML code into your HTML file.
+                    For more information, checkout the Bootstap navigation page: 
+                    https://getbootstrap.com/docs/5.3/components/navbar
                     </div>
+                `,
+                })
+            }
+            else if (component.attributes.type == 'B-ACCORDION') {
+                mdl.open({
+                    title: 'This is an Accordion',
+                    content: `
+                    <div class="container" style="background-color: black;">
+                    You just dropped an accordion.<br> Accordions are menus that have headers stacked together. They reveal more details when you click on them. This accordion is built with Bootstrap, to create
+                    yours, check the 'View code' component and add the HTML code into your HTML file.
+                    For more information, checkout the Bootstap accordion page:
+                    https://getbootstrap.com/docs/5.3/components/accordion/
                     </div>
-                </nav>
+                `,
+                })
+            } else if (component.attributes.type == 'B-CARD') {
+                mdl.open({
+                    title: 'This is a Card',
+                    content: `
+                    <div class="container" style="background-color: black;">
+                    You just dropped a card.<br> Cards are containers that group related information in flexible-size containers
+                    visually resembling playing cards.<br> This card is built with Bootstrap, to create
+                    yours, check the 'View code' component and add the HTML code into your HTML file.
+                    For more information, checkout the Bootstap card page:
+                    https://getbootstrap.com/docs/5.3/components/cards
+                    </div>
+                `,
+                })
+            } else if (component.attributes.type == 'B-FOOTER') {
+                mdl.open({
+                    title: 'This is a Footer',
+                    content: `
+                    <div class="container" style="background-color: black;">
+                    You just dropped a footer.<br> Footers are website components that hold important information about
+                    your website. They are mostly fixed at the bottom of the website. This footer is built with Bootstrap, to create
+                    yours, check the 'View code' component and add the HTML code into your HTML file.
+                    For more information, checkout the Bootstap footer page:
+                    https://getbootstrap.com/docs/5.2/examples/footers/
+                    </div>
+                `,
+                })
+            } else if (component.attributes.type == 'B-PRICING') {
+                mdl.open({
+                    title: 'This is a Pricing',
+                    content: `
+                    <div class="container" style="background-color: black;">
+                    You just dropped a pricing component.<br> This component has all the elements you need for creating the different
+                    pricing models. If you have used any subscription model for the web and have seen the 
+                    pricing page, this is exactly what this component does. This component is built with Bootstrap, to create
+                    yours, check the 'View code' component and add the HTML code into your HTML file.:
+                    For more information, checkout the Bootstap pricing page:
+                    https://getbootstrap.com/docs/5.2/examples/pricing
+                    </div>
+                `,
+                })
+            } else if (component.attributes.type == 'B-FEATURES') {
+                mdl.open({
+                    title: 'This is a Feature',
+                    content: `
+                    <div class="container" style="background-color: black;">
+                    You just dropped a feature component.<br> If you have ever wondered how to show-off the great
+                    features of your product, consider using this component.<br> This component is built with Bootstrap, to create
+                    yours, check the 'View code' component and add the HTML code into your HTML file.
+                    For more information, checkout the Bootstap features page:
+                    https://getbootstrap.com/docs/5.2/examples/features
+                    </div>
+                `,
+                })
+            } else if (component.attributes.type == 'B-HERO') {
+                mdl.open({
+                    title: 'This is Hero',
+                    content: `
+                    <div class="container" style="background-color: black;">
+                    You just dropped a Hero component.<br> This is the first thing the visitor sees when they visit your website.
+                    The goal is to capture the attention of the visitor. This Hero is built with Bootstrap, to create
+                    yours, check the 'View code' component and add the HTML code into your HTML file.
+                    For more information, checkout the Bootstap hero page:
+                    https://getbootstrap.com/docs/5.2/examples/hero/
+                    </div>
+                `,
+                })
+            } else if (component.attributes.type == 'B-BUTTON') {
+                mdl.open({
+                    title: 'This is a Button',
+                    content: `
+                    <div class="container" style="background-color: black;">
+                    You just dropped a button. Buttons are interractive elements that communicate actions that users can take.
+                    They mostly perform actions when users click on them. This button is built with Bootstrap, to create
+                    yours, check the 'View code' component and add the HTML code into your HTML file.
+                    For more information, checkout the Bootstap button page:
+                    
+                    </div>
+                `,
+                })
+            } else if (component.attributes.type == 'B-CAROUSEL') {
+                mdl.open({
+                    title: 'This is an Carousel',
+                    content: `
+                    <div class="container" style="background-color: black;">
+                    You just dropped a carousel.<br> Carousels can also be called slideshows or galleries.
+                    They allow you display text, images, and even video in one interractive sliding block. This carousel is built with Bootstrap, to create
+                    yours, check the 'View code' component and add the HTML code into your HTML file.
+                    For more information, checkout the Bootstap carousel page:
+                    </div>
                 `,
                 })
             }
@@ -332,8 +419,7 @@ const Dashboard = {
                       Choose if you'd like to create from an empty workspace or using a template
                     </div>
                     <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" @click="emptyProject">Empty Workspace</button>
-                      <button type="button" class="btn btn-primary" @click="templateProject">Template</button>
+                      <button type="button" class="btn btn-primary" @click="emptyProject">Empty Workspace</button>
                     </div>
                   </div>
                 </div>
@@ -354,7 +440,7 @@ const Dashboard = {
 
     methods: {
         createSub(name) {
-            const subUrl = `${ cpanelSubConfig.cpanelDomain}:2083/cpsess${cpanelSubConfig.cpanelApiKey}/execute/SubDomain/addsubdomain?domain=${name}&rootdomain=${cpanelSubConfig.root}&dir=${name}.${cpanelSubConfig.root}`;
+            const subUrl = `${cpanelSubConfig.cpanelDomain}:2083/cpsess${cpanelSubConfig.cpanelApiKey}/execute/SubDomain/addsubdomain?domain=${name}&rootdomain=${cpanelSubConfig.root}&dir=${name}.${cpanelSubConfig.root}`;
             let data = fetch(subUrl, {
                 method: 'GET', headers: {
                     'Authorization': 'cpanel ' + cpanelSubConfig.cpanelUsername + ':' + cpanelSubConfig.cpanelApiKey,
@@ -381,17 +467,8 @@ const Dashboard = {
             } else {
                 let name = prompt('What will you like to name your project?');
                 if (name) {
-                    this.createSub(name).then(async (response) => {
-                        let text = await response.text();
-                        let json = JSON.parse(text);
-                        if (response.ok && json.errors == null) {
-                            localStorage.setItem('projectName', name);
-                            window.location.href = "/";
-                        } else {
-                            alert(`${name}.peppubuild.com already exists, choose another name`)
-                        }
-                    }
-                    )
+                    localStorage.setItem('projectName', name);
+                    window.location.href = "/";
                 }
             }
         },
