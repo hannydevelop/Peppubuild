@@ -371,6 +371,31 @@ const Home = {
                     </div>
                 `,
                 })
+            } else if (component.attributes.type == 'column1') {
+                mdl.open({
+                    title: 'This is column1 type',
+                    content: `
+                    <div class="container" style="background-color: black;">
+                    You just dropped a carousel.<br> Carousels can also be called slideshows or galleries.
+                    They allow you display text, images, and even video in one interractive sliding block. This carousel is built with Bootstrap, to create
+                    yours, check the 'View code' component and add the HTML code into your HTML file.
+                    For more information, checkout the Bootstap carousel page:
+                    </div>
+                `,
+                })
+            }
+            else if (component.attributes.name == 'column1') {
+                mdl.open({
+                    title: 'This is column1 name',
+                    content: `
+                    <div class="container" style="background-color: black;">
+                    You just dropped a carousel.<br> Carousels can also be called slideshows or galleries.
+                    They allow you display text, images, and even video in one interractive sliding block. This carousel is built with Bootstrap, to create
+                    yours, check the 'View code' component and add the HTML code into your HTML file.
+                    For more information, checkout the Bootstap carousel page:
+                    </div>
+                `,
+                })
             }
         });
     }
@@ -661,7 +686,7 @@ const Auth = {
             })
             storecookie
                 .then((response) => {
-                    window.location.href = "/";
+                    window.location.href = "/dashboard";
                 }).catch((error) => {
                     swal("Oops!", `Login verification error: ${error}`, "error");
                 })
