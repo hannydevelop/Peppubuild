@@ -254,7 +254,164 @@ const Home = {
             })
         })
         editor.on('block:drag:stop', (component, block) => {
-            console.log(component)
+            if (component.attributes.type == 'B-NAVBAR') {
+                mdl.open({
+                    title: 'This is a Navigation Bar',
+                    content: `
+                    <div class="container" style="background-color: black;">
+                    You just dropped a navigation bar.<br> Navigation bars are usually a list of links, 
+                    useful to aid visitors to access information faster.<br> This navigation bar is built with Bootstrap, to create
+                    yours, check the 'View code' component and add the HTML code into your HTML file.
+                    For more information, checkout the Bootstap navigation page: 
+                    https://getbootstrap.com/docs/5.3/components/navbar
+                    </div>
+                `,
+                })
+            }
+            else if (component.attributes.type == 'B-ACCORDION') {
+                mdl.open({
+                    title: 'This is an Accordion',
+                    content: `
+                    <div class="container" style="background-color: black;">
+                    You just dropped an accordion.<br> Accordions are menus that have headers stacked together. They reveal more details when you click on them. This accordion is built with Bootstrap, to create
+                    yours, check the 'View code' component and add the HTML code into your HTML file.
+                    For more information, checkout the Bootstap accordion page:
+                    https://getbootstrap.com/docs/5.3/components/accordion/
+                    </div>
+                `,
+                })
+            } else if (component.attributes.type == 'B-CARD') {
+                mdl.open({
+                    title: 'This is a Card',
+                    content: `
+                    <div class="container" style="background-color: black;">
+                    You just dropped a card.<br> Cards are containers that group related information in flexible-size containers
+                    visually resembling playing cards.<br> This card is built with Bootstrap, to create
+                    yours, check the 'View code' component and add the HTML code into your HTML file.
+                    For more information, checkout the Bootstap card page:
+                    https://getbootstrap.com/docs/5.3/components/cards
+                    </div>
+                `,
+                })
+            } else if (component.attributes.type == 'B-FOOTER') {
+                mdl.open({
+                    title: 'This is a Footer',
+                    content: `
+                    <div class="container" style="background-color: black;">
+                    You just dropped a footer.<br> Footers are website components that hold important information about
+                    your website. They are mostly fixed at the bottom of the website. This footer is built with Bootstrap, to create
+                    yours, check the 'View code' component and add the HTML code into your HTML file.
+                    For more information, checkout the Bootstap footer page:
+                    https://getbootstrap.com/docs/5.2/examples/footers/
+                    </div>
+                `,
+                })
+            } else if (component.attributes.type == 'B-PRICING') {
+                mdl.open({
+                    title: 'This is a Pricing',
+                    content: `
+                    <div class="container" style="background-color: black;">
+                    You just dropped a pricing component.<br> This component has all the elements you need for creating the different
+                    pricing models. If you have used any subscription model for the web and have seen the 
+                    pricing page, this is exactly what this component does. This component is built with Bootstrap, to create
+                    yours, check the 'View code' component and add the HTML code into your HTML file.:
+                    For more information, checkout the Bootstap pricing page:
+                    https://getbootstrap.com/docs/5.2/examples/pricing
+                    </div>
+                `,
+                })
+            } else if (component.attributes.type == 'B-FEATURES') {
+                mdl.open({
+                    title: 'This is a Feature',
+                    content: `
+                    <div class="container" style="background-color: black;">
+                    You just dropped a feature component.<br> If you have ever wondered how to show-off the great
+                    features of your product, consider using this component.<br> This component is built with Bootstrap, to create
+                    yours, check the 'View code' component and add the HTML code into your HTML file.
+                    For more information, checkout the Bootstap features page:
+                    https://getbootstrap.com/docs/5.2/examples/features
+                    </div>
+                `,
+                })
+            } else if (component.attributes.type == 'B-HERO') {
+                mdl.open({
+                    title: 'This is Hero',
+                    content: `
+                    <div class="container" style="background-color: black;">
+                    You just dropped a Hero component.<br> This is the first thing the visitor sees when they visit your website.
+                    The goal is to capture the attention of the visitor. This Hero is built with Bootstrap, to create
+                    yours, check the 'View code' component and add the HTML code into your HTML file.
+                    For more information, checkout the Bootstap hero page:
+                    https://getbootstrap.com/docs/5.2/examples/hero/
+                    </div>
+                `,
+                })
+            } else if (component.attributes.type == 'B-BUTTON') {
+                mdl.open({
+                    title: 'This is a Button',
+                    content: `
+                    <div class="container" style="background-color: black;">
+                    You just dropped a button. Buttons are interractive elements that communicate actions that users can take.
+                    They mostly perform actions when users click on them. This button is built with Bootstrap, to create
+                    yours, check the 'View code' component and add the HTML code into your HTML file.
+                    For more information, checkout the Bootstap button page:
+                    
+                    </div>
+                `,
+                })
+            } else if (component.attributes.type == 'B-CAROUSEL') {
+                mdl.open({
+                    title: 'This is an Carousel',
+                    content: `
+                    <div class="container" style="background-color: black;">
+                    You just dropped a carousel.<br> Carousels can also be called slideshows or galleries.
+                    They allow you display text, images, and even video in one interractive sliding block. This carousel is built with Bootstrap, to create
+                    yours, check the 'View code' component and add the HTML code into your HTML file.
+                    For more information, checkout the Bootstap carousel page:
+                    </div>
+                `,
+                })
+            }else if (component.attributes.type == 'text') {
+                mdl.open({
+                    title: 'This is a text',
+                    content: `
+                    <div class="container" style="background-color: black;">
+                    This is a text. Texts can be added into divs or 'p' tags. To create
+                    yours, check the 'View code' component and add the HTML code into your HTML file.
+                    </div>
+                `,
+                })
+            } else if (component.attributes.name == 'Row') {
+                mdl.open({
+                    title: 'This is a Div',
+                    content: `
+                    <div class="container" style="background-color: black;">
+                    This is a Div tag. Div tags are mostly used as building blocks to create components. To create
+                    yours, check the 'View code' component and add the HTML code into your HTML file.
+                    </div>
+                `,
+                })
+            } else if (component.attributes.type == 'link') {
+                mdl.open({
+                    title: 'This is a Link',
+                    content: `
+                    <div class="container" style="background-color: black;">
+                    This is a Link. Links can be added to texts or buttons and come with an 'a' tag. To create
+                    yours, check the 'View code' component and add the HTML code into your HTML file.
+                    </div>
+                `,
+                })
+            }else if (component.attributes.type == 'image') {
+                mdl.open({
+                    title: 'This is an Image',
+                    content: `
+                    <div class="container" style="background-color: black;">
+                    This is an Image (img tag). Image tags are mostly used to display images. To create
+                    yours, check the 'View code' component and add the HTML code into your HTML file.
+                    </div>
+                `,
+                })
+            }
         });
     }
 }
