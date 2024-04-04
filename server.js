@@ -536,6 +536,4 @@ async function startServer() {
   app.listen(port);
   console.log(`started server in ${port}`)
 }
-// startServer()
-exports.app = app;
-exports.startServer = startServer;
+startServer()
