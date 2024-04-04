@@ -10,7 +10,6 @@
     "release": "release-it"
   },
   "dependencies": {
-    "@netlify/functions": "^2.4.1",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -18,7 +17,6 @@
     "fs": "^0.0.1-security",
     "grapesjs": "^0.21.7",
     "lowdb": "^1.0.0",
-    "netlify-cli": "^17.14.0",
     "node-fetch": "^2.7.0",
     "open": "^9.1.0",
     "openai": "^3.1.0",
