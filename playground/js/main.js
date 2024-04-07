@@ -432,7 +432,7 @@ const Dashboard = {
                         </p>
                     </div>
                 </div>
-                <div id="inyx">
+                <div id="inyx" v-if="pname">
                     <div class="action_btn">
                         <h2>Unfinished Project</h2>
                         Continue from where you left off. Please note that projects not saved will be lost.
@@ -597,6 +597,7 @@ const Auth = {
         link.name = 'viewport';
         link.content = 'width=device-width, initial-scale=1.0';
         document.getElementsByTagName('head')[0].appendChild(link);
+        this.pname = localStorage.getItem('pname')
     },
     data() {
         return {
@@ -604,7 +605,8 @@ const Auth = {
             password: "",
             lemail: "",
             lpassword: "",
-            fname: ""
+            fname: "",
+            pname: ""
         }
     },
     methods: {
@@ -793,6 +795,12 @@ const router = new VueRouter({
 router.beforeEach(async (to, from, next) => {
     let isAuthenticated = getCookie('pepputoken')
     if (to.name !== 'Auth' && !isAuthenticated) next({ name: 'Auth' })
+    else next()
+})
+
+router.beforeEach(async (to, from, next) => {
+    let isProjectCreated = localStorage.getItem('pname');
+    if (to.name == 'Home' && !isProjectCreated) next({ name: 'Dashboard' })
     else next()
 })
 
