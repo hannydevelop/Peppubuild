@@ -371,7 +371,7 @@ const Home = {
                     </div>
                 `,
                 })
-            }else if (component.attributes.type == 'text') {
+            } else if (component.attributes.type == 'text') {
                 mdl.open({
                     title: 'This is a text',
                     content: `
@@ -401,7 +401,7 @@ const Home = {
                     </div>
                 `,
                 })
-            }else if (component.attributes.type == 'image') {
+            } else if (component.attributes.type == 'image') {
                 mdl.open({
                     title: 'This is an Image',
                     content: `
@@ -432,6 +432,24 @@ const Dashboard = {
                         </p>
                     </div>
                 </div>
+                    <div id="i2sw">New Project
+                </div>
+                <div class="card text-center">
+                <div class="card-header">
+                    <ul class="nav nav-pills card-header-pills">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Create Project</a>
+                    </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Create a new website with Peppubuild</h5>
+                    <p class="card-text">With Peppubuild, you can create from an empty workspace or build with AI</p>
+                    <div>
+                        <button type="button" class="action_btn btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">New Project</button>
+                    <div>
+                </div>
+                </div>
                 <div id="inyx" v-if="pname">
                     <div class="action_btn">
                         <h2>Unfinished Project</h2>
@@ -441,9 +459,6 @@ const Dashboard = {
                                 <img src="https://source.unsplash.com/weRQAu9TA-A" alt="Paris" style="width:150px">
                             </a>
                         </div>
-                        <div>
-                        <button type="button" class="action_btn btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">New Project</button>
-                        <div>
                     </div>
                 </div>
                 <!-- Modal -->
@@ -460,6 +475,7 @@ const Dashboard = {
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-primary" @click="emptyProject">Empty Workspace</button>
+                      <button type="button" class="btn btn-success" @click="templateProject">Build with AI</button>
                     </div>
                   </div>
                 </div>
@@ -471,20 +487,20 @@ const Dashboard = {
         const link = document.createElement('meta');
         link.name = 'viewport';
         link.content = 'width=device-width, initial-scale=1.0';
-        document.getElementsByTagName('head')[0].appendChild(link);
+        document.getElementsByTagName('head')[0].appendChild(link)
+        this.pname = localStorage.getItem('pname')
     },
     data() {
         return {
+            pname: ""
         };
     },
 
     methods: {
         createSub(name) {
-            const subUrl = `${cpanelSubConfig.cpanelDomain}:2083/cpsess${cpanelSubConfig.cpanelApiKey}/execute/SubDomain/addsubdomain?domain=${name}&rootdomain=${cpanelSubConfig.root}&dir=${name}.${cpanelSubConfig.root}`;
+            const subUrl = ``;
             let data = fetch(subUrl, {
-                method: 'GET', headers: {
-                    'Authorization': 'cpanel ' + cpanelSubConfig.cpanelUsername + ':' + cpanelSubConfig.cpanelApiKey,
-                }
+                method: 'GET'
             })
             return data;
         },
@@ -597,7 +613,6 @@ const Auth = {
         link.name = 'viewport';
         link.content = 'width=device-width, initial-scale=1.0';
         document.getElementsByTagName('head')[0].appendChild(link);
-        this.pname = localStorage.getItem('pname')
     },
     data() {
         return {
@@ -606,7 +621,6 @@ const Auth = {
             lemail: "",
             lpassword: "",
             fname: "",
-            pname: ""
         }
     },
     methods: {
