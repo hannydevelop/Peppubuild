@@ -8,6 +8,7 @@ import {
     GoogleAuthProvider,
     GithubAuthProvider
 } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js";
+const serverUrl = 'https://www.server.peppubuild.com';
 // Create route components
 const Home = {
     template: `
@@ -479,15 +480,6 @@ const Dashboard = {
     },
 
     methods: {
-        createSub(name) {
-            const subUrl = `${cpanelSubConfig.cpanelDomain}:2083/cpsess${cpanelSubConfig.cpanelApiKey}/execute/SubDomain/addsubdomain?domain=${name}&rootdomain=${cpanelSubConfig.root}&dir=${name}.${cpanelSubConfig.root}`;
-            let data = fetch(subUrl, {
-                method: 'GET', headers: {
-                    'Authorization': 'cpanel ' + cpanelSubConfig.cpanelUsername + ':' + cpanelSubConfig.cpanelApiKey,
-                }
-            })
-            return data;
-        },
         showSide() {
             var x = document.getElementById("dedee");
             var y = document.getElementById("d-cont");
@@ -501,15 +493,20 @@ const Dashboard = {
             }
         },
         emptyProject() {
-            let project = localStorage.getItem('gjsProject');
-            if (project) {
-                alert('You already have a project. Finish your pending project, publish, and use the desktop application')
-            } else {
-                let name = prompt('What will you like to name your project?');
-                if (name) {
-                    localStorage.setItem('projectName', name);
-                    window.location.href = "/";
-                }
+            let name = prompt('What will you like to name your project?');
+            if (name) {
+                localStorage.setItem('projectName', name);
+                let gjsProject = '{}'
+                let accessToken = localStorage.getItem('oauth')
+                let url = `${serverUrl}/${name}`
+                fetch(url, {
+                    method: 'POST', 
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ gjsProject: gjsProject, accessToken: accessToken }),
+                }).then((res) => {localStorage.setItem('ProjectId', res.json().id)})
+                window.location.href = "/";
             }
         },
         templateProject() {
