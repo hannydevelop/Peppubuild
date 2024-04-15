@@ -658,6 +658,7 @@ const Auth = {
                 .then((result) => {
                     // This gives you a Google Access Token. You can use it to access the Google API.
                     const credential = authProvider.credentialFromResult(result);
+                    localStorage.setItem('oauth', credential.accessToken)
                     const token = credential.accessToken;
                     // The signed-in user info.
                     const user = result.user;
@@ -679,6 +680,7 @@ const Auth = {
         // Google Authentication
         googleLogin() {
             const provider = new GoogleAuthProvider();
+            provider.addScope('https://www.googleapis.com/auth/drive.appdata')
             this.providerLogin(GoogleAuthProvider, provider);
         },
         // Github Authentication
