@@ -243,7 +243,7 @@ function driveAuth(accessToken) {
 
   // create frontend project
   /// TODO: Import the necessary functions here like createFrontend etc.
-  app.get('/publishfront/:name', (req, res) => {
+  app.post('/publishfront/:name', (req, res) => {
     let projectName = req.params.name;
     // let projectName = req.body.projectName;
     // let projectType = req.body.projectType;
@@ -260,7 +260,7 @@ function driveAuth(accessToken) {
           createFrontend(projectName, accessToken).then((id) => {
           // Step 3 - Update with empty project
             updateDB(gjsProject, id, accessToken);
-            res.send({ success: id })
+            res.send({ id: id });
           });
           // Step 4 - Add file name and project data to localstorage.
         } else {
