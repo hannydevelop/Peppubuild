@@ -128,8 +128,6 @@ export default class PagesApp extends UI {
         this.update();
     }
 
-    
-
     saveProject() {
         const { editor } = this;
         const projectdata = editor.getProjectData();
