@@ -8,7 +8,7 @@ import {
     GoogleAuthProvider,
     GithubAuthProvider
 } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js";
-const serverUrl = 'https://www.server.peppubuild.com';
+const serverUrl = 'http://localhost:1404';
 // Create route components
 const Home = {
     template: `
@@ -437,10 +437,17 @@ const Dashboard = {
                     <div class="action_btn">
                         <h2>Unfinished Project</h2>
                         Continue from where you left off. Please note that projects not saved will be lost.
-                        <div class="thumb-link">
-                            <a target="_blank" href="/">
-                                <img src="https://source.unsplash.com/weRQAu9TA-A" alt="Paris" style="width:150px">
-                            </a>
+                        <div class="card-deck">
+                         <div class="row">
+                         <div class="col-sm-4" v-for="project in projects" :key="project.id">
+                            <div class="card" @click=projectWorkspace(project.id)>
+                            <img src="..." class="card-img-top" alt="...">
+                            <div class="card-body">
+                            <h1 class="card-title">{{project.name}}</h1>
+                            </div>
+                            </div>
+                            </div>
+                            </div>
                         </div>
                         <div>
                         <button type="button" class="action_btn btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">New Project</button>
@@ -460,7 +467,7 @@ const Dashboard = {
                       Choose if you'd like to create from an empty workspace or using a template
                     </div>
                     <div class="modal-footer">
-                      <button type="button" class="btn btn-primary" @click="emptyProject">Empty Workspace</button>
+                      <button type="button" class="btn btn-primary" @click="emptyProject()">Empty Workspace</button>
                     </div>
                   </div>
                 </div>
@@ -468,14 +475,28 @@ const Dashboard = {
             </section-one>
         </div>
     `,
-    mounted() {
+    async mounted() {
         const link = document.createElement('meta');
         link.name = 'viewport';
         link.content = 'width=device-width, initial-scale=1.0';
         document.getElementsByTagName('head')[0].appendChild(link);
+        
+        let accessToken = localStorage.getItem('oauth')
+        let url = `${serverUrl}/projects/${accessToken}`
+        await fetch(url, {
+            method: 'GET', 
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then((res) => {
+            res.json().then((response) => {
+                this.projects = response;
+            })                    
+        })
     },
     data() {
         return {
+            projects: []
         };
     },
 
@@ -492,21 +513,44 @@ const Dashboard = {
                 y.style.marginLeft = "0%";
             }
         },
-        emptyProject() {
+        async projectWorkspace(id) {
+            // get content.
+            // set the value of gjsProject.
+            let url = `${serverUrl}/project/${id}`
+            let accessToken = localStorage.getItem('oauth')
+            await fetch(url, {
+                method: 'POST', 
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ accessToken: accessToken }),
+            }).then((res) => {
+                res.json().then((response) => {
+                    console.log(response)
+                    localStorage.setItem('gjsProject', response);
+                    // window.location.href = "/";
+                })                    
+            })
+            // run soft reload
+        },
+        async emptyProject() {
             let name = prompt('What will you like to name your project?');
             if (name) {
                 localStorage.setItem('projectName', name);
                 let gjsProject = '{}'
                 let accessToken = localStorage.getItem('oauth')
-                let url = `${serverUrl}/${name}`
-                fetch(url, {
+                let url = `${serverUrl}/publishfront/${name}`
+                await fetch(url, {
                     method: 'POST', 
                     headers: {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({ gjsProject: gjsProject, accessToken: accessToken }),
-                }).then((res) => {localStorage.setItem('ProjectId', res.json().id)})
-                window.location.href = "/";
+                }).then((res) => {
+                    res.json().then((response) => {
+                        localStorage.setItem('ProjectId', response.id); 
+                    })                    
+                })
             }
         },
         templateProject() {
