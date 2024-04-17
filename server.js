@@ -33,7 +33,7 @@ const tmp = require('tmp');
 require('dotenv').config();
 
 // var ftp = require("basic-ftp");
-// var cors = require('cors')
+var cors = require('cors')
 // ENV constants for Namecheap
 const CURR_DIR = os.homedir();
 const cpanelDomain = process.env.CPANEL_DOMAIN;
@@ -49,7 +49,7 @@ const app = express()
 async function startServer() {
   app.use(bodyParser.urlencoded({ extended: false }))
 
-  // app.use(cors())
+  app.use(cors())
   // app.use(express.json({ limit: '50mb' }))
   // parse application/json
   app.use(bodyParser.json())
@@ -176,7 +176,7 @@ function driveAuth(accessToken) {
   }
 
   // update file 
-  async function updateDB(project, Id) {
+  async function updateDB(project, Id, accessToken) {
     const service = driveAuth(accessToken);
     const media = {
       mimeType: 'application/json',
@@ -206,8 +206,9 @@ function driveAuth(accessToken) {
       fileId: Id,
       alt: 'media',
     });
-    let data = JSON.parse(file.data)
-    return data.gjsProject.project;
+    let data = JSON.stringify(file.data);
+    let finaldata = JSON.parse(data)
+    return finaldata.gjsProject.project;
   } catch (err) {
     // TODO(developer) - Handle error
     throw err;
@@ -215,7 +216,7 @@ function driveAuth(accessToken) {
   }
 
   // get all of the projects from db in gjsProject format.
-  app.get('/project/:id', (req, res) => {
+  app.post('/project/:id', (req, res) => {
     let Id = req.params.id;
     let accessToken = req.body.accessToken;
     const project = getContent(Id, accessToken);
@@ -223,12 +224,10 @@ function driveAuth(accessToken) {
   })
 
     // get all of the projects from db in gjsProject format.
-    app.get('/projects', (req, res) => {
-      let accessToken = req.body.accessToken;
+    app.get('/projects/:token', (req, res) => {
+      let accessToken = req.params.token;
       listFiles(accessToken).then((response) => {
-        response.forEach(function(file) {
-          res.send(file.name, file.id);
-        });
+        res.send(response)
       })
     })
 
