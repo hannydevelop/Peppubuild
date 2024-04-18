@@ -58,20 +58,6 @@ export default (editor, opts = {}) => {
 
     // Load page with index zero
     editor.on('load', async () => {
-        let gjsProject = localStorage.getItem('gjsProject');
-        let pname = localStorage.getItem('projectName');
-        if (pname == null) {
-            let projectName = await editor.PagesApp.getProjectName();
-            if (projectName) {
-                localStorage.setItem("projectName", projectName)
-            }
-        }
-      if (gjsProject) {
-        return;
-      } else {
-        let data = await editor.PagesApp.getProject();
-        console.log(data)
-        localStorage.setItem("gjsProject", JSON.stringify(data));
-        location.reload();      }
+        location.reload();  
     });
 };

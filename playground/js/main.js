@@ -8,6 +8,7 @@ import {
     GoogleAuthProvider,
     GithubAuthProvider
 } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js";
+const serverUrl = 'http://localhost:1404';
 // Create route components
 const Home = {
     template: `
@@ -371,7 +372,7 @@ const Home = {
                     </div>
                 `,
                 })
-            } else if (component.attributes.type == 'text') {
+            }else if (component.attributes.type == 'text') {
                 mdl.open({
                     title: 'This is a text',
                     content: `
@@ -401,7 +402,7 @@ const Home = {
                     </div>
                 `,
                 })
-            } else if (component.attributes.type == 'image') {
+            }else if (component.attributes.type == 'image') {
                 mdl.open({
                     title: 'This is an Image',
                     content: `
@@ -432,33 +433,25 @@ const Dashboard = {
                         </p>
                     </div>
                 </div>
-                    <div id="i2sw">New Project
-                </div>
-                <div class="card text-center">
-                <div class="card-header">
-                    <ul class="nav nav-pills card-header-pills">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Create Project</a>
-                    </li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">Create a new website with Peppubuild</h5>
-                    <p class="card-text">With Peppubuild, you can create from an empty workspace or build with AI</p>
-                    <div>
-                        <button type="button" class="action_btn btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">New Project</button>
-                    <div>
-                </div>
-                </div>
-                <div id="inyx" v-if="pname">
+                <div id="inyx">
                     <div class="action_btn">
                         <h2>Unfinished Project</h2>
                         Continue from where you left off. Please note that projects not saved will be lost.
-                        <div class="thumb-link">
-                            <a target="_blank" href="/">
-                                <img src="https://source.unsplash.com/weRQAu9TA-A" alt="Paris" style="width:150px">
-                            </a>
+                        <div class="card-deck">
+                         <div class="row">
+                         <div class="col-sm-4" v-for="project in projects" :key="project.id">
+                            <div class="card" @click=projectWorkspace(project.id)>
+                            <img src="..." class="card-img-top" alt="...">
+                            <div class="card-body">
+                            <h1 class="card-title">{{project.name}}</h1>
+                            </div>
+                            </div>
+                            </div>
+                            </div>
                         </div>
+                        <div>
+                        <button type="button" class="action_btn btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">New Project</button>
+                        <div>
                     </div>
                 </div>
                 <!-- Modal -->
@@ -474,8 +467,7 @@ const Dashboard = {
                       Choose if you'd like to create from an empty workspace or using a template
                     </div>
                     <div class="modal-footer">
-                      <button type="button" class="btn btn-primary" @click="emptyProject">Empty Workspace</button>
-                      <button type="button" class="btn btn-success" @click="templateProject">Build with AI</button>
+                      <button type="button" class="btn btn-primary" @click="emptyProject()">Empty Workspace</button>
                     </div>
                   </div>
                 </div>
@@ -483,27 +475,32 @@ const Dashboard = {
             </section-one>
         </div>
     `,
-    mounted() {
+    async mounted() {
         const link = document.createElement('meta');
         link.name = 'viewport';
         link.content = 'width=device-width, initial-scale=1.0';
-        document.getElementsByTagName('head')[0].appendChild(link)
-        this.pname = localStorage.getItem('pname')
+        document.getElementsByTagName('head')[0].appendChild(link);
+        
+        let accessToken = localStorage.getItem('oauth')
+        let url = `${serverUrl}/projects/${accessToken}`
+        await fetch(url, {
+            method: 'GET', 
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then((res) => {
+            res.json().then((response) => {
+                this.projects = response;
+            })                    
+        })
     },
     data() {
         return {
-            pname: ""
+            projects: []
         };
     },
 
     methods: {
-        createSub(name) {
-            const subUrl = ``;
-            let data = fetch(subUrl, {
-                method: 'GET'
-            })
-            return data;
-        },
         showSide() {
             var x = document.getElementById("dedee");
             var y = document.getElementById("d-cont");
@@ -516,16 +513,44 @@ const Dashboard = {
                 y.style.marginLeft = "0%";
             }
         },
-        emptyProject() {
-            let project = localStorage.getItem('gjsProject');
-            if (project) {
-                alert('You already have a project. Finish your pending project, publish, and use the desktop application')
-            } else {
-                let name = prompt('What will you like to name your project?');
-                if (name) {
-                    localStorage.setItem('projectName', name);
-                    window.location.href = "/";
-                }
+        async projectWorkspace(id) {
+            // get content.
+            // set the value of gjsProject.
+            let url = `${serverUrl}/project/${id}`
+            let accessToken = localStorage.getItem('oauth')
+            await fetch(url, {
+                method: 'POST', 
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ accessToken: accessToken }),
+            }).then((res) => {
+                res.json().then((response) => {
+                    let projectString = JSON.stringify(response);
+                    localStorage.setItem('gjsProject', projectString);
+                    // window.location.href = "/";
+                })                    
+            })
+            // run soft reload
+        },
+        async emptyProject() {
+            let name = prompt('What will you like to name your project?');
+            if (name) {
+                localStorage.setItem('projectName', name);
+                let gjsProject = '{}'
+                let accessToken = localStorage.getItem('oauth')
+                let url = `${serverUrl}/publishfront/${name}`
+                await fetch(url, {
+                    method: 'POST', 
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ gjsProject: gjsProject, accessToken: accessToken }),
+                }).then((res) => {
+                    res.json().then((response) => {
+                        localStorage.setItem('ProjectId', response.id); 
+                    })                    
+                })
             }
         },
         templateProject() {
@@ -534,7 +559,6 @@ const Dashboard = {
             if (name) {
                 localStorage.setItem('projectName', name);
                 window.location.href = "/";
-                console.log(editor)
             }
         }
     }
@@ -620,13 +644,12 @@ const Auth = {
             password: "",
             lemail: "",
             lpassword: "",
-            fname: "",
+            fname: ""
         }
     },
     methods: {
         // callActive method to switch to signup or signin form
         callActive() {
-            console.log('we are calling you')
             const wrapper = document.querySelector('.wrapper');
             wrapper.classList.toggle('active');
         },
@@ -674,6 +697,7 @@ const Auth = {
                 .then((result) => {
                     // This gives you a Google Access Token. You can use it to access the Google API.
                     const credential = authProvider.credentialFromResult(result);
+                    localStorage.setItem('oauth', credential.accessToken)
                     const token = credential.accessToken;
                     // The signed-in user info.
                     const user = result.user;
@@ -695,6 +719,7 @@ const Auth = {
         // Google Authentication
         googleLogin() {
             const provider = new GoogleAuthProvider();
+            provider.addScope('https://www.googleapis.com/auth/drive.appdata')
             this.providerLogin(GoogleAuthProvider, provider);
         },
         // Github Authentication
@@ -809,12 +834,6 @@ const router = new VueRouter({
 router.beforeEach(async (to, from, next) => {
     let isAuthenticated = getCookie('pepputoken')
     if (to.name !== 'Auth' && !isAuthenticated) next({ name: 'Auth' })
-    else next()
-})
-
-router.beforeEach(async (to, from, next) => {
-    let isProjectCreated = localStorage.getItem('pname');
-    if (to.name == 'Home' && !isProjectCreated) next({ name: 'Dashboard' })
     else next()
 })
 
