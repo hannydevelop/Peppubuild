@@ -5,20 +5,17 @@ export default class PagesApp extends UI {
     constructor(editor, opts = {}) {
         super(editor, opts);
         this.addPage = this.addPage.bind(this);
-        this.addProject = this.addProject.bind(this);
         this.loadProject = this.loadProject.bind(this);
         this.selectPage = this.selectPage.bind(this);
         this.removePage = this.removePage.bind(this);
         this.isSelected = this.isSelected.bind(this);
         this.handleNameInput = this.handleNameInput.bind(this);
         this.openEdit = this.openEdit.bind(this);
-        this.createPublish = this.createPublish.bind(this);
         this.saveProject = this.saveProject.bind(this);
         this.getProject = this.getProject.bind(this);
         this.getProjectName = this.getProjectName.bind(this);
         this.openDelete = this.openDelete.bind(this);
         this.deleteProject = this.deleteProject.bind(this);
-        this.deletePage = this.deletePage.bind(this)
         this.readText = this.readText.bind(this)
 
         /* Set initial app state */
@@ -74,7 +71,6 @@ export default class PagesApp extends UI {
     removePage(e) {
         if (this.opts.confirmDeletePage()) {
             this.pm.remove(e.currentTarget.dataset.key);
-            this.deletePage(e.currentTarget.dataset.key);
             this.update();
         }
     }
@@ -82,37 +78,9 @@ export default class PagesApp extends UI {
     deleteProject() {
         const { editor } = this;
         localStorage.removeItem("projectName");
+        // call drive delete route
         try {
-            fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/pdelete`, {
-                method: "DELETE", // or 'PUT'
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }).then((response) => {
-                if (!response.ok) {
-                    swal("Error", `Slow internet detected`, "error")
-                } else {
-                    swal("Successful!", "Deleted Project", "success");
-                }
-            })
-        } catch { swal("Error", "An error occurred", "error") }
-    }
-
-    deletePage(id) {
-        const { editor } = this;
-        try {
-            fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/pagedelete/${id}`, {
-                method: "DELETE", // or 'PUT'
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }).then((response) => {
-                if (!response.ok) {
-                    swal("Error", `Slow internet detected`, "error")
-                } else {
-                    swal("Successful!", "Deleted Page", "success");
-                }
-            })
+            
         } catch { swal("Error", "An error occurred", "error") }
     }
 
@@ -160,34 +128,19 @@ export default class PagesApp extends UI {
         this.update();
     }
 
-    createPublish(value) {
-        const { editor } = this;
-        const projectdata = editor.getProjectData();
-        let name = this.state.projectName;
-        let data = fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/${value}/${name}`, {
-            method: "POST", // or 'PUT'
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ gjsProject: projectdata })
-        })
-        return data;
-    }
-
     saveProject() {
         const { editor } = this;
         const projectdata = editor.getProjectData();
         let gjsProject = JSON.stringify(projectdata)
-        let id = this.pm.getSelected().id;
-        let html = editor.Pages.get(id).getMainComponent().toHTML();
-        let css = editor.getCss()
+        let id = localStorage.getItem('projectId')
+        let accessToken = localStorage.getItem('oauth');
         try {
             fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/save/${id}`, {
                 method: "PUT", // or 'PUT'
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ gjsProject: gjsProject, html: html, css: css }),
+                body: JSON.stringify({ accessToken: accessToken, gjsProject: gjsProject }),
             }).then((response) => {
                 if (response.ok) {
                     swal("Successful!", "Saved Project", "success");
@@ -196,9 +149,9 @@ export default class PagesApp extends UI {
         } catch { swal("Error", "An error occurred", "error") }
     }
 
-    async getProject() {
+    async getProject(id) {
         const { editor } = this;
-        let data = await fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/projects`).then(response => { return response.json() });
+        let data = await fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/project/${id}`).then(response => { return response.json() });
         return data;
     }
 
@@ -206,78 +159,6 @@ export default class PagesApp extends UI {
         const { editor } = this;
         let data = fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/pname`).then(response => { return response.text() });
         return data;
-    }
-
-    addProject() {
-        swal("What would you like to name this project?", {
-            content: "input",
-        }).then((name) => {
-            if (name == null) {
-                return
-            } else
-                localStorage.setItem("projectName", name);
-            this.state.projectName = name;
-            swal("What type of project will you like to create", {
-                buttons: {
-                    front: {
-                        text: "Frontend",
-                        value: "publishfront",
-                    },
-                    /* 
-                    back: {
-                        text: "Backend",
-                        value: "publishback",
-                    },
-                    defeat: {
-                        text: "Fullstack",
-                        value: "publishfull",
-                    }
-                    */
-                },
-            })
-                .then((value) => {
-                    switch (value) {
-                        case "publishfront":
-                            try {
-                                this.createPublish(value).then(async (response) => {
-                                    let text = await response.text();
-                                    let json = JSON.parse(text);
-                                    console.log(json.ok)
-                                    if (json.success) {
-                                        swal("Successful!", "Created Project", "success");
-                                    } else swal("Error", json.error, 'error');
-                                })
-                            } catch (error) {
-                                swal("Error", "An error occurred", 'error');
-                            }
-                            break;
-
-                        /* 
-                        case "publishback":
-                            try {
-                                this.createPublish(value);
-                                swal("Successful!", "Backend bootstrapped", "success");
-                            } catch (error) {
-                                swal("Error", "An error occurred", error);
-                            }
-                            break;
-    
-                        case "publishfull":
-                            try {
-                                this.createPublish(value);
-                                swal("Successful!", "Fullstack bootstrapped", "success");
-                            } catch (error) {
-                                swal("Error", "An error occurred", "error");
-                            }
-                            break;
-                        */
-
-                        default:
-
-                    }
-                });
-            this.update();
-        });
     }
 
     loadProject() {
@@ -301,16 +182,6 @@ export default class PagesApp extends UI {
         localStorage.setItem("projectName", output);
         await this.setProjectName(output);
         this.update();
-    }
-
-    async setProjectName(name) {
-        const { editor } = this;
-        fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/setname/${name}`, {
-            method: "POST", // or 'PUT'
-            headers: {
-                "Content-Type": "application/json",
-            }
-        })
     }
 
     handleNameInput(e) {
@@ -405,8 +276,7 @@ export default class PagesApp extends UI {
         cont.find('.add-page').on('click', this.addPage);
         cont.find('input').on('change', this.handleNameInput);
 
-        cont.find('.add-project').on('click', this.addProject);
-        cont.find('.load-project').on('change', this.readText);
+        // cont.find('.load-project').on('change', this.readText);
 
         this.$el = cont;
         return cont;
