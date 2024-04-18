@@ -140,7 +140,7 @@ export default class PagesApp extends UI {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ gjsProject: gjsProject, id: id, accessToken: accessToken }),
+                body: JSON.stringify({ accessToken: accessToken, gjsProject: gjsProject }),
             }).then((response) => {
                 if (response.ok) {
                     swal("Successful!", "Saved Project", "success");

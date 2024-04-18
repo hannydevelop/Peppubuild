@@ -219,8 +219,9 @@ function driveAuth(accessToken) {
   app.post('/project/:id', (req, res) => {
     let Id = req.params.id;
     let accessToken = req.body.accessToken;
-    const project = getContent(Id, accessToken);
-    res.send(project)
+    getContent(Id, accessToken).then((response) => {
+      res.send(response)
+    })
   })
 
     // get all of the projects from db in gjsProject format.
@@ -236,7 +237,6 @@ function driveAuth(accessToken) {
     let id = req.params.id;
     let accessToken = req.body.accessToken;
     let gjsProject = req.body.gjsProject;
-    // console.log(gjsP)
     updateDB(gjsProject, id, accessToken).then(res.send({ success: 'Project saved successfully!' }));
   })
 

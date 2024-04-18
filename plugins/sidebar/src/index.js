@@ -58,9 +58,6 @@ export default (editor, opts = {}) => {
 
     // Load page with index zero
     editor.on('load', async () => {
-        let gjsProject = localStorage.getItem('gjsProject');
-        let pname = localStorage.getItem('projectName');
-        let id = localStorage.getItem('projectId');
         location.reload();  
     });
 };

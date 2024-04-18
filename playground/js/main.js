@@ -526,8 +526,8 @@ const Dashboard = {
                 body: JSON.stringify({ accessToken: accessToken }),
             }).then((res) => {
                 res.json().then((response) => {
-                    console.log(response)
-                    localStorage.setItem('gjsProject', response);
+                    let projectString = JSON.stringify(response);
+                    localStorage.setItem('gjsProject', projectString);
                     // window.location.href = "/";
                 })                    
             })
@@ -559,7 +559,6 @@ const Dashboard = {
             if (name) {
                 localStorage.setItem('projectName', name);
                 window.location.href = "/";
-                console.log(editor)
             }
         }
     }
@@ -651,7 +650,6 @@ const Auth = {
     methods: {
         // callActive method to switch to signup or signin form
         callActive() {
-            console.log('we are calling you')
             const wrapper = document.querySelector('.wrapper');
             wrapper.classList.toggle('active');
         },
