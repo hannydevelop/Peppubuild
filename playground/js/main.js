@@ -528,7 +528,7 @@ const Dashboard = {
                 res.json().then((response) => {
                     let projectString = JSON.stringify(response);
                     localStorage.setItem('gjsProject', projectString);
-                    // window.location.href = "/";
+                    window.location.href = "/";
                 })                    
             })
             // run soft reload
