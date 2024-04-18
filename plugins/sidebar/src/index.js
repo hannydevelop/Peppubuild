@@ -58,6 +58,6 @@ export default (editor, opts = {}) => {
 
     // Load page with index zero
     editor.on('load', async () => {
-        location.reload();  
+        // location.reload();  
     });
 };
