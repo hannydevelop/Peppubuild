@@ -437,11 +437,11 @@ const Dashboard = {
                     <div class="action_btn">
                         <h2>Unfinished Project</h2>
                         Continue from where you left off. Please note that projects not saved will be lost.
-                        <div class="card-deck">
+                        <div class="card-deck project-deck">
                          <div class="row">
                          <div class="col-sm-4" v-for="project in projects" :key="project.id">
                             <div class="card" @click=projectWorkspace(project.id)>
-                            <img src="..." class="card-img-top" alt="...">
+                            <img src="./img/project.png" class="card-img-top" alt="...">
                             <div class="card-body">
                             <h1 class="card-title">{{project.name}}</h1>
                             </div>
@@ -517,6 +517,7 @@ const Dashboard = {
             // get content.
             // set the value of gjsProject.
             let url = `${serverUrl}/project/${id}`
+            localStorage.setItem('projectId', id);
             let accessToken = localStorage.getItem('oauth')
             await fetch(url, {
                 method: 'POST', 

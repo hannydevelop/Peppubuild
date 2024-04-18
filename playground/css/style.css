@@ -576,6 +576,10 @@ img:hover {
     font-family: Helvetica, sans-serif;
 }
 
+.project-deck {
+    padding: 10px;
+}
+
 @media screen and (max-width: 800px) {
     .one-container {
         display: block;
