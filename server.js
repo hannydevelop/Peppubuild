@@ -27,8 +27,8 @@ var grapesjs = require('grapesjs');
 var replaceInFile = require('replace-in-file');
 var os = require('os');
 var fetch = require('node-fetch');
-const {OAuth2Client} = require('google-auth-library');
-const {google} = require('googleapis');
+const { OAuth2Client } = require('google-auth-library');
+const { google } = require('googleapis');
 const tmp = require('tmp');
 require('dotenv').config();
 
@@ -91,7 +91,7 @@ async function startServer() {
   })
   */
 
-// Step 1 - Run Filename by creating subdomain.
+  // Step 1 - Run Filename by creating subdomain.
   function createSub(name) {
     const apiUrl = `${cpanelDomain}:2083/cpsess${cpanelApiKey}/execute/SubDomain/addsubdomain?domain=${name}&rootdomain=${root}&dir=${name}.${root}`;
     let data = fetch(apiUrl, {
@@ -102,26 +102,26 @@ async function startServer() {
     return data;
   }
 
-function driveAuth(accessToken) {
-  const auth = new OAuth2Client({});
-  auth.setCredentials({access_token: accessToken})
-  const service = google.drive({version: 'v3', auth: auth});
-  return service;
-}
- async function listFiles(accessToken) {
-  const service = driveAuth(accessToken);
-  try {
-    const res = await service.files.list({
-      spaces: 'appDataFolder',
-      fields: 'nextPageToken, files(id, name)',
-      pageSize: 100,
-    });
-    return res.data.files;
-  } catch (err) {
-    // TODO(developer) - Handle error
-    throw err;
+  function driveAuth(accessToken) {
+    const auth = new OAuth2Client({});
+    auth.setCredentials({ access_token: accessToken })
+    const service = google.drive({ version: 'v3', auth: auth });
+    return service;
   }
- }
+  async function listFiles(accessToken) {
+    const service = driveAuth(accessToken);
+    try {
+      const res = await service.files.list({
+        spaces: 'appDataFolder',
+        fields: 'nextPageToken, files(id, name)',
+        pageSize: 100,
+      });
+      return res.data.files;
+    } catch (err) {
+      // TODO(developer) - Handle error
+      return err;
+    }
+  }
 
   // set route for logout
   app.get('/logout', (_req, res) => {
@@ -171,7 +171,7 @@ function driveAuth(accessToken) {
       return file.data.id;
     } catch (err) {
       // TODO(developer) - Handle error
-      throw err;
+      return err;
     }
   }
 
@@ -180,22 +180,22 @@ function driveAuth(accessToken) {
     const service = driveAuth(accessToken);
     const media = {
       mimeType: 'application/json',
-      body: 
-      `{
+      body:
+        `{
         "gjsProject": {
             "project": ${project}
         }
     }`
     };
     try {
-        service.files.update({
+      service.files.update({
         fileId: Id,
         // resource: fileMetadatad,
         media: media,
       });
     } catch (err) {
       // TODO(developer) - Handle error
-      throw err;
+      return err;
     }
   }
 
@@ -203,19 +203,31 @@ function driveAuth(accessToken) {
     const service = driveAuth(accessToken);
     try {
       const file = await service.files.get({
-      fileId: Id,
-      alt: 'media',
-    });
-    let data = JSON.stringify(file.data);
-    let finaldata = JSON.parse(data)
-    return finaldata.gjsProject.project;
-  } catch (err) {
-    // TODO(developer) - Handle error
-    throw err;
-  }
+        fileId: Id,
+        alt: 'media',
+      });
+      let data = JSON.stringify(file.data);
+      let finaldata = JSON.parse(data)
+      return finaldata.gjsProject.project;
+    } catch (err) {
+      // TODO(developer) - Handle error
+      return err;
+    }
   }
 
-  // get all of the projects from db in gjsProject format.
+  async function deleteContent(Id, accessToken) {
+    const service = driveAuth(accessToken);
+    try {
+      await service.files.delete({
+        fileId: Id,
+      });
+    } catch (err) {
+      // TODO(developer) - Handle error
+      return err;
+    }
+  }
+
+  // get project from db in gjsProject format.
   app.post('/project/:id', (req, res) => {
     let Id = req.params.id;
     let accessToken = req.body.accessToken;
@@ -224,13 +236,22 @@ function driveAuth(accessToken) {
     })
   })
 
-    // get all of the projects from db in gjsProject format.
-    app.get('/projects/:token', (req, res) => {
-      let accessToken = req.params.token;
-      listFiles(accessToken).then((response) => {
-        res.send(response)
-      })
+  // get all of the projects from db in gjsProject format.
+  app.post('/pdelete/:id', (req, res) => {
+    let Id = req.params.id;
+    let accessToken = req.body.accessToken;
+    deleteContent(Id, accessToken).then(() => {
+      res.send('Deleted successfully')
     })
+  })
+
+  // get all of the projects from db in gjsProject format.
+  app.get('/projects/:token', (req, res) => {
+    let accessToken = req.params.token;
+    listFiles(accessToken).then((response) => {
+      res.send(response)
+    })
+  })
 
   // save changes to corresponding file on disk
   app.put('/save/:id', (req, res) => {
@@ -257,16 +278,16 @@ function driveAuth(accessToken) {
         if (json.errors == null) {
           // Step 2 - Create file in drive
           createFrontend(projectName, accessToken).then((id) => {
-          // Step 3 - Update with empty project
+            // Step 3 - Update with empty project
             updateDB(gjsProject, id, accessToken);
             res.send({ id: id });
           });
           // Step 4 - Add file name and project data to localstorage.
         } else {
-          res.status(500).send({error: json.errors[0]});
+          res.status(500).send({ error: json.errors[0] });
         }
       } else {
-        res.status(500).send({error: 'Network error'});      
+        res.status(500).send({ error: 'Network error' });
       }
     })
   })

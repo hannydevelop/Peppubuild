@@ -1,0 +1,8 @@
+Implement a build with AI
+Implement build with template
+Play around other login processes (Github, Email)
+- Fix throw error in server
+- Fix redirect error (catch all on wrong route)
+- Fix delete by removing project from this.projects array
+- Remove all location.redirect and replace with router.push
+- Add spinner to create project
