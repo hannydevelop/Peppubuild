@@ -41,10 +41,6 @@ const cpanelUsername = process.env.CPANEL_USER;
 const root = 'peppubuild.com';
 const cpanelApiKey = process.env.CPANEL_SECRET_KEY;
 
-const fileMetadatad = {
-  name: 'config.json',
-};
-
 const app = express()
 async function startServer() {
   app.use(bodyParser.urlencoded({ extended: false }))
