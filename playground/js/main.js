@@ -435,23 +435,38 @@ const Dashboard = {
                 </div>
                 <div id="inyx">
                     <div class="action_btn">
-                        <h2>Unfinished Project</h2>
-                        Continue from where you left off. Please note that projects not saved will be lost.
-                        <div class="card-deck project-deck">
-                         <div class="row">
-                         <div class="col-sm-4" v-for="project in projects" :key="project.id">
-                            <div class="card" @click=projectWorkspace(project.id)>
-                            <img src="./img/project.png" class="card-img-top" alt="...">
-                            <div class="card-body">
-                            <h1 class="card-title">{{project.name}}</h1>
+                        <h2>Projects</h2>
+                        <p class="project-deck"> Continue from where you left off. Please note that projects not saved will be lost.</p>
+                        <div class="card text-center project-deck">
+                        <div class="card-header">
+                          <ul class="nav nav-tabs card-header-tabs">
+                            <li class="nav-item">
+                              <a class="nav-link active" aria-current="true" href="#">Active</a>
+                            </li>
+                          </ul>
+                        </div>
+                        <div class="card-body">
+                          <h5 class="card-title">Create New Project</h5>
+                          <p class="card-text">With Peppubuild, you can create a new project from scratch, build with our personalised AI, or build with a template</p>
+                          <button type="button" class="action_btn btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">New Project</button>
+                          </div>
+                      </div>
+                        <div class="row">
+                         <div class="col-sm-6" v-for="project in projects" :key="project.id" >
+                         <div class="card project-deck">
+                            <div class="card-header">
+                                Featured
                             </div>
-                            </div>
-                            </div>
+                         <div class="card-body">
+                           <h2 class="card-title">{{project.name}}</h2>
+                           <div class="card-footer">
+                           <button @click="deleteProject(project.id)" class="btn btn-danger">Delete</button>
+                           <button @click="projectWorkspace(project.id)" class="btn btn-primary">Continue</button>
+                           </div>
                             </div>
                         </div>
-                        <div>
-                        <button type="button" class="action_btn btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">New Project</button>
-                        <div>
+                            </div>
+                            </div>
                     </div>
                 </div>
                 <!-- Modal -->
@@ -461,13 +476,14 @@ const Dashboard = {
                   <div class="modal-content">
                     <div class="modal-header">
                       <h1 class="modal-title fs-5" id="exampleModalLabel">New Project</h1>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                       Choose if you'd like to create from an empty workspace or using a template
                     </div>
                     <div class="modal-footer">
-                      <button type="button" class="btn btn-primary" @click="emptyProject()">Empty Workspace</button>
+                      <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="emptyProject()">Empty Workspace</button>
+                      <button type="button" class="btn btn-dark" @click="templateProject()">Build with Template</button>
+                      <button type="button" class="btn btn-success" @click="aiProject()">Build with AI</button>
                     </div>
                   </div>
                 </div>
@@ -529,10 +545,31 @@ const Dashboard = {
                 res.json().then((response) => {
                     let projectString = JSON.stringify(response);
                     localStorage.setItem('gjsProject', projectString);
-                    window.location.href = "/";
+                    this.$router.push({ name: "Home" });
                 })                    
             })
-            // run soft reload
+        },
+        // Delete project
+        async deleteProject(id) {
+            let accessToken = localStorage.getItem('oauth')
+            let url = `${serverUrl}/pdelete/${id}`
+            let deleteQuestion = confirm('Do you want to delete this project');
+            if (deleteQuestion) {
+            await fetch(url, {
+                method: 'POST', 
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ accessToken: accessToken }),
+            }).then((res) => {
+                if (res.status == 200) {
+                    // delete project from array
+                    // console.log(this.projects)
+                    let index = this.projects.findIndex(project => project.id === id)
+                    this.projects.splice(index, 1);
+                    // alert('Successfully deleted project')                    
+                }
+            })}
         },
         async emptyProject() {
             let name = prompt('What will you like to name your project?');
@@ -541,6 +578,7 @@ const Dashboard = {
                 let gjsProject = '{}'
                 let accessToken = localStorage.getItem('oauth')
                 let url = `${serverUrl}/publishfront/${name}`
+                Swal.showLoading();
                 await fetch(url, {
                     method: 'POST', 
                     headers: {
@@ -549,7 +587,9 @@ const Dashboard = {
                     body: JSON.stringify({ gjsProject: gjsProject, accessToken: accessToken }),
                 }).then((res) => {
                     res.json().then((response) => {
-                        localStorage.setItem('ProjectId', response.id); 
+                        Swal.close();
+                        localStorage.setItem('projectId', response.id); 
+                        this.$router.push({name: "Home"})
                     })                    
                 })
             }
@@ -559,8 +599,11 @@ const Dashboard = {
             let name = prompt('What will you like to name your project?');
             if (name) {
                 localStorage.setItem('projectName', name);
-                window.location.href = "/";
+                // window.location.href = "/";
             }
+        },
+        aiProject() {
+
         }
     }
 }
@@ -743,7 +786,7 @@ const Auth = {
             })
             storecookie
                 .then((response) => {
-                    window.location.href = "/dashboard";
+                    this.$router.push({ name: "Dashboard" });
                 }).catch((error) => {
                     swal("Oops!", `Login verification error: ${error}`, "error");
                 })
@@ -822,6 +865,7 @@ const routes = [
     { path: '/auth', component: Auth, name: 'Auth' },
     { path: '/contact', component: Contact, name: 'Contact' },
     { path: '/dashboard', component: Dashboard, name: 'Dashboard' },
+    { path: '*', component: Dashboard }
 ];
 
 
@@ -835,6 +879,11 @@ const router = new VueRouter({
 router.beforeEach(async (to, from, next) => {
     let isAuthenticated = getCookie('pepputoken')
     if (to.name !== 'Auth' && !isAuthenticated) next({ name: 'Auth' })
+    else next()
+})
+
+router.beforeEach(async (to, from, next) => {
+    if (from.name !== 'Dashboard' && to.name == 'Home' ) next({ name: 'Dashboard' })
     else next()
 })
 
