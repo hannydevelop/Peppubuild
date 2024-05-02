@@ -9,7 +9,7 @@ export default {
             placeholder: 'project name',
             new: 'Create Project +',
             load: 'Load Project +',
-            url: 'https://server.peppubuild.com/',
+            url: 'https://server.peppubuild.com',
         },
         settings: {
             save: 'Save',
