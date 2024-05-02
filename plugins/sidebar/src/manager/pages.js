@@ -211,17 +211,10 @@ export default class PagesApp extends UI {
     }
 
     renderProject() {
-        if (!this.state.projectName && localStorage.getItem("projectName") != null) {
+        if (localStorage.getItem("projectName") != null) {
             return `
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
             <span class="project-text"><i class="fa fa-folder-o" style="margin:5px;"></i>${localStorage.getItem("projectName")}</span>
-            <span class="p-delete"><i class="fa fa-trash" style="margin:5px;"></i></span>`
-        } else if (this.state.projectName) {
-            return `
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-            <span class="project-text"><i class="fa fa-folder-o" style="margin:5px;"></i>${this.state.projectName}</span>
-            <span class="p-delete"><i class="fa fa-trash" style="margin:5px;"></i></span>
-            `;
+            `
         } else {
             return 'No project yet'
         }
@@ -236,7 +229,6 @@ export default class PagesApp extends UI {
         this.$el?.find('.page').on('click', this.selectPage);
         this.$el?.find('.page-edit').on('click', this.openEdit);
         this.$el?.find('.page-close').on('click', this.removePage);
-        this.$el?.find('.p-delete').on('click', this.openDelete);
     }
 
     render() {
@@ -262,15 +254,6 @@ export default class PagesApp extends UI {
                 </div>
                 <div class="project">
                     ${this.renderProject()}
-                </div>
-                <div class="add-project">
-                    ${editor.I18n.t('peppu-sidebar.project.new')}
-                </div>
-                <div>
-                <label for="file-upload" class="tm-input sm">
-                    Load Project
-                </label>
-                    <input type="file" class="load-project" id="file-upload"/>
                 </div>
             </div>`);
         cont.find('.add-page').on('click', this.addPage);
