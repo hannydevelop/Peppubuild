@@ -63,7 +63,7 @@ async function startServer() {
     });
   }
 
-  app.get('/clientdeploy/:pname', (req, res) => {
+  app.post('/clientdeploy/:pname', (req, res) => {
     let pname = req.params.pname;
     const pages = req.body.pages;
     async function uploadFiles() {
