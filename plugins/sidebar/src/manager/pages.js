@@ -5,6 +5,7 @@ export default class PagesApp extends UI {
     constructor(editor, opts = {}) {
         super(editor, opts);
         this.addPage = this.addPage.bind(this);
+        this.addProject = this.addProject.bind(this);
         this.loadProject = this.loadProject.bind(this);
         this.selectPage = this.selectPage.bind(this);
         this.removePage = this.removePage.bind(this);
@@ -13,7 +14,6 @@ export default class PagesApp extends UI {
         this.openEdit = this.openEdit.bind(this);
         this.saveProject = this.saveProject.bind(this);
         this.getProject = this.getProject.bind(this);
-        this.getProjectName = this.getProjectName.bind(this);
         this.openDelete = this.openDelete.bind(this);
         this.deleteProject = this.deleteProject.bind(this);
         this.readText = this.readText.bind(this)
@@ -117,6 +117,25 @@ export default class PagesApp extends UI {
         this.update()
     }
 
+    addProject() {
+        const projectdata = editor.getProjectData();
+        let pages = JSON.stringify(projectdata);
+        let pname = localStorage.getItem('projectName');
+        try {
+            fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/clientdeploy/${pname}`, {
+                method: "POST", // or 'PUT'
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ pages: pages }),
+            }).then((response) => {
+                if (response.ok) {
+                    swal("Successful!", "Published Project", "success");
+                }
+            })
+        } catch { swal("Error", "An error occurred", "error") }
+    }
+
     addPage() {
         const { pm } = this;
         const { nameText } = this.state
@@ -152,12 +171,6 @@ export default class PagesApp extends UI {
     async getProject(id) {
         const { editor } = this;
         let data = await fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/project/${id}`).then(response => { return response.json() });
-        return data;
-    }
-
-    async getProjectName() {
-        const { editor } = this;
-        let data = fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/pname`).then(response => { return response.text() });
         return data;
     }
 
@@ -252,11 +265,15 @@ export default class PagesApp extends UI {
                 <div class="add-page">
                     ${editor.I18n.t('peppu-sidebar.pages.new')}
                 </div>
+                <div class="add-project">
+                    ${editor.I18n.t('peppu-sidebar.pages.publish')}
+                </div>
                 <div class="project">
                     ${this.renderProject()}
                 </div>
             </div>`);
         cont.find('.add-page').on('click', this.addPage);
+        cont.find('.add-project').on('click', this.addProject);
         cont.find('input').on('change', this.handleNameInput);
 
         // cont.find('.load-project').on('change', this.readText);
