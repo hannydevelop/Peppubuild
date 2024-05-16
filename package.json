@@ -29,6 +29,7 @@
     "peppu-sidebar": "^0.1.6",
     "replace-in-file": "^7.0.1",
     "serverless-http": "^3.2.0",
+    "stream": "^0.0.2",
     "tmp": "^0.2.3"
   },
   "devDependencies": {
