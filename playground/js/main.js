@@ -461,7 +461,7 @@ const Dashboard = {
                            <h2 class="card-title">{{project.name}}</h2>
                            <div class="card-footer">
                            <button @click="deleteProject(project.id)" class="btn btn-danger">Delete</button>
-                           <button @click="projectWorkspace(project.id)" class="btn btn-primary">Continue</button>
+                           <button @click="projectWorkspace(project.id, project.name)" class="btn btn-primary">Continue</button>
                            </div>
                             </div>
                         </div>
@@ -529,11 +529,12 @@ const Dashboard = {
                 y.style.marginLeft = "0%";
             }
         },
-        async projectWorkspace(id) {
+        async projectWorkspace(id, name) {
             // get content.
             // set the value of gjsProject.
             let url = `${serverUrl}/project/${id}`
             localStorage.setItem('projectId', id);
+            localStorage.setItem('projectName', name);
             let accessToken = localStorage.getItem('oauth')
             await fetch(url, {
                 method: 'POST', 
