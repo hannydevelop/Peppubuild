@@ -21,7 +21,6 @@ var bodyParser = require('body-parser');
 var fs = require('fs');
 var low = require('lowdb');
 var FileSync = require('lowdb/adapters/FileSync.js');
-var createProject = require('./utils/project.js');
 var path = require('path');
 var grapesjs = require('grapesjs');
 var replaceInFile = require('replace-in-file');
@@ -31,49 +30,86 @@ const { OAuth2Client } = require('google-auth-library');
 const { google } = require('googleapis');
 const tmp = require('tmp');
 require('dotenv').config();
+const { Readable } = require('stream');
 
-// var ftp = require("basic-ftp");
+var ftp = require("basic-ftp");
 var cors = require('cors')
 // ENV constants for Namecheap
-const CURR_DIR = os.homedir();
+const CURR_DIR = os.tmpdir();
 const cpanelDomain = process.env.CPANEL_DOMAIN;
 const cpanelUsername = process.env.CPANEL_USER;
 const root = 'peppubuild.com';
 const cpanelApiKey = process.env.CPANEL_SECRET_KEY;
 
-const app = express()
+const app = express();
+tmp.setGracefulCleanup();
+
 async function startServer() {
   app.use(bodyParser.urlencoded({ extended: false }))
 
   app.use(cors())
-  // app.use(express.json({ limit: '50mb' }))
+  app.use(express.json({ limit: '50mb' }))
   // parse application/json
   app.use(bodyParser.json())
 
   app.use(cookieParser())
 
-  /*
-  app.get('/clientdeploy', (req, res) => {
+  function stringToStream(str) {
+    return new ReadableStream({
+      start(controller) {
+        controller.enqueue(str);
+        controller.close();
+      }
+    });
+  }
 
+  app.get('/clientdeploy/:pname', (req, res) => {
+    let pname = req.params.pname;
+    const pages = req.body.pages;
     async function uploadFiles() {
       const client = new ftp.Client();
-      const projectname = req.params.projectname;
+      const projectname = `${pname}.peppubuild.com`;
 
       try {
         // Connect to FTP server
         await client.access({
-          host: "63.250.38.72",
-          user: "ammytzib",
-          password: "My1stbrainchild!",
+          host: process.env.HOST,
+          user: cpanelUsername,
+          password: process.env.PASSWORD,
         });
 
         // Set the remote directory (public_html or another directory)
         await client.cd(projectname);
 
         // Upload files
-        await client.uploadFromDir(`${CURR_DIR}/${projectname}`);
-
-        console.log("Files uploaded successfully");
+        let editor = grapesjs.init({
+          headless: true, pageManager: {
+            pages: pages.pages
+          }
+        });
+        for (const e of editor.Pages.getAll()) {
+          const name = e.id
+          const component = e.getMainComponent()
+          const html = editor.getHtml({ component });
+          const css = editor.getCss({ component });
+          let htmlContent = `
+            <!DOCTYPE html>
+              <html lang="en">
+              <head>
+                  <meta charset="UTF-8">
+                  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                  <title>Document</title>
+                  <link rel="stylesheet" type="text/css" href="./css/${name}.css">
+              </head>
+              ${html}
+            </html>`
+          // create directory and add files into directory
+          let htmlstreams = Readable.from(htmlContent);
+          await client.uploadFrom(htmlstreams, `${name}.html`);
+          let cssstreams = Readable.from(css)
+          await client.uploadFrom(cssstreams, `${name}.css`);
+        }
       } catch (error) {
         console.error("Error:", error);
       } finally {
@@ -85,7 +121,9 @@ async function startServer() {
     // Run the function
     uploadFiles();
   })
-  */
+
+
+
 
   // Step 1 - Run Filename by creating subdomain.
   function createSub(name) {
@@ -255,6 +293,10 @@ async function startServer() {
     let accessToken = req.body.accessToken;
     let gjsProject = req.body.gjsProject;
     updateDB(gjsProject, id, accessToken).then(res.send({ success: 'Project saved successfully!' }));
+  })
+
+  app.post('/publishcontent', (req, res) => {
+
   })
 
   // create frontend project
