@@ -7,7 +7,7 @@ export default {
         },
         project: {
             placeholder: 'project name',
-            new: 'Create Project +',
+            publish: 'Publish Project +',
             load: 'Load Project +',
             url: 'https://server.peppubuild.com',
         },
