@@ -118,6 +118,7 @@ export default class PagesApp extends UI {
     }
 
     addProject() {
+        const { editor } = this;
         const projectdata = editor.getProjectData();
         let pages = JSON.stringify(projectdata);
         let pname = localStorage.getItem('projectName');
