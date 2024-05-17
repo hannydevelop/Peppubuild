@@ -267,7 +267,7 @@ export default class PagesApp extends UI {
                     ${editor.I18n.t('peppu-sidebar.pages.new')}
                 </div>
                 <div class="add-project">
-                    ${editor.I18n.t('peppu-sidebar.pages.publish')}
+                    ${editor.I18n.t('peppu-sidebar.project.publish')}
                 </div>
                 <div class="project">
                     ${this.renderProject()}
