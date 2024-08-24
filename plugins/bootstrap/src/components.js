@@ -131,7 +131,7 @@ export default (editor, opts = {}) => {
     model: {
       defaults: {
         tagName: 'div',
-        attributes: { class: 'navbar navbar-expand-lg fixed-top' },
+        attributes: { class: 'navbar navbar-expand-lg' },
         components: [{
           tagName: 'div',
           attributes: { class: 'container-fluid' },
