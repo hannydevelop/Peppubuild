@@ -814,7 +814,7 @@ export default (editor, opts = {}) => {
               },
               {
                 tagName: 'div',
-                attributes: { class: 'carousel-item citem' },
+                attributes: { class: 'carousel-item cactive' },
                 components: [
                   {
                     type: 'image',
@@ -960,17 +960,9 @@ export default (editor, opts = {}) => {
           }
         ],
         styles: `
-        .cactive {
-          height: 32em;
-        }
-
         .cactive img {
           width:100%; 
-          height: 100%;
-        }
-
-        .citem {
-          height: 32em;
+         
         }
         `
       },
