@@ -372,7 +372,7 @@ const Home = {
                     </div>
                 `,
                 })
-            }else if (component.attributes.type == 'text') {
+            } else if (component.attributes.type == 'text') {
                 mdl.open({
                     title: 'This is a text',
                     content: `
@@ -402,7 +402,7 @@ const Home = {
                     </div>
                 `,
                 })
-            }else if (component.attributes.type == 'image') {
+            } else if (component.attributes.type == 'image') {
                 mdl.open({
                     title: 'This is an Image',
                     content: `
@@ -496,18 +496,18 @@ const Dashboard = {
         link.name = 'viewport';
         link.content = 'width=device-width, initial-scale=1.0';
         document.getElementsByTagName('head')[0].appendChild(link);
-        
+
         let accessToken = localStorage.getItem('oauth')
         let url = `${serverUrl}/projects/${accessToken}`
         await fetch(url, {
-            method: 'GET', 
+            method: 'GET',
             headers: {
                 "Content-Type": "application/json",
             },
         }).then((res) => {
             res.json().then((response) => {
                 this.projects = response;
-            })                    
+            })
         })
     },
     data() {
@@ -537,7 +537,7 @@ const Dashboard = {
             localStorage.setItem('projectName', name);
             let accessToken = localStorage.getItem('oauth')
             await fetch(url, {
-                method: 'POST', 
+                method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -547,7 +547,7 @@ const Dashboard = {
                     let projectString = JSON.stringify(response);
                     localStorage.setItem('gjsProject', projectString);
                     this.$router.push({ name: "Home" });
-                })                    
+                })
             })
         },
         // Delete project
@@ -556,21 +556,22 @@ const Dashboard = {
             let url = `${serverUrl}/pdelete/${id}`
             let deleteQuestion = confirm('Do you want to delete this project');
             if (deleteQuestion) {
-            await fetch(url, {
-                method: 'POST', 
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ accessToken: accessToken }),
-            }).then((res) => {
-                if (res.status == 200) {
-                    // delete project from array
-                    // console.log(this.projects)
-                    let index = this.projects.findIndex(project => project.id === id)
-                    this.projects.splice(index, 1);
-                    // alert('Successfully deleted project')                    
-                }
-            })}
+                await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ accessToken: accessToken }),
+                }).then((res) => {
+                    if (res.status == 200) {
+                        // delete project from array
+                        // console.log(this.projects)
+                        let index = this.projects.findIndex(project => project.id === id)
+                        this.projects.splice(index, 1);
+                        // alert('Successfully deleted project')                    
+                    }
+                })
+            }
         },
         async emptyProject() {
             let name = prompt('What will you like to name your project?');
@@ -581,17 +582,26 @@ const Dashboard = {
                 let url = `${serverUrl}/publishfront/${name}`
                 Swal.showLoading();
                 await fetch(url, {
-                    method: 'POST', 
+                    method: 'POST',
                     headers: {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({ gjsProject: gjsProject, accessToken: accessToken }),
                 }).then((res) => {
                     res.json().then((response) => {
-                        Swal.close();
-                        localStorage.setItem('projectId', response.id); 
-                        this.$router.push({name: "Home"})
-                    })                    
+                        if (res.status == 200) {
+                            Swal.close();
+                            localStorage.setItem('projectId', response.id);
+                            this.$router.push({ name: "Home" })
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: response.error,
+                                footer: '<a href="https://www.docs.peppubuild.com">Why do I have this issue?</a>'
+                            });
+                        }
+                    })
                 })
             }
         },
@@ -837,7 +847,7 @@ router.beforeEach(async (to, from, next) => {
 })
 
 router.beforeEach(async (to, from, next) => {
-    if (from.name !== 'Dashboard' && to.name == 'Home' ) next({ name: 'Dashboard' })
+    if (from.name !== 'Dashboard' && to.name == 'Home') next({ name: 'Dashboard' })
     else next()
 })
 
