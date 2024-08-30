@@ -8,7 +8,7 @@ import {
     GoogleAuthProvider,
     GithubAuthProvider
 } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js";
-const serverUrl = 'https://www.server.peppubuild.com';
+const serverUrl = 'http://localhost:1404';
 // Create route components
 const Home = {
     template: `
@@ -742,7 +742,7 @@ const Auth = {
                     // verify token
 
                     // store token
-                    document.cookie = `pepputoken=${providerToken}; maxAge=24 * 60 * 60 * 1000`
+                    document.cookie = `pepputoken=${providerToken}; max-age=3600`
                     resolve();
                 } else {
                     reject();
