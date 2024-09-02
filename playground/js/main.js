@@ -6,7 +6,8 @@ import {
     updateProfile,
     signInWithPopup,
     GoogleAuthProvider,
-    GithubAuthProvider
+    GithubAuthProvider,
+    onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js";
 const serverUrl = 'http://localhost:1404';
 // Create route components
@@ -517,6 +518,19 @@ const Dashboard = {
     },
 
     methods: {
+        // check state to see if auth changed.
+        checkState() {
+            return new Promise((resolve, reject) => {
+            userAuth.onAuthStateChanged((user) => {
+                if (user) {
+                    user.getIdToken(true).then((accessToken) => {
+                        resolve(document.cookie = `pepputoken=${accessToken}; max-age=3300`)
+                    })
+                }
+                reject
+            })
+        })
+        },
         showSide() {
             var x = document.getElementById("dedee");
             var y = document.getElementById("d-cont");
@@ -532,6 +546,8 @@ const Dashboard = {
         async projectWorkspace(id, name) {
             // get content.
             // set the value of gjsProject.
+            await this.checkState();
+            Swal.showLoading();
             let url = `${serverUrl}/project/${id}`
             localStorage.setItem('projectId', id);
             localStorage.setItem('projectName', name);
@@ -645,6 +661,9 @@ const Auth = {
         link.name = 'viewport';
         link.content = 'width=device-width, initial-scale=1.0';
         document.getElementsByTagName('head')[0].appendChild(link);
+
+        // check auth change state.
+        // work on th
     },
     data() {
         return {
@@ -742,7 +761,7 @@ const Auth = {
                     // verify token
 
                     // store token
-                    document.cookie = `pepputoken=${providerToken}; max-age=3600`
+                    document.cookie = `pepputoken=${providerToken}; max-age=3300`
                     resolve();
                 } else {
                     reject();
