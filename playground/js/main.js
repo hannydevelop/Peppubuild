@@ -7,7 +7,6 @@ import {
     signInWithPopup,
     GoogleAuthProvider,
     GithubAuthProvider,
-    onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js";
 const serverUrl = 'http://localhost:1404';
 // Create route components
@@ -456,10 +455,10 @@ const Dashboard = {
                          <div class="col-sm-6" v-for="project in projects" :key="project.id" >
                          <div class="card project-deck">
                             <div class="card-header">
-                                Featured
+                                Project
                             </div>
                          <div class="card-body">
-                           <h2 class="card-title">{{project.name}}</h2>
+                           <h2 class="card-title">{{project.name.split('.').slice(0, -1).join('.')}}</h2>
                            <div class="card-footer">
                            <button @click="deleteProject(project.id)" class="btn btn-danger">Delete</button>
                            <button @click="projectWorkspace(project.id, project.name)" class="btn btn-primary">Continue</button>

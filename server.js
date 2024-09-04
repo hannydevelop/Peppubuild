@@ -106,7 +106,8 @@ async function startServer() {
 
   app.post('/clientdeploy/:pname', (req, res) => {
     let pname = req.params.pname;
-    const pages = req.body.pages;
+    let page = req.body.pages;
+    const pages = JSON.parse(page)
 
       async function uploadFiles() {
         const client = new ftp.Client();
@@ -144,6 +145,7 @@ async function startServer() {
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <title>Document</title>
                     <link rel="stylesheet" type="text/css" href="./css/${name}.css">
+                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
                 </head>
                 ${html}
               </html>`
@@ -158,6 +160,7 @@ async function startServer() {
         } finally {
           // Close the FTP connection
           client.close();
+          res.send('successfully created project')
         }
       }
   
