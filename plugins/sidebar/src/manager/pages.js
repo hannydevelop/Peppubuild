@@ -1,5 +1,6 @@
 import UI from '../utils/ui';
 import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
 export default class PagesApp extends UI {
     constructor(editor, opts = {}) {
@@ -122,6 +123,8 @@ export default class PagesApp extends UI {
         const projectdata = editor.getProjectData();
         let pages = JSON.stringify(projectdata);
         let pname = localStorage.getItem('projectName');
+        let name = pname.split('.').slice(0, -1).join('.');
+        Swal.showLoading();
         try {
             fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/clientdeploy/${pname}`, {
                 method: "POST", // or 'PUT'
@@ -131,7 +134,9 @@ export default class PagesApp extends UI {
                 body: JSON.stringify({ pages: pages }),
             }).then((response) => {
                 if (response.ok) {
-                    swal("Successful!", "Published Project", "success");
+                    swal("Successful!", "Project Published", "success").then(() => {
+                        window.location.replace(`http://www.${name}.peppubuild.com`);
+                    })
                 }
             })
         } catch { swal("Error", "An error occurred", "error") }
