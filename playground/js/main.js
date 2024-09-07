@@ -8,7 +8,7 @@ import {
     GoogleAuthProvider,
     GithubAuthProvider,
 } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js";
-const serverUrl = 'http://localhost:1404';
+const serverUrl = 'https://server.peppubuild.com';
 // Create route components
 const Home = {
     template: `
