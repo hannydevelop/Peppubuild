@@ -6,9 +6,9 @@ import {
     updateProfile,
     signInWithPopup,
     GoogleAuthProvider,
-    GithubAuthProvider
+    GithubAuthProvider,
 } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js";
-const serverUrl = 'https://www.server.peppubuild.com';
+const serverUrl = 'http://localhost:1404';
 // Create route components
 const Home = {
     template: `
@@ -372,7 +372,7 @@ const Home = {
                     </div>
                 `,
                 })
-            }else if (component.attributes.type == 'text') {
+            } else if (component.attributes.type == 'text') {
                 mdl.open({
                     title: 'This is a text',
                     content: `
@@ -402,7 +402,7 @@ const Home = {
                     </div>
                 `,
                 })
-            }else if (component.attributes.type == 'image') {
+            } else if (component.attributes.type == 'image') {
                 mdl.open({
                     title: 'This is an Image',
                     content: `
@@ -455,10 +455,10 @@ const Dashboard = {
                          <div class="col-sm-6" v-for="project in projects" :key="project.id" >
                          <div class="card project-deck">
                             <div class="card-header">
-                                Featured
+                                Project
                             </div>
                          <div class="card-body">
-                           <h2 class="card-title">{{project.name}}</h2>
+                           <h2 class="card-title">{{project.name.split('.').slice(0, -1).join('.')}}</h2>
                            <div class="card-footer">
                            <button @click="deleteProject(project.id)" class="btn btn-danger">Delete</button>
                            <button @click="projectWorkspace(project.id, project.name)" class="btn btn-primary">Continue</button>
@@ -496,18 +496,18 @@ const Dashboard = {
         link.name = 'viewport';
         link.content = 'width=device-width, initial-scale=1.0';
         document.getElementsByTagName('head')[0].appendChild(link);
-        
+
         let accessToken = localStorage.getItem('oauth')
         let url = `${serverUrl}/projects/${accessToken}`
         await fetch(url, {
-            method: 'GET', 
+            method: 'GET',
             headers: {
                 "Content-Type": "application/json",
             },
         }).then((res) => {
             res.json().then((response) => {
                 this.projects = response;
-            })                    
+            })
         })
     },
     data() {
@@ -517,6 +517,19 @@ const Dashboard = {
     },
 
     methods: {
+        // check state to see if auth changed.
+        checkState() {
+            return new Promise((resolve, reject) => {
+            userAuth.onAuthStateChanged((user) => {
+                if (user) {
+                    user.getIdToken(true).then((accessToken) => {
+                        resolve(document.cookie = `pepputoken=${accessToken}; max-age=3300`)
+                    })
+                }
+                reject
+            })
+        })
+        },
         showSide() {
             var x = document.getElementById("dedee");
             var y = document.getElementById("d-cont");
@@ -532,12 +545,14 @@ const Dashboard = {
         async projectWorkspace(id, name) {
             // get content.
             // set the value of gjsProject.
+            await this.checkState();
+            Swal.showLoading();
             let url = `${serverUrl}/project/${id}`
             localStorage.setItem('projectId', id);
             localStorage.setItem('projectName', name);
             let accessToken = localStorage.getItem('oauth')
             await fetch(url, {
-                method: 'POST', 
+                method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -547,7 +562,7 @@ const Dashboard = {
                     let projectString = JSON.stringify(response);
                     localStorage.setItem('gjsProject', projectString);
                     this.$router.push({ name: "Home" });
-                })                    
+                })
             })
         },
         // Delete project
@@ -556,21 +571,22 @@ const Dashboard = {
             let url = `${serverUrl}/pdelete/${id}`
             let deleteQuestion = confirm('Do you want to delete this project');
             if (deleteQuestion) {
-            await fetch(url, {
-                method: 'POST', 
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ accessToken: accessToken }),
-            }).then((res) => {
-                if (res.status == 200) {
-                    // delete project from array
-                    // console.log(this.projects)
-                    let index = this.projects.findIndex(project => project.id === id)
-                    this.projects.splice(index, 1);
-                    // alert('Successfully deleted project')                    
-                }
-            })}
+                await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ accessToken: accessToken }),
+                }).then((res) => {
+                    if (res.status == 200) {
+                        // delete project from array
+                        // console.log(this.projects)
+                        let index = this.projects.findIndex(project => project.id === id)
+                        this.projects.splice(index, 1);
+                        // alert('Successfully deleted project')                    
+                    }
+                })
+            }
         },
         async emptyProject() {
             let name = prompt('What will you like to name your project?');
@@ -581,17 +597,26 @@ const Dashboard = {
                 let url = `${serverUrl}/publishfront/${name}`
                 Swal.showLoading();
                 await fetch(url, {
-                    method: 'POST', 
+                    method: 'POST',
                     headers: {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({ gjsProject: gjsProject, accessToken: accessToken }),
                 }).then((res) => {
                     res.json().then((response) => {
-                        Swal.close();
-                        localStorage.setItem('projectId', response.id); 
-                        this.$router.push({name: "Home"})
-                    })                    
+                        if (res.status == 200) {
+                            Swal.close();
+                            localStorage.setItem('projectId', response.id);
+                            this.$router.push({ name: "Home" })
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: response.error,
+                                footer: '<a href="https://www.docs.peppubuild.com">Why do I have this issue?</a>'
+                            });
+                        }
+                    })
                 })
             }
         },
@@ -611,68 +636,21 @@ const Dashboard = {
 const Auth = {
     template: `
     <div class="background">
+    <div id="i9x1">
+    <h1>Login or Sign into your account with your Google profile.</h1>
+    </div>
     <div class="main__container">
       <div class="wrapper">
         <div class="form-wrapper sign-in">
-          <form id="sign-in-form" action="">
-            <h2>Login</h2>
-            <div class="input-group">
-              <input id="username-login" type="email" required v-model="lemail" />
-              <label for="">Email</label>
+        <div class="start">
+          <div class="google-btn google-bk" @click="googleLogin()">
+            <div class="google-icon-wrapper">
+              <img class="google-icon" src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg" />
             </div>
-            <div class="input-group">
-              <input id="password-login" type="password" required v-model="lpassword" />
-              <label for="">Password</label>
-            </div>
-            <button type="reset" class="mybtn" @click="logUser()">Login</button>
-            <div class="signup-link">
-              <p>
-                Don't have an account?
-                <button type="reset" class="signUpBtn" @click="callActive()">Sign Up</button>
-              </p>
-            </div>
-          </form>
+            <p class="btn-text"><b>Sign in with Google</b></p>
+          </div>
         </div>
-
-        <div class="form-wrapper sign-up">
-          <form id="sign-up-form" action="">
-            <h2>Sign Up</h2>
-            <div class="input-group">
-              <input id="username" type="text" required v-model="fname" />
-              <label for="">Full Name</label>
-            </div>
-            <div class="input-group">
-              <input id="password" type="password" required v-model="password" />
-              <label for="">Password</label>
-            </div>
-            <div class="input-group">
-              <input id="email" type="email" required v-model="email" />
-              <label for="">Email</label>
-            </div>
-            <button type="reset" class="mybtn" @click="createUser()">Sign Up</button>
-            <div class="signup-link">
-              <p>
-                Already have an account?
-                <button type="reset" class="signUpBtn" @click="callActive()">Sign Up</button>
-              </p>
-            </div>
-          </form>
         </div>
-      </div>
-    </div>
-    <div id="i9x1">You can also authenticate with providers like Google or Github.</div>
-    <div class="start">
-      <div class="google-btn google-bk" @click="googleLogin()">
-        <div class="google-icon-wrapper">
-          <img class="google-icon" src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg" />
-        </div>
-        <p class="btn-text"><b>Sign in with Google</b></p>
-      </div>
-      <div class="google-btn github-bk" @click="githubLogin()">
-        <div class="google-icon-wrapper">
-          <img class="google-icon" src="img/github.svg" />
-        </div>
-        <p class="btn-text"><b>Sign in with Github</b></p>
       </div>
     </div>
   </div>
@@ -682,6 +660,9 @@ const Auth = {
         link.name = 'viewport';
         link.content = 'width=device-width, initial-scale=1.0';
         document.getElementsByTagName('head')[0].appendChild(link);
+
+        // check auth change state.
+        // work on th
     },
     data() {
         return {
@@ -779,7 +760,7 @@ const Auth = {
                     // verify token
 
                     // store token
-                    document.cookie = `pepputoken=${providerToken}; maxAge=24 * 60 * 60 * 1000`
+                    document.cookie = `pepputoken=${providerToken}; max-age=3300`
                     resolve();
                 } else {
                     reject();
@@ -884,7 +865,7 @@ router.beforeEach(async (to, from, next) => {
 })
 
 router.beforeEach(async (to, from, next) => {
-    if (from.name !== 'Dashboard' && to.name == 'Home' ) next({ name: 'Dashboard' })
+    if (from.name !== 'Dashboard' && to.name == 'Home') next({ name: 'Dashboard' })
     else next()
 })
 

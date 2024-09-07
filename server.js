@@ -31,6 +31,7 @@ const { google } = require('googleapis');
 const tmp = require('tmp');
 require('dotenv').config();
 const { Readable } = require('stream');
+const {Blob} = require('node:buffer');
 
 var ftp = require("basic-ftp");
 var cors = require('cors')
@@ -63,63 +64,108 @@ async function startServer() {
     });
   }
 
+  async function getContent(Id, accessToken) {
+    const service = driveAuth(accessToken);
+    try {
+      const file = await service.files.get({
+        fileId: Id,
+        alt: 'media',
+      });
+      let data = JSON.stringify(file.data);
+      let finaldata = JSON.parse(data)
+      return finaldata.gjsProject.project;
+    } catch (err) {
+      // TODO(developer) - Handle error
+      return err;
+    }
+  }
+
+  async function createContent(accessToken, projectName, mimeType, body, parents) {
+    const service = driveAuth(accessToken);
+    const media = {
+      mimeType: mimeType,
+      body: body
+    };
+    const fileMetadata = {
+      name: projectName,
+      parents: [parents],
+    };
+    try {
+      const file = await service.files.create({
+        resource: fileMetadata,
+        media: media,
+      })
+      // console.log(file.data.id)
+      return file.data.id;
+    } catch (err) {
+      // TODO(developer) - Handle error
+      return err;
+    }
+  }
+
+
   app.post('/clientdeploy/:pname', (req, res) => {
     let pname = req.params.pname;
-    const pages = req.body.pages;
-    async function uploadFiles() {
-      const client = new ftp.Client();
-      const projectname = `${pname}.peppubuild.com`;
+    let page = req.body.pages;
+    const pages = JSON.parse(page)
 
-      try {
-        // Connect to FTP server
-        await client.access({
-          host: process.env.HOST,
-          user: cpanelUsername,
-          password: process.env.PASSWORD,
-        });
-
-        // Set the remote directory (public_html or another directory)
-        await client.cd(projectname);
-
-        // Upload files
-        let editor = grapesjs.init({
-          headless: true, pageManager: {
-            pages: pages.pages
+      async function uploadFiles() {
+        const client = new ftp.Client();
+        let pathname = path.parse(pname).name;
+        const projectname = `${pathname}.peppubuild.com`;
+  
+        try {
+          // Connect to FTP server
+          await client.access({
+            host: process.env.HOST,
+            user: cpanelUsername,
+            password: process.env.PASSWORD,
+          });
+  
+          // Set the remote directory (public_html or another directory)
+          await client.cd(projectname);
+  
+          // Upload files
+          let editor = grapesjs.init({
+            headless: true, pageManager: {
+              pages: pages.pages
+            }
+          });
+          for (const e of editor.Pages.getAll()) {
+            const name = e.id
+            const component = e.getMainComponent()
+            const html = editor.getHtml({ component });
+            const css = editor.getCss({ component });
+            let htmlContent = `
+              <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Document</title>
+                    <link rel="stylesheet" type="text/css" href="./css/${name}.css">
+                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+                </head>
+                ${html}
+              </html>`
+            // create directory and add files into directory
+            let htmlstreams = Readable.from([htmlContent]);
+            await client.uploadFrom(htmlstreams, `${name}.html`);
+            let cssstreams = Readable.from(css)
+            await client.uploadFrom(cssstreams, `${name}.css`);
           }
-        });
-        for (const e of editor.Pages.getAll()) {
-          const name = e.id
-          const component = e.getMainComponent()
-          const html = editor.getHtml({ component });
-          const css = editor.getCss({ component });
-          let htmlContent = `
-            <!DOCTYPE html>
-              <html lang="en">
-              <head>
-                  <meta charset="UTF-8">
-                  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-                  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                  <title>Document</title>
-                  <link rel="stylesheet" type="text/css" href="./css/${name}.css">
-              </head>
-              ${html}
-            </html>`
-          // create directory and add files into directory
-          let htmlstreams = Readable.from(htmlContent);
-          await client.uploadFrom(htmlstreams, `${name}.html`);
-          let cssstreams = Readable.from(css)
-          await client.uploadFrom(cssstreams, `${name}.css`);
+        } catch (error) {
+          console.error("Error:", error);
+        } finally {
+          // Close the FTP connection
+          client.close();
+          res.send('successfully created project')
         }
-      } catch (error) {
-        console.error("Error:", error);
-      } finally {
-        // Close the FTP connection
-        client.close();
       }
-    }
-
-    // Run the function
-    uploadFiles();
+  
+      // Run the function
+      uploadFiles();
   })
 
 
@@ -227,22 +273,6 @@ async function startServer() {
         // resource: fileMetadatad,
         media: media,
       });
-    } catch (err) {
-      // TODO(developer) - Handle error
-      return err;
-    }
-  }
-
-  async function getContent(Id, accessToken) {
-    const service = driveAuth(accessToken);
-    try {
-      const file = await service.files.get({
-        fileId: Id,
-        alt: 'media',
-      });
-      let data = JSON.stringify(file.data);
-      let finaldata = JSON.parse(data)
-      return finaldata.gjsProject.project;
     } catch (err) {
       // TODO(developer) - Handle error
       return err;
