@@ -37,7 +37,7 @@ export default (editor, opts = {}) => {
     {
       id: 'peppu:open',
       className: 'fa fa-terminal',
-      active: false,
+      active: true,
       command: 'peppu:open'
     }
   ])

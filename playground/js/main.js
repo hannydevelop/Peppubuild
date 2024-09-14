@@ -12,12 +12,62 @@ const serverUrl = 'https://server.peppubuild.com';
 // Create route components
 const Home = {
     template: `
-<div id="gjs"></div>
+    <div>
+    <div id="navbar" class="sidenav d-flex flex-column overflow-scroll">
+    <nav class="navbar navbar-light">
+      <div class="container-fluid">
+        <img src="https://www.peppubuild.com/logo.png" class="navbar-brand mb-0 h3 logo" />
+      </div>
+    </nav>
+    <div class="">
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#block" type="button"
+            role="tab" aria-controls="block" aria-selected="true">
+            <i class="bi bi-grid-fill"></i>
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="trait-tab" data-bs-toggle="tab" data-bs-target="#trait" type="button" role="tab"
+            aria-controls="trait" aria-selected="false">
+            <i class="bi bi-layers-fill"></i>
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="style-tab" data-bs-toggle="tab" data-bs-target="#style" type="button" role="tab"
+            aria-controls="style" aria-selected="false">
+            <i class="bi bi-palette-fill"></i>
+          </button>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="block" role="tabpanel" aria-labelledby="block-tab">
+          <div id="blocks"></div>
+        </div>
+        <div class="tab-pane fade" id="trait" role="tabpanel" aria-labelledby="trait-tab">
+          <div id="layers-container"></div>
+        </div>
+        <div class="tab-pane fade" id="style" role="tabpanel" aria-labelledby="style-tab">
+          <div id="styles-container"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="main-content">
+    <nav class="navbar navbar-light">
+      <div class="container-fluid">
+        <div class="panel__devices"></div>
+        <div class="panel__basic-actions"></div>
+      </div>
+    </nav>
+    <div id="editor"></div>
+  </div>
+    </div>
 `,
     mounted() {
         // initialize grapesjs
         const editor = grapesjs.init({
-            container: '#gjs',
+            container: '#editor',
             height: '100vh',
             width: 'auto',
             showOffsets: true,
@@ -31,7 +81,18 @@ const Home = {
                     }
                 ]
             },
+            blockManager: {
+                appendTo: "#blocks",
+            },
+
+            layerManager: {
+                appendTo: "#layers-container",
+            },
+            panels: {
+
+            },
             styleManager: {
+                appendTo: "#styles-container",
                 sectors: [{
                     name: 'General',
                     open: false,
@@ -234,6 +295,15 @@ const Home = {
                 ],
             }
         });
+        var panelManager = editor.Panels;
+        // get the buttons
+        panelManager.getButton("views", "open-sm");
+        panelManager.getButton("views", "open-layers");
+        panelManager.getButton("views", "open-blocks");
+
+        // remove the buttons
+        panelManager.removeButton("views", "open-layers");
+        panelManager.removeButton("views", "open-blocks");
         const mdl = editor.Modal;
         editor.on('load', (some, argument) => {
             mdl.open({
@@ -492,11 +562,6 @@ const Dashboard = {
         </div>
     `,
     async mounted() {
-        const link = document.createElement('meta');
-        link.name = 'viewport';
-        link.content = 'width=device-width, initial-scale=1.0';
-        document.getElementsByTagName('head')[0].appendChild(link);
-
         let accessToken = localStorage.getItem('oauth')
         let url = `${serverUrl}/projects/${accessToken}`
         await fetch(url, {
@@ -520,15 +585,15 @@ const Dashboard = {
         // check state to see if auth changed.
         checkState() {
             return new Promise((resolve, reject) => {
-            userAuth.onAuthStateChanged((user) => {
-                if (user) {
-                    user.getIdToken(true).then((accessToken) => {
-                        resolve(document.cookie = `pepputoken=${accessToken}; max-age=3300`)
-                    })
-                }
-                reject
+                userAuth.onAuthStateChanged((user) => {
+                    if (user) {
+                        user.getIdToken(true).then((accessToken) => {
+                            resolve(document.cookie = `pepputoken=${accessToken}; max-age=3300`)
+                        })
+                    }
+                    reject
+                })
             })
-        })
         },
         showSide() {
             var x = document.getElementById("dedee");
@@ -656,10 +721,12 @@ const Auth = {
   </div>
     `,
     mounted() {
+        /* 
         const link = document.createElement('meta');
         link.name = 'viewport';
         link.content = 'width=device-width, initial-scale=1.0';
         document.getElementsByTagName('head')[0].appendChild(link);
+        */
 
         // check auth change state.
         // work on th
@@ -811,12 +878,7 @@ const Contact = {
         </form>
     </div>
 `,
-    mounted() {
-        const link = document.createElement('meta');
-        link.name = 'viewport';
-        link.content = 'width=device-width, initial-scale=1.0';
-        document.getElementsByTagName('head')[0].appendChild(link);
-    },
+
     methods: {
         submitReq() {
             emailjs.sendForm('service_ye8ngya', 'template_hjuc4sp', this.$refs.form, 'gaqDvZ1uPiEy0Z2CO')
