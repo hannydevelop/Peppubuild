@@ -72,7 +72,6 @@ export default {
   name: 'SideBar',
   data() {
     return {
-      name: userinfo.display_name,
       imageLink: userinfo.photoURL,
     };
   },
