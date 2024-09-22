@@ -16,8 +16,13 @@ body {
     box-sizing: border-box;
 }
 
-a {
+a, router-link {
     text-decoration: none;
+    color: #000 !important;
+}
+
+a:hover, router-link:hover {
+    color: #51ef59 !important; 
 }
 
 /*
@@ -603,18 +608,6 @@ Grapes
 ################
 */
 
-body {
-    margin: 0;
-    padding: 0;
-  }
-
-  html {
-    overflow: scroll;
-    overflow-x: hidden;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-
   ::-webkit-scrollbar {
     display: none;
   }
@@ -676,7 +669,7 @@ body {
   }
 
   .gjs-pn-panel {
-    position: relative;
+    position: absolute;
   }
 
   .gjs-cv-canvas {
@@ -715,3 +708,25 @@ body {
   #block #blocks .gjs-block-label {
     display: none;
   }
+
+  /*Sidebar*/
+ .black {
+    color: #000;
+    margin-top: 5vh;
+ }
+
+ .blac {
+    color: #000;
+ }
+
+ .black-box {
+    margin-top: 1vw;
+    background-color: #333;
+    width: 80px;
+    border-radius: 25px;
+    border: 2px solid #73AD21;
+ }
+
+ .black-box-content {
+    margin: 1vw;
+ }
