@@ -2,7 +2,7 @@
   <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-light">
     <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
       <div class="dropdown pb-4 black-box" v-if="imageLink">
-        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle black-box-content"
+        <a href="#" class="d-flex align-items-center text-black text-decoration-none dropdown-toggle"
           id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
           <img :src="imageLink" alt="profile_picture" width="30" height="30" class="rounded-circle">
           <span class="d-none d-sm-inline mx-1"></span>
