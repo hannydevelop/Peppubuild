@@ -23,11 +23,11 @@
                 </div>
               </div>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-3" v-if="projects">
               <div class="card text-success border-success">
                 <div class="card-header">Projects</div>
                 <div class="card-body">
-                  <h1 class="card-title">14</h1>
+                  <h1 class="card-title">{{ projects }}</h1>
                 </div>
               </div>
             </div>
@@ -66,13 +66,14 @@ import {
 } from 'chart.js'
 
 ChartJS.register(Title, Filler, Tooltip, Legend, PointElement, LineElement, CategoryScale, LinearScale)
-
+const serverUrl = 'https://server.peppubuild.com';
 
 export default {
   name: 'LogPage',
   components: { SideBar, Line },
   data() {
     return {
+      projects: [],
       chartData: {
         labels: ["1 Dec", "8 Dec", "16 Dec", "31 Dec"],
     datasets: [
@@ -89,6 +90,20 @@ export default {
         responsive: true
       }
     }
+  },
+  async mounted() {
+    let accessToken = localStorage.getItem('oauth')
+    let url = `${serverUrl}/projects/${accessToken}`
+    await fetch(url, {
+      method: 'GET',
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => {
+      res.json().then((response) => {
+        this.projects = response.length;
+      })
+    })
   }
 }
 
