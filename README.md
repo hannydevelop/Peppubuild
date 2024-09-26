@@ -7,7 +7,7 @@
 Open source no-code web builder. Own your artifacts, no vendor lock-in.
 </h1>
 <h3 align="center">
-We're building something different, the ultimate visual builder for any web application. Sync with other opensource tools.
+We're building something different, the ultimate visual builder for any web application. Plug your own backend into Peppubuild.
 </h3>
 
 If you're reading this that means you're interested in what I and some friends are building with Peppubuild. The goal of this project is to empower `citizen developers` to create web applications with ease, while also giving `professional developers` the flexibility and speed they need for creating an application. Simply put, anyone can build a web based application and get them running in no time with Peppubuild. 
@@ -31,7 +31,7 @@ Here's what Peppubuild offers.
 
 ## 🪜 Contributing
 
-Checkout the guide from [contribution.md](./contribution.md) to contribute.
+Checkout the guide from [contribution.md](./Contribution.md) to contribute.
 
 ## ✨ Quick Start
 
