@@ -35,7 +35,9 @@ import swal from 'sweetalert';
 
 export default {
   name: 'AuthPage',
-
+  /** 
+   * This is a test
+  */
   methods: {
         // callActive method to switch to signup or signin form
         callActive() {

@@ -1,14 +1,6 @@
-/*Peppubuild uses Firebase for authentication and Google Drive [appDataFolder] to store user information.
-  Since we are only accessing [appDataFolder], we can't access the users files in drive, only information we 
-  have created. For more information, checkout https://developers.google.com/drive/api/guides/appdata.
-
-  The important routes are as follows:
-  1. /publishfront/:name: This route runs the createSub() function which creates a subdomain for the user.
-  On successful subdomain creation, the file is then created in Google Drive with createFrontend() 
-  and updated with updateDB().
-  2. getContent() coupled with tmp will create a temporary directory with temporary files.
-  3. /publish: calls ftp with the path of temporary folder.
-  4. Login, logout, and cookies manages authentication.
+/** Peppubuild uses Firebase for authentication and Google Drive [appDataFolder] to store user information.
+ * Since we are only accessing [appDataFolder], we can't access the users files in drive, only information we 
+ * have created. For more information, checkout https://developers.google.com/drive/api/guides/appdata.
 */
 "use strict";
 exports.__esModule = true;
@@ -18,22 +10,17 @@ exports.startServer = void 0;
 var express = require('express');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var fs = require('fs');
-var low = require('lowdb');
-var FileSync = require('lowdb/adapters/FileSync.js');
 var path = require('path');
 var grapesjs = require('grapesjs');
-var replaceInFile = require('replace-in-file');
 var os = require('os');
 var fetch = require('node-fetch');
 const { OAuth2Client } = require('google-auth-library');
 const { google } = require('googleapis');
-const tmp = require('tmp');
 require('dotenv').config();
 const { Readable } = require('stream');
-
 var ftp = require("basic-ftp");
 var cors = require('cors')
+
 // ENV constants for Namecheap
 const CURR_DIR = os.tmpdir();
 const cpanelDomain = process.env.CPANEL_DOMAIN;
@@ -42,8 +29,11 @@ const root = 'peppubuild.com';
 const cpanelApiKey = process.env.CPANEL_SECRET_KEY;
 
 const app = express();
-tmp.setGracefulCleanup();
 
+/**
+ * All of our functions are wrapped around the startServer() function.
+ * At the end of the file, we call this function and listen to port 1404.
+*/
 async function startServer() {
   app.use(bodyParser.urlencoded({ extended: false }))
 
@@ -54,15 +44,12 @@ async function startServer() {
 
   app.use(cookieParser())
 
-  function stringToStream(str) {
-    return new ReadableStream({
-      start(controller) {
-        controller.enqueue(str);
-        controller.close();
-      }
-    });
-  }
-
+/**
+ * This function retrieves the gjs JSON content, which forms our website page, from Google's Drive [appDataFolder].
+ * With our fileID, we can easily retrieve file and return its content.
+ * @param {number} Id - FileId
+ * @param {string} accessToken - Oauth Access Token
+*/
   async function getContent(Id, accessToken) {
     const service = driveAuth(accessToken);
     try {
@@ -79,30 +66,16 @@ async function startServer() {
     }
   }
 
-  async function createContent(accessToken, projectName, mimeType, body, parents) {
-    const service = driveAuth(accessToken);
-    const media = {
-      mimeType: mimeType,
-      body: body
-    };
-    const fileMetadata = {
-      name: projectName,
-      parents: [parents],
-    };
-    try {
-      const file = await service.files.create({
-        resource: fileMetadata,
-        media: media,
-      })
-      // console.log(file.data.id)
-      return file.data.id;
-    } catch (err) {
-      // TODO(developer) - Handle error
-      return err;
-    }
-  }
-
-
+/**
+ * app.post('/clientdeploy/:pname', (req, res) => {})
+ * Route serving deploy, to publish project. 
+ * We use FTP server to upload files.
+ * We also call uploadFrom() with params readablestream and file name.
+ * @name Clientdeploy
+ * @function
+ * @param {string} pname - Project name
+ * @param {callback} page - gjs page data.
+*/
   app.post('/clientdeploy/:pname', (req, res) => {
     let pname = req.params.pname;
     let page = req.body.pages;
@@ -170,7 +143,11 @@ async function startServer() {
 
 
 
-  // Step 1 - Run Filename by creating subdomain.
+/**
+ * Create Subdomain
+ * This function creates a subdomain for our user in our Namecheap shared hosting account.
+ * @param {string} name - Subdomain name
+*/
   function createSub(name) {
     const apiUrl = `${cpanelDomain}:2083/cpsess${cpanelApiKey}/execute/SubDomain/addsubdomain?domain=${name}&rootdomain=${root}&dir=${name}.${root}`;
     let data = fetch(apiUrl, {
@@ -187,6 +164,11 @@ async function startServer() {
     const service = google.drive({ version: 'v3', auth: auth });
     return service;
   }
+
+/**
+ * This function lists all projects created with Peppubuild, from Google's Drive (appDataFolder).
+ * @param {string} accessToken - Oauth Access Token
+*/
   async function listFiles(accessToken) {
     const service = driveAuth(accessToken);
     try {
@@ -202,13 +184,26 @@ async function startServer() {
     }
   }
 
-  // set route for logout
+/**
+ * app.get('/logout', (_req, res) => {})
+ * This route deletes the cookie pepputoken, which contains our Oauth.
+ * @name Logout
+ * @function
+ * @param {string} pepputoken - res.clearCookie
+*/
   app.get('/logout', (_req, res) => {
     res.clearCookie('pepputoken')
     res.send(`Cookie have been deleted successfully ${CURR_DIR}`);
   })
 
-  // set route for user login
+/**
+ * app.get('/logout', (_req, res) => {})
+ * This route retrieves Oauth token after authentication with firebase.
+ * Next, it stores the cookie pepputoken, which contains our Oauth.
+ * @name Login
+ * @function
+ * @param {string} providerToken - Oauth token
+*/
   app.post('/login', (req, res) => {
     // collect token
     let providerToken = req.body.token;

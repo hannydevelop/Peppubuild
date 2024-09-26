@@ -1,1 +1,0 @@
-This offers a simple guide on how to setup your project and create a simple website without AI. This is the exact guide in the documentation's quickstart, if you want to see how much more you can do with Peppubuild, read through our [documentation](docs.peppubuild.com).
