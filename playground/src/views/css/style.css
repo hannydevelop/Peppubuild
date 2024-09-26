@@ -675,7 +675,7 @@ Grapes
   .gjs-cv-canvas {
     width: 100%;
     height: 100%;
-    top: 0;
+    top: 40px;
   }
 
   .tab-content {
@@ -720,13 +720,5 @@ Grapes
  }
 
  .black-box {
-    margin-top: 1vw;
-    background-color: #333;
-    width: 80px;
-    border-radius: 25px;
-    border: 2px solid #73AD21;
- }
-
- .black-box-content {
-    margin: 1vw;
+    margin-top: 30px;
  }
