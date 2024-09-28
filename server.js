@@ -1,5 +1,5 @@
-/** Peppubuild uses Firebase for authentication and Google Drive [appDataFolder] to store user information.
- * Since we are only accessing [appDataFolder], we can't access the users files in drive, only information we 
+/** Peppubuild uses Firebase for authentication and Google Drive (appDataFolder) to store user information.
+ * Since we are only accessing (appDataFolder), we can't access the users files in drive, only information we 
  * have created. For more information, checkout https://developers.google.com/drive/api/guides/appdata.
 */
 "use strict";
@@ -45,7 +45,8 @@ async function startServer() {
   app.use(cookieParser())
 
 /**
- * This function retrieves the gjs JSON content, which forms our website page, from Google's Drive [appDataFolder].
+ * This function retrieves the gjs JSON content, which forms our website page, from Google's Drive (appDataFolder).
+ * @module getContent()
  * With our fileID, we can easily retrieve file and return its content.
  * @param {number} Id - FileId
  * @param {string} accessToken - Oauth Access Token
@@ -146,6 +147,7 @@ async function startServer() {
 /**
  * Create Subdomain
  * This function creates a subdomain for our user in our Namecheap shared hosting account.
+ * @module createSub()
  * @param {string} name - Subdomain name
 */
   function createSub(name) {
@@ -167,6 +169,7 @@ async function startServer() {
 
 /**
  * This function lists all projects created with Peppubuild, from Google's Drive (appDataFolder).
+ * @module listFiles()
  * @param {string} accessToken - Oauth Access Token
 */
   async function listFiles(accessToken) {
@@ -225,7 +228,12 @@ async function startServer() {
     next()
   })
 
-  // Save Frontend changes.
+/**
+ * Create File to store application's data on Google Drive (appDataFolder).
+ * @module createFrontend()
+ * @param {string} projectName - Project Name
+ * @param {string} accessToken - Oauth AccessToken
+*/
   async function createFrontend(projectName, accessToken) {
     const service = driveAuth(accessToken);
     const media = {
@@ -249,7 +257,13 @@ async function startServer() {
     }
   }
 
-  // update file 
+/**
+ * Update the project file created on Google Drive (appDataFolder), with gjs JSON.
+ * @module updateDB()
+ * @param {string} projectName - Project Name
+ * @param {string} Id - FileId
+ * @param {string} accessToken - Oauth AccessToken
+*/
   async function updateDB(project, Id, accessToken) {
     const service = driveAuth(accessToken);
     const media = {
@@ -273,6 +287,13 @@ async function startServer() {
     }
   }
 
+/**
+ * Function to delete file and the content of the project.
+ * @module deleteContent()
+ * @param {string} projectName - Project Name
+ * @param {string} Id - FileId
+ * @param {string} accessToken - Oauth AccessToken
+*/
   async function deleteContent(Id, accessToken) {
     const service = driveAuth(accessToken);
     try {
@@ -285,6 +306,14 @@ async function startServer() {
     }
   }
 
+/**
+ * app.post('/project/:id', (req, res) => {})
+ * Route to retrieve the data of a single project. Useful route for loading editor with pre-saved project.
+ * @memberof getContent()
+ * @name Retrieve_Project
+ * @function
+ * @param {string} Id - File Id
+*/
   // get project from db in gjsProject format.
   app.post('/project/:id', (req, res) => {
     let Id = req.params.id;
@@ -294,7 +323,14 @@ async function startServer() {
     })
   })
 
-  // get all of the projects from db in gjsProject format.
+/**
+ * app.post('/pdelete/:id', (req, res) => {})
+ * Route to delete project from Google Drive.
+ * @memberof deleteContent
+ * @name Delete_Project
+ * @function
+ * @param {string} Id - File Id
+*/
   app.post('/pdelete/:id', (req, res) => {
     let Id = req.params.id;
     let accessToken = req.body.accessToken;
@@ -303,14 +339,28 @@ async function startServer() {
     })
   })
 
-  // get all of the projects from db in gjsProject format.
+/**
+ * app.post('/pdelete/:id', (req, res) => {})
+ * Route to retrieve all of the projects from Drive.
+ * @memberof listFiles()
+ * @name Delete_Project
+ * @function
+ * @param {string} token - Oauth Token
+*/
   app.get('/projects/:token', (req, res) => {
     let accessToken = req.params.token;
     listFiles(accessToken).then((response) => {
       res.send(response)
     })
   })
-
+/**
+ * app.put('/save/:id', (req, res) => {})
+ * Route to save changes to corresponding file on Drive.
+ * @memberof updateDB()
+ * @name Save_Project
+ * @function
+ * @param {string} token - Oauth Token
+*/
   // save changes to corresponding file on disk
   app.put('/save/:id', (req, res) => {
     let id = req.params.id;
@@ -323,6 +373,15 @@ async function startServer() {
 
   })
 
+/**
+ * app.post('/publishfront/:name', (req, res) => {})
+ * Route to publish file to Namescheap
+ * @function
+ * @memberof updateDB()
+ * @memberof createFrontend()
+ * @memberof createSub()
+ * @name Publish_Project
+*/
   // create frontend project
   /// TODO: Import the necessary functions here like createFrontend etc.
   app.post('/publishfront/:name', (req, res) => {

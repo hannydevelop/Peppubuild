@@ -33,12 +33,27 @@ This section contains a detailed overview of all the functions in the client, se
     *   [Parameters][12]
 *   [Login][13]
     *   [Parameters][14]
+*   [createFrontend][15]
+    *   [Parameters][16]
+*   [updateDB][17]
+    *   [Parameters][18]
+*   [deleteContent][19]
+    *   [Parameters][20]
+    *   [Delete\_Project][21]
+        *   [Parameters][22]
+*   [Retrieve\_Project][23]
+    *   [Parameters][24]
+*   [Delete\_Project][25]
+    *   [Parameters][26]
+*   [Save\_Project][27]
+    *   [Parameters][28]
+*   [Publish\_Project][29]
 
 ##
 
-Peppubuild uses Firebase for authentication and Google Drive \[appDataFolder] to store user information.
-Since we are only accessing \[appDataFolder], we can't access the users files in drive, only information we
-have created. For more information, checkout [https://developers.google.com/drive/api/guides/appdata][15].
+Peppubuild uses Firebase for authentication and Google Drive (appDataFolder) to store user information.
+Since we are only accessing (appDataFolder), we can't access the users files in drive, only information we
+have created. For more information, checkout [https://developers.google.com/drive/api/guides/appdata][30].
 
 ## startServer
 
@@ -47,13 +62,12 @@ At the end of the file, we call this function and listen to port 1404.
 
 ## getContent
 
-This function retrieves the gjs JSON content, which forms our website page, from Google's Drive \[appDataFolder].
-With our fileID, we can easily retrieve file and return its content.
+This function retrieves the gjs JSON content, which forms our website page, from Google's Drive (appDataFolder).
 
 ### Parameters
 
-*   `Id` **[number][16]** FileId
-*   `accessToken` **[string][17]** Oauth Access Token
+*   `Id` **[number][31]** FileId
+*   `accessToken` **[string][32]** Oauth Access Token
 
 ## Clientdeploy
 
@@ -64,7 +78,7 @@ We also call uploadFrom() with params readablestream and file name.
 
 ### Parameters
 
-*   `pname` **[string][17]** Project name
+*   `pname` **[string][32]** Project name
 *   `page` **callback** gjs page data.
 
 ## createSub
@@ -74,7 +88,7 @@ This function creates a subdomain for our user in our Namecheap shared hosting a
 
 ### Parameters
 
-*   `name` **[string][17]** Subdomain name
+*   `name` **[string][32]** Subdomain name
 
 ## listFiles
 
@@ -82,7 +96,7 @@ This function lists all projects created with Peppubuild, from Google's Drive (a
 
 ### Parameters
 
-*   `accessToken` **[string][17]** Oauth Access Token
+*   `accessToken` **[string][32]** Oauth Access Token
 
 ## Logout
 
@@ -91,7 +105,7 @@ This route deletes the cookie pepputoken, which contains our Oauth.
 
 ### Parameters
 
-*   `pepputoken` **[string][17]** res.clearCookie
+*   `pepputoken` **[string][32]** res.clearCookie
 
 ## Login
 
@@ -101,7 +115,78 @@ Next, it stores the cookie pepputoken, which contains our Oauth.
 
 ### Parameters
 
-*   `providerToken` **[string][17]** Oauth token
+*   `providerToken` **[string][32]** Oauth token
+
+## createFrontend
+
+Create File to store application's data on Google Drive (appDataFolder).
+
+### Parameters
+
+*   `projectName` **[string][32]** Project Name
+*   `accessToken` **[string][32]** Oauth AccessToken
+
+## updateDB
+
+Update the project file created on Google Drive (appDataFolder), with gjs JSON.
+
+### Parameters
+
+*   `project` &#x20;
+*   `Id` **[string][32]** FileId
+*   `accessToken` **[string][32]** Oauth AccessToken
+*   `projectName` **[string][32]** Project Name
+
+## deleteContent
+
+Function to delete file and the content of the project.
+
+### Parameters
+
+*   `Id` **[string][32]** FileId
+*   `accessToken` **[string][32]** Oauth AccessToken
+*   `projectName` **[string][32]** Project Name
+
+### Delete\_Project
+
+app.post('/pdelete/:id', (req, res) => {})
+Route to delete project from Google Drive.
+
+#### Parameters
+
+*   `Id` **[string][32]** File Id
+
+## Retrieve\_Project
+
+app.post('/project/:id', (req, res) => {})
+Route to retrieve the data of a single project. Useful route for loading editor with pre-saved project.
+
+### Parameters
+
+*   `Id` **[string][32]** File Id
+
+## Delete\_Project
+
+app.post('/pdelete/:id', (req, res) => {})
+Route to retrieve all of the projects from Drive.
+
+### Parameters
+
+*   `token` **[string][32]** Oauth Token
+
+## Save\_Project
+
+app.put('/save/:id', (req, res) => {})
+Route to save changes to corresponding file on Drive.
+
+### Parameters
+
+*   `token` **[string][32]** Oauth Token
+
+## Publish\_Project
+
+app.post('/publishfront/:name', (req, res) => {})
+Route to publish file to Namescheap
 
 [1]: #
 
@@ -131,8 +216,38 @@ Next, it stores the cookie pepputoken, which contains our Oauth.
 
 [14]: #parameters-5
 
-[15]: https://developers.google.com/drive/api/guides/appdata
+[15]: #createfrontend
 
-[16]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[16]: #parameters-6
 
-[17]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[17]: #updatedb
+
+[18]: #parameters-7
+
+[19]: #deletecontent
+
+[20]: #parameters-8
+
+[21]: #delete_project
+
+[22]: #parameters-9
+
+[23]: #retrieve_project
+
+[24]: #parameters-10
+
+[25]: #delete_project-1
+
+[26]: #parameters-11
+
+[27]: #save_project
+
+[28]: #parameters-12
+
+[29]: #publish_project
+
+[30]: https://developers.google.com/drive/api/guides/appdata
+
+[31]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+
+[32]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
