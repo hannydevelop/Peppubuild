@@ -62,6 +62,11 @@
 import grapesjs from 'grapesjs'
 
 export default {
+  /**
+    * This is the editor page.
+    * It calls our empty editor or load data from gjs.
+    * Onmounted(), we load our editor.
+  */
     mounted() {
         // initialize grapesjs
         const editor = grapesjs.init({

@@ -1,24 +1,25 @@
 
 <template>
-        <div class="background">
-    <div id="i9x1">
-    <h1>Login or Sign into your account with your Google profile.</h1>
-    </div>
-    <div class="main__container">
-      <div class="wrapper">
-        <div class="form-wrapper sign-in">
-        <div class="start">
-          <div class="google-btn google-bk" @click="googleLogin()">
-            <div class="google-icon-wrapper">
-              <img class="google-icon" src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg" />
+    <div class="background">
+        <div id="i9x1">
+            <h1>Login or Sign into your account with your Google profile.</h1>
+        </div>
+        <div class="main__container">
+            <div class="wrapper">
+                <div class="form-wrapper sign-in">
+                    <div class="start">
+                        <div class="google-btn google-bk" @click="googleLogin()">
+                            <div class="google-icon-wrapper">
+                                <img class="google-icon"
+                                    src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg" />
+                            </div>
+                            <p class="btn-text"><b>Sign in with Google</b></p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <p class="btn-text"><b>Sign in with Google</b></p>
-          </div>
         </div>
-        </div>
-      </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -34,17 +35,16 @@ import {
 import swal from 'sweetalert';
 
 export default {
-  name: 'AuthPage',
-  /** 
-   * This is a test
-  */
-  methods: {
-        // callActive method to switch to signup or signin form
-        callActive() {
-            const wrapper = document.querySelector('.wrapper');
-            wrapper.classList.toggle('active');
-        },
-        // createuser method to create new user with email and password.
+    /**
+     * This is the authentication page.
+     * It calls routes for login, logout, and registration.
+    */
+    name: 'AuthPage',
+    methods: {
+        /**
+         * This function is redundant.
+         * It allows new users create an account with email and password.
+        */
         createUser() {
             createUserWithEmailAndPassword(userAuth, this.email, this.password)
                 .then((userCredential) => {
@@ -69,7 +69,10 @@ export default {
                     swal("Oops!", `Registration error: ${errorMessage}`, "error");
                 });
         },
-        // logUser method to sign in already registered user with email and password.
+        /**
+         * This function is redundant.
+         * It allows users login their account with email and password.
+        */
         logUser() {
             signInWithEmailAndPassword(userAuth, this.lemail, this.lpassword)
                 .then((userCredential) => {
@@ -82,7 +85,11 @@ export default {
                     swal("Oops!", `Login error: ${errorMessage}`, "error");
                 });
         },
-        // providerLogin to perform authentication with Github and Google
+        /**
+         * A utility function, to manage GitHub, Facebook, and other providers login.
+         * This function uses signInWithPopup, to retrieve credential after login.
+         * We store credential and user data in localStorage().
+        */
         providerLogin(authProvider, provider) {
             signInWithPopup(userAuth, provider)
                 .then((result) => {
@@ -109,16 +116,27 @@ export default {
                 });
         },
         // Google Authentication
+        /**
+         * This function contains the scope and  for googleLogin()
+        */
         googleLogin() {
             const provider = new GoogleAuthProvider();
             provider.addScope('https://www.googleapis.com/auth/drive.appdata')
             this.providerLogin(GoogleAuthProvider, provider);
         },
         // Github Authentication
+        /**
+         * Function isn't in use currently.
+         * This function contains the scope for googleLogin()
+        */
         githubLogin() {
             const provider = new GithubAuthProvider();
             this.providerLogin(GithubAuthProvider, provider);
         },
+         /**
+         * Call verify to manage tokens after login.
+         * Store tokens and manage expiration.
+        */
         callVerify(token) {
             let storecookie = new Promise((resolve, reject) => {
                 if (token) {

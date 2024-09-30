@@ -87,6 +87,10 @@
 </template>
 
 <script>
+/**
+  * This is the Dashbord page.
+  * It calls routes in our server-side 'server.js'.
+*/
 import { userAuth } from './js/firebase.js';
 import Swal from 'sweetalert2'
 import SideBar from '../components/SideBar.vue';
@@ -96,6 +100,10 @@ export default {
   name: 'DashboardPage',
   components: { SideBar },
 
+  /**
+    * On mounted, we call route /projects/:accessToken.
+    * This returns and displays all projects.
+  */
   async mounted() {
     let accessToken = localStorage.getItem('oauth')
     let url = `${serverUrl}/projects/${accessToken}`
@@ -117,7 +125,9 @@ export default {
   },
 
   methods: {
-    // check state to see if auth changed.
+  /**
+    * We call checkState(), to ensure user is still logged in.
+  */
     checkState() {
       return new Promise((resolve, reject) => {
         userAuth.onAuthStateChanged((user) => {
@@ -130,18 +140,9 @@ export default {
         })
       })
     },
-    showSide() {
-      var x = document.getElementById("dedee");
-      var y = document.getElementById("d-cont");
-      if (x.style.display === "none") {
-        x.style.display = "block";
-        y.style.marginLeft = "225px";
-      } else {
-        x.style.display = "none";
-        y.style.width = "100%";
-        y.style.marginLeft = "0%";
-      }
-    },
+  /**
+    * The projectWorkspace() function, loads our editor with the current project.
+  */
     async projectWorkspace(id, name) {
       // get content.
       // set the value of gjsProject.
@@ -165,7 +166,9 @@ export default {
         })
       })
     },
-    // Delete project
+  /**
+    * The deleteProject() function, takes the id of the project, calls /pdelete/:id and deletes it..
+  */
     async deleteProject(id) {
       let accessToken = localStorage.getItem('oauth')
       let url = `${serverUrl}/pdelete/${id}`
@@ -188,6 +191,9 @@ export default {
         })
       }
     },
+  /**
+    * The emptyProject() function, allows you to create an empty project.
+  */
     async emptyProject() {
       let name = prompt('What will you like to name your project?');
       if (name) {
@@ -220,6 +226,9 @@ export default {
         })
       }
     },
+  /**
+    * The templateProject() function, allows you to create a project from a template.
+  */
     templateProject() {
       localStorage.removeItem('gjsProject');
       let name = prompt('What will you like to name your project?');
@@ -228,6 +237,9 @@ export default {
         // window.location.href = "/";
       }
     },
+  /**
+    * The aiProject() function, allows you to create a project with AI.
+  */
     aiProject() {
 
     }

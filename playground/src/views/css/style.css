@@ -673,9 +673,10 @@ Grapes
   }
 
   .gjs-cv-canvas {
-    width: 100%;
+    width: 85%;
     height: 100%;
     top: 40px;
+    right: 1000px !important;
   }
 
   .tab-content {

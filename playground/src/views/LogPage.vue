@@ -76,15 +76,15 @@ export default {
       projects: [],
       chartData: {
         labels: ["1 Dec", "8 Dec", "16 Dec", "31 Dec"],
-    datasets: [
-      {
-        label: "Sales Made",
-        data: [3, 7, 4, 5],
-        borderColor: ["#90ee90"],
-        fill: true,
-        backgroundColor: '#F1F2F3'
-      },
-    ],
+        datasets: [
+          {
+            label: "Sales Made",
+            data: [3, 7, 4, 5],
+            borderColor: ["#90ee90"],
+            fill: true,
+            backgroundColor: '#F1F2F3'
+          },
+        ],
       },
       chartOptions: {
         responsive: true
@@ -92,6 +92,11 @@ export default {
     }
   },
   async mounted() {
+  /**
+    * This is the Log page.
+    * It calls routes to display page monitoring.
+    * Onmounted(), we call the graph and project info.
+  */
     let accessToken = localStorage.getItem('oauth')
     let url = `${serverUrl}/projects/${accessToken}`
     await fetch(url, {

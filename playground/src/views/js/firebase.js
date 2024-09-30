@@ -1,3 +1,7 @@
+/**
+ * This file contains our firebase configuration.
+ * If you're self-hosting Peppubuild, add your configurations in a .env file.
+ */
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 
