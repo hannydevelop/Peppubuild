@@ -162,7 +162,7 @@ export default {
         res.json().then((response) => {
           let projectString = JSON.stringify(response);
           localStorage.setItem('gjsProject', projectString);
-          this.$router.push({ name: "Home" });
+          this.$router.push({ name: "Home",  params: { id}});
         })
       })
     },

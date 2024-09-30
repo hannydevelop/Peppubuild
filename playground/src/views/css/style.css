@@ -723,3 +723,19 @@ Grapes
  .black-box {
     margin-top: 30px;
  }
+
+/** Page Not Found **/
+.element {
+    position: fixed;
+    inset: 0px;
+    width: 48rem;
+    height: 20rem;
+    max-width: 100vw;
+    max-height: 100dvh;
+    text-align: center;
+    margin: auto;
+}
+
+.text {
+    padding-top: 30px;
+}
