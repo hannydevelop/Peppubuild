@@ -12,6 +12,8 @@
     "core-js": "^3.8.3",
     "firebase": "^10.13.1",
     "grapesjs": "^0.21.8",
+    "grapesjs-icons": "0.0.4",
+    "grapesjs-rulers": "^1.0.8",
     "sweetalert": "^2.1.2",
     "sweetalert2": "^11.14.0",
     "vue": "^3.2.13",

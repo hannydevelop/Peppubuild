@@ -1,55 +1,59 @@
 <template>
-        <div id="navbar" class="sidenav d-flex flex-column overflow-scroll">
-            <nav class="navbar navbar-light">
-                <div class="container-fluid">
-                    <router-link to="dashboard/projects">
-                        <img src="https://www.peppubuild.com/logo.png" class="navbar-brand mb-0 h3 logo" />
-                    </router-link>
+    <div id="navbar" class="sidenav d-flex flex-column overflow-scroll">
+        <nav class="navbar navbar-light">
+            <div class="container-fluid">
+                <router-link to="dashboard/projects">
+                    <img src="https://www.peppubuild.com/logo.png" class="navbar-brand mb-0 h3 logo" />
+                </router-link>
+            </div>
+        </nav>
+        <div style="display: none">
+            <div class="gjs-logo-cont" @click="popen()">
+                <svg class="gjs-logo" width="24px" height="24px" viewBox="0 0 24 24" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 14H12M12 14H14M12 14V16M12 14V12" stroke="#1C274C" stroke-width="1.5"
+                        stroke-linecap="round" />
+                    <path
+                        d="M22 11.7979C22 9.16554 22 7.84935 21.2305 6.99383C21.1598 6.91514 21.0849 6.84024 21.0062 6.76946C20.1506 6 18.8345 6 16.2021 6H15.8284C14.6747 6 14.0979 6 13.5604 5.84678C13.2651 5.7626 12.9804 5.64471 12.7121 5.49543C12.2237 5.22367 11.8158 4.81578 11 4L10.4497 3.44975C10.1763 3.17633 10.0396 3.03961 9.89594 2.92051C9.27652 2.40704 8.51665 2.09229 7.71557 2.01738C7.52976 2 7.33642 2 6.94975 2C6.06722 2 5.62595 2 5.25839 2.06935C3.64031 2.37464 2.37464 3.64031 2.06935 5.25839C2 5.62595 2 6.06722 2 6.94975M21.9913 16C21.9554 18.4796 21.7715 19.8853 20.8284 20.8284C19.6569 22 17.7712 22 14 22H10C6.22876 22 4.34315 22 3.17157 20.8284C2 19.6569 2 17.7712 2 14V11"
+                        stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+                <div class="gjs-logo-version"></div>
+            </div>
+        </div>
+        <div class="">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="style-tab" data-bs-toggle="tab" data-bs-target="#style" type="button"
+                        role="tab" aria-controls="style" aria-selected="false">
+                        Properties
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="trait-tab" data-bs-toggle="tab" data-bs-target="#trait" type="button"
+                        role="tab" aria-controls="trait" aria-selected="false">
+                        Layers
+                    </button>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="style" role="tabpanel" aria-labelledby="style-tab">
+                    <div id="properties-container"></div>
                 </div>
-            </nav>
-            <div class="">
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#block"
-                            type="button" role="tab" aria-controls="block" aria-selected="true">
-                            <i class="bi bi-grid-fill"></i>
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="trait-tab" data-bs-toggle="tab" data-bs-target="#trait" type="button"
-                            role="tab" aria-controls="trait" aria-selected="false">
-                            <i class="bi bi-layers-fill"></i>
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="style-tab" data-bs-toggle="tab" data-bs-target="#style" type="button"
-                            role="tab" aria-controls="style" aria-selected="false">
-                            <i class="bi bi-palette-fill"></i>
-                        </button>
-                    </li>
-                </ul>
-                <div class="tab-content">
-                    <div class="tab-pane fade show active" id="block" role="tabpanel" aria-labelledby="block-tab">
-                        <div id="blocks"></div>
-                    </div>
-                    <div class="tab-pane fade" id="trait" role="tabpanel" aria-labelledby="trait-tab">
-                        <div id="layers-containe"></div>
-                    </div>
-                    <div class="tab-pane fade" id="style" role="tabpanel" aria-labelledby="style-tab">
-                        <div id="styles-container"></div>
-                    </div>
+                <div class="tab-pane fade" id="trait" role="tabpanel" aria-labelledby="trait-tab">
+                    <div id="layers-containe"></div>
                 </div>
             </div>
         </div>
-        <div class="main-content">
-            <nav class="navbar navbar-light">
-                <div class="container-fluid">
-                    <div class="panel__devices"></div>
-                    <div class="panel__basic-actions"></div>
-                </div>
-            </nav>
-            <div id="editor"></div>
-        </div>
+    </div>
+    <div class="main-content">
+        <nav class="navbar navbar-light">
+            <div class="container-fluid">
+                <div class="panel__devices"></div>
+                <div class="panel__basic-actions"></div>
+            </div>
+        </nav>
+        <div id="editor"></div>
+    </div>
 </template>
 
 <style>
@@ -60,13 +64,29 @@
 
 <script>
 import grapesjs from 'grapesjs'
+import grapesjsIcons from 'grapesjs-icons';
+
+const options = {
+    // see https://icon-sets.iconify.design/
+    collections: [
+        'ri', // Remix Icon by Remix Design
+        'mdi', // Material Design Icons by Pictogrammers
+        'uim', // Unicons Monochrome by Iconscout
+        'streamline-emojis' // Streamline Emojis by Streamline
+    ]
+}
 
 export default {
-  /**
-    * This is the editor page.
-    * It calls our empty editor or load data from gjs.
-    * Onmounted(), we load our editor.
-  */
+    /**
+      * This is the editor page.
+      * It calls our empty editor or load data from gjs.
+      * Onmounted(), we load our editor.
+    */
+    data() {
+        return {
+            edit: ""
+        }
+    },
     mounted() {
         // initialize grapesjs
         const editor = grapesjs.init({
@@ -84,18 +104,16 @@ export default {
                     }
                 ]
             },
-            blockManager: {
-                appendTo: "#blocks",
-            },
-
             layerManager: {
                 appendTo: "#layers-containe",
+            },
+            traitManager: {
+                appendTo: "#properties-container"
             },
             panels: {
 
             },
             styleManager: {
-                appendTo: "#styles-container",
                 sectors: [{
                     name: 'General',
                     open: false,
@@ -283,11 +301,15 @@ export default {
                 ],
             },
             // Add peppu and other plugins.
-            plugins: ['peppu-sidebar', 'peppu-bootstrap', 'peppu-panel', "gjs-blocks-basic", "grapesjs-plugin-forms", 'grapesjs-style-bg', 'grapesjs-touch'],
+            plugins: ['peppu-sidebar', 'peppu-bootstrap', 'peppu-panel', "gjs-blocks-basic", "grapesjs-plugin-forms", 'grapesjs-style-bg', 'grapesjs-touch', grapesjsIcons, 'grapesjs-rulers'],
             pluginsOpts: {
                 'peppu-sidebar': { /* Test here your options  */ },
                 'peppu-bootstrap': {},
                 'gjs-blocks-basic': { flexGrid: true },
+                [grapesjsIcons]: options,
+                'grapesjs-rulers': {
+                    dragMode: 'absolute'
+                }
             },
             canvas: {
                 styles: [
@@ -298,195 +320,42 @@ export default {
                 ],
             }
         });
+        var logoCont = document.querySelector('.gjs-logo-cont');
+        document.querySelector('.gjs-logo-version').innerHTML = 'Pages';
+        var logoPanel = document.querySelector('.gjs-pn-commands');
+        logoPanel.appendChild(logoCont);
         var panelManager = editor.Panels;
         // get the buttons
         panelManager.getButton("views", "open-sm");
+        panelManager.getButton("views", "open-tm");
         panelManager.getButton("views", "open-layers");
-        panelManager.getButton("views", "open-blocks");
+
+        const panelViews = panelManager.addPanel({
+            id: "options"
+        });
+        panelViews.get("buttons").add([{
+            attributes: {
+                title: "Designer Mode"
+            },
+            label: `<svg width="18" viewBox="0 0 16 16"><path d="M0 8a.5.5 0 0 1 .5-.5h15a.5.5 0 0 1 0 1H.5A.5.5 0 0 1 0 8z"/><path d="M4 3h8a1 1 0 0 1 1 1v2.5h1V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v2.5h1V4a1 1 0 0 1 1-1zM3 9.5H2V12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9.5h-1V12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/></svg>`,
+            command: "ruler-visibility",
+            id: "ruler-visibility",
+            active: false
+        }]);
 
         // remove the buttons
-        panelManager.removeButton("views", "open-layers");
-        panelManager.removeButton("views", "open-blocks");
-        const mdl = editor.Modal;
-        editor.on('load', () => {
-            mdl.open({
-                title: 'Quickstart',
-                content: `
-                <div class="container" style="background-color: black;">
-                  The 'View Code' icon contains the HTML and CSS code added to the editor.<br>
-                  To get started, you need to install VSCode and create a HTML/CSS file.<br>
-                  In the HTML file, you can start with a scaffold by typing '!' and hitting enter.<br>
-                  For bootstrap components, add the Bootstrap CSS and HTML.<br>
-      
-                  <div class="mb-3">
-                      <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-                      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">"></textarea>
-                  </div>
-                  Always start with the basic blocks if you're just starting out.<br>
-                  Remember that you can change the style of any component in the editor from the style panel.
-                </div>`,
-            })
-        })
-        editor.on('block:drag:stop', (component) => {
-            if (component.attributes.type == 'B-NAVBAR') {
-                mdl.open({
-                    title: 'This is a Navigation Bar',
-                    content: `
-                    <div class="container" style="background-color: black;">
-                    You just dropped a navigation bar.<br> Navigation bars are usually a list of links, 
-                    useful to aid visitors to access information faster.<br> This navigation bar is built with Bootstrap, to create
-                    yours, check the 'View code' component and add the HTML code into your HTML file.
-                    For more information, checkout the Bootstap navigation page: 
-                    https://getbootstrap.com/docs/5.3/components/navbar
-                    </div>
-                `,
-                })
+        panelManager.removeButton("views", "open-layers"); 
+        panelManager.removeButton("views", "open-tm");         
+        this.edit = editor;
+    },
+    methods: {
+        popen() {
+            if (this.edit.Commands.isActive('peppu:open')) {
+                this.edit.Commands.stop('peppu:open'); 
+            } else {
+                this.edit.Commands.run('peppu:open'); 
             }
-            else if (component.attributes.type == 'B-ACCORDION') {
-                mdl.open({
-                    title: 'This is an Accordion',
-                    content: `
-                    <div class="container" style="background-color: black;">
-                    You just dropped an accordion.<br> Accordions are menus that have headers stacked together. They reveal more details when you click on them. This accordion is built with Bootstrap, to create
-                    yours, check the 'View code' component and add the HTML code into your HTML file.
-                    For more information, checkout the Bootstap accordion page:
-                    https://getbootstrap.com/docs/5.3/components/accordion/
-                    </div>
-                `,
-                })
-            } else if (component.attributes.type == 'B-CARD') {
-                mdl.open({
-                    title: 'This is a Card',
-                    content: `
-                    <div class="container" style="background-color: black;">
-                    You just dropped a card.<br> Cards are containers that group related information in flexible-size containers
-                    visually resembling playing cards.<br> This card is built with Bootstrap, to create
-                    yours, check the 'View code' component and add the HTML code into your HTML file.
-                    For more information, checkout the Bootstap card page:
-                    https://getbootstrap.com/docs/5.3/components/cards
-                    </div>
-                `,
-                })
-            } else if (component.attributes.type == 'B-FOOTER') {
-                mdl.open({
-                    title: 'This is a Footer',
-                    content: `
-                    <div class="container" style="background-color: black;">
-                    You just dropped a footer.<br> Footers are website components that hold important information about
-                    your website. They are mostly fixed at the bottom of the website. This footer is built with Bootstrap, to create
-                    yours, check the 'View code' component and add the HTML code into your HTML file.
-                    For more information, checkout the Bootstap footer page:
-                    https://getbootstrap.com/docs/5.2/examples/footers/
-                    </div>
-                `,
-                })
-            } else if (component.attributes.type == 'B-PRICING') {
-                mdl.open({
-                    title: 'This is a Pricing',
-                    content: `
-                    <div class="container" style="background-color: black;">
-                    You just dropped a pricing component.<br> This component has all the elements you need for creating the different
-                    pricing models. If you have used any subscription model for the web and have seen the 
-                    pricing page, this is exactly what this component does. This component is built with Bootstrap, to create
-                    yours, check the 'View code' component and add the HTML code into your HTML file.:
-                    For more information, checkout the Bootstap pricing page:
-                    https://getbootstrap.com/docs/5.2/examples/pricing
-                    </div>
-                `,
-                })
-            } else if (component.attributes.type == 'B-FEATURES') {
-                mdl.open({
-                    title: 'This is a Feature',
-                    content: `
-                    <div class="container" style="background-color: black;">
-                    You just dropped a feature component.<br> If you have ever wondered how to show-off the great
-                    features of your product, consider using this component.<br> This component is built with Bootstrap, to create
-                    yours, check the 'View code' component and add the HTML code into your HTML file.
-                    For more information, checkout the Bootstap features page:
-                    https://getbootstrap.com/docs/5.2/examples/features
-                    </div>
-                `,
-                })
-            } else if (component.attributes.type == 'B-HERO') {
-                mdl.open({
-                    title: 'This is Hero',
-                    content: `
-                    <div class="container" style="background-color: black;">
-                    You just dropped a Hero component.<br> This is the first thing the visitor sees when they visit your website.
-                    The goal is to capture the attention of the visitor. This Hero is built with Bootstrap, to create
-                    yours, check the 'View code' component and add the HTML code into your HTML file.
-                    For more information, checkout the Bootstap hero page:
-                    https://getbootstrap.com/docs/5.2/examples/hero/
-                    </div>
-                `,
-                })
-            } else if (component.attributes.type == 'B-BUTTON') {
-                mdl.open({
-                    title: 'This is a Button',
-                    content: `
-                    <div class="container" style="background-color: black;">
-                    You just dropped a button. Buttons are interractive elements that communicate actions that users can take.
-                    They mostly perform actions when users click on them. This button is built with Bootstrap, to create
-                    yours, check the 'View code' component and add the HTML code into your HTML file.
-                    For more information, checkout the Bootstap button page:
-                    
-                    </div>
-                `,
-                })
-            } else if (component.attributes.type == 'B-CAROUSEL') {
-                mdl.open({
-                    title: 'This is an Carousel',
-                    content: `
-                    <div class="container" style="background-color: black;">
-                    You just dropped a carousel.<br> Carousels can also be called slideshows or galleries.
-                    They allow you display text, images, and even video in one interractive sliding block. This carousel is built with Bootstrap, to create
-                    yours, check the 'View code' component and add the HTML code into your HTML file.
-                    For more information, checkout the Bootstap carousel page:
-                    </div>
-                `,
-                })
-            } else if (component.attributes.type == 'text') {
-                mdl.open({
-                    title: 'This is a text',
-                    content: `
-                    <div class="container" style="background-color: black;">
-                    This is a text. Texts can be added into divs or 'p' tags. To create
-                    yours, check the 'View code' component and add the HTML code into your HTML file.
-                    </div>
-                `,
-                })
-            } else if (component.attributes.name == 'Row') {
-                mdl.open({
-                    title: 'This is a Div',
-                    content: `
-                    <div class="container" style="background-color: black;">
-                    This is a Div tag. Div tags are mostly used as building blocks to create components. To create
-                    yours, check the 'View code' component and add the HTML code into your HTML file.
-                    </div>
-                `,
-                })
-            } else if (component.attributes.type == 'link') {
-                mdl.open({
-                    title: 'This is a Link',
-                    content: `
-                    <div class="container" style="background-color: black;">
-                    This is a Link. Links can be added to texts or buttons and come with an 'a' tag. To create
-                    yours, check the 'View code' component and add the HTML code into your HTML file.
-                    </div>
-                `,
-                })
-            } else if (component.attributes.type == 'image') {
-                mdl.open({
-                    title: 'This is an Image',
-                    content: `
-                    <div class="container" style="background-color: black;">
-                    This is an Image (img tag). Image tags are mostly used to display images. To create
-                    yours, check the 'View code' component and add the HTML code into your HTML file.
-                    </div>
-                `,
-                })
-            }
-        });
+        }
     }
 }
 

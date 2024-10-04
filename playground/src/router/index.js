@@ -65,7 +65,6 @@ function getCookie(name) {
   // guard routes
 router.beforeEach(async (to, from, next) => {
     let isAuthenticated = getCookie('pepputoken')
-    console.log(isAuthenticated)
     if (to.name !== 'Auth' && !isAuthenticated) next({ name: 'Auth' })
     else next()
 })

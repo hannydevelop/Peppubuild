@@ -48,7 +48,7 @@
                       <div class="card-body">
                         <h2 class="card-title">{{ project.name.split('.').slice(0, -1).join('.') }}</h2>
                         <div class="card-footer">
-                          <button @click="deleteProject(project.id)" class="btn btn-danger">Delete</button>
+                          <button @click="deleteProject(project.id)" class="btn btn-danger space">Delete</button>
                           <button @click="projectWorkspace(project.id, project.name)"
                             class="btn btn-primary">Continue</button>
                         </div>
@@ -58,7 +58,34 @@
                 </div>
               </div>
             </div>
+            <!-- Modal for choosing template-->
             <!-- Modal -->
+            <div class="modal fade" id="templateModal" tabindex="-1" aria-labelledby="templateModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="templateModalLabel">Recommended for you</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="container-fluid">
+                      <div class="row">
+                        <div class="col-md-4" @click="templateProject('photography')" data-bs-dismiss="modal">
+                          <img src="../views/img/photography.png" style="height: 100px;width: 100px;"/>
+                          Photography
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Modal for creating project-->
 
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
               aria-hidden="true">
@@ -73,7 +100,8 @@
                   <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="emptyProject()">Empty
                       Workspace</button>
-                    <button type="button" class="btn btn-dark" @click="templateProject()">Build with Template</button>
+                    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-dismiss="modal"
+                      data-bs-target="#templateModal">Build with Template</button>
                     <button type="button" class="btn btn-success" @click="aiProject()">Build with AI</button>
                   </div>
                 </div>
@@ -94,6 +122,7 @@
 import { userAuth } from './js/firebase.js';
 import Swal from 'sweetalert2'
 import SideBar from '../components/SideBar.vue';
+import templatesData from '../assets/templates.json'
 
 const serverUrl = 'https://server.peppubuild.com';
 export default {
@@ -120,14 +149,15 @@ export default {
   },
   data() {
     return {
-      projects: []
+      projects: [],
+      templates: templatesData
     };
   },
 
   methods: {
-  /**
-    * We call checkState(), to ensure user is still logged in.
-  */
+    /**
+      * We call checkState(), to ensure user is still logged in.
+    */
     checkState() {
       return new Promise((resolve, reject) => {
         userAuth.onAuthStateChanged((user) => {
@@ -140,9 +170,9 @@ export default {
         })
       })
     },
-  /**
-    * The projectWorkspace() function, loads our editor with the current project.
-  */
+    /**
+      * The projectWorkspace() function, loads our editor with the current project.
+    */
     async projectWorkspace(id, name) {
       // get content.
       // set the value of gjsProject.
@@ -162,13 +192,13 @@ export default {
         res.json().then((response) => {
           let projectString = JSON.stringify(response);
           localStorage.setItem('gjsProject', projectString);
-          this.$router.push({ name: "Home",  params: { id}});
+          this.$router.push({ name: "Home", params: { id } });
         })
       })
     },
-  /**
-    * The deleteProject() function, takes the id of the project, calls /pdelete/:id and deletes it..
-  */
+    /**
+      * The deleteProject() function, takes the id of the project, calls /pdelete/:id and deletes it..
+    */
     async deleteProject(id) {
       let accessToken = localStorage.getItem('oauth')
       let url = `${serverUrl}/pdelete/${id}`
@@ -191,9 +221,9 @@ export default {
         })
       }
     },
-  /**
-    * The emptyProject() function, allows you to create an empty project.
-  */
+    /**
+      * The emptyProject() function, allows you to create an empty project.
+    */
     async emptyProject() {
       let name = prompt('What will you like to name your project?');
       if (name) {
@@ -212,8 +242,9 @@ export default {
           res.json().then((response) => {
             if (res.status == 200) {
               Swal.close();
-              localStorage.setItem('projectId', response.id);
-              this.$router.push({ name: "Home" })
+              let id = response.id
+              localStorage.setItem('projectId', id);
+              localStorage.setItem('gjsProject', `{}`)
             } else {
               Swal.fire({
                 icon: "error",
@@ -226,22 +257,47 @@ export default {
         })
       }
     },
-  /**
-    * The templateProject() function, allows you to create a project from a template.
-  */
-    templateProject() {
-      localStorage.removeItem('gjsProject');
+    /**
+      * The templateProject() function, allows you to create a project from a template.
+    */
+    async templateProject(id) {
       let name = prompt('What will you like to name your project?');
       if (name) {
         localStorage.setItem('projectName', name);
-        // window.location.href = "/";
+        let gjsProject = this.templates[id];
+        let accessToken = localStorage.getItem('oauth')
+        let url = `${serverUrl}/publishfront/${name}`
+        Swal.showLoading();
+        await fetch(url, {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ gjsProject: gjsProject, accessToken: accessToken }),
+        }).then((res) => {
+          res.json().then((response) => {
+            if (res.status == 200) {
+              Swal.close();
+              localStorage.setItem('projectId', response.id);
+              localStorage.setItem('gjsProject', JSON.stringify(gjsProject))
+              this.$router.push({ name: "Home", params: { id: response.id } });
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: response.error,
+                footer: '<a href="https://www.docs.peppubuild.com">Why do I have this issue?</a>'
+              });
+            }
+          })
+        })
       }
     },
-  /**
-    * The aiProject() function, allows you to create a project with AI.
-  */
+    /**
+      * The aiProject() function, allows you to create a project with AI.
+    */
     aiProject() {
-
+      alert('coming soon!')
     }
   }
 }

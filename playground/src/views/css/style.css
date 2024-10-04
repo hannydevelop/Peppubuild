@@ -675,8 +675,7 @@ Grapes
   .gjs-cv-canvas {
     width: 85%;
     height: 100%;
-    top: 40px;
-    right: 1000px !important;
+    top: 55px;
   }
 
   .tab-content {
@@ -738,4 +737,8 @@ Grapes
 
 .text {
     padding-top: 30px;
+}
+
+.space {
+    margin-right: 10px;
 }
