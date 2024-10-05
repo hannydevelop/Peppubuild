@@ -89,6 +89,9 @@ export default {
     },
     mounted() {
         // initialize grapesjs
+        if (window.innerWidth <= '1050'){
+            alert ('Screen too small for Peppubuild, please use a larger screen.')
+        }
         const editor = grapesjs.init({
             container: '#editor',
             height: '100vh',
