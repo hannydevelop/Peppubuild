@@ -31,6 +31,7 @@ import {
     signInWithPopup,
     GoogleAuthProvider,
     GithubAuthProvider,
+    fetchSignInMethodsForEmail
 } from 'firebase/auth';
 import swal from 'sweetalert';
 
@@ -90,6 +91,16 @@ export default {
          * This function uses signInWithPopup, to retrieve credential after login.
          * We store credential and user data in localStorage().
         */
+       async sendEmail(email, token) {
+        let userSignInMethods = await fetchSignInMethodsForEmail(userAuth, email)
+        if (userSignInMethods.length > 0) {
+            this.sendWelcome(email);
+            this.callVerify(token);
+        } else {
+            // call verify
+            this.callVerify(token);
+        }
+       },
         providerLogin(authProvider, provider) {
             signInWithPopup(userAuth, provider)
                 .then((result) => {
@@ -102,7 +113,7 @@ export default {
                     // const user = result.user;
                     // IdP data available using getAdditionalUserInfo(result)
                     // ...
-                    this.callVerify(token)
+                    this.sendEmail(result.user.email, token)
                 }).catch((error) => {
                     // Handle Errors here.
                     // const errorCode = error.code;
@@ -133,10 +144,10 @@ export default {
             const provider = new GithubAuthProvider();
             this.providerLogin(GithubAuthProvider, provider);
         },
-         /**
-         * Call verify to manage tokens after login.
-         * Store tokens and manage expiration.
-        */
+        /**
+        * Call verify to manage tokens after login.
+        * Store tokens and manage expiration.
+       */
         callVerify(token) {
             let storecookie = new Promise((resolve, reject) => {
                 if (token) {
@@ -156,6 +167,21 @@ export default {
                 }).catch((error) => {
                     swal("Oops!", `Login verification error: ${error}`, "error");
                 })
+        },
+        sendWelcome(userEmail) {
+            const form = new FormData();
+            form.append('from', 'Ugochi from Peppubuild');
+            form.append('to', userEmail);
+            form.append('subject', 'Welcome to Peppubuild');
+            form.append('template', 'welcome');
+
+            fetch('https://api.mailgun.net/v3/peppubuild.com/messages', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Basic ' + btoa(`api:${process.env.VUE_APP_MAILGUN_API_KEY}`)
+                },
+                body: form
+            });
         }
     }
 }
