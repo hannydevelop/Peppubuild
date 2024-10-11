@@ -170,7 +170,7 @@ export default {
         },
         sendWelcome(userEmail) {
             const form = new FormData();
-            form.append('from', 'Ugochi from Peppubuild');
+            form.append('from', 'Ugo from Peppubuild <ugochi.ukpai@peppubuild.com>');
             form.append('to', userEmail);
             form.append('subject', 'Welcome to Peppubuild');
             form.append('template', 'welcome');
