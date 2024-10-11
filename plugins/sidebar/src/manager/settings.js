@@ -36,6 +36,16 @@ export default class SettingsApp extends UI {
         });
     }
 
+    renameProject(fileName, newName) {
+        let data = fetch(`${editor.I18n.t('peppu-sidebar.project.url')}/prename/${fileName}/${newName}`, {
+            method: "POST", // or 'PUT'
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        return data;
+    }
+
     handleSave(e) {
         const { $el, editor } = this;
         const { tab } = this.state;
@@ -43,6 +53,7 @@ export default class SettingsApp extends UI {
         const name = $el?.find('input.name').val().trim();
         id && editor.PagesApp.editPage(id, name);
         editor.Modal.close();
+        this.renameProject(id, name);
     }
 
     handleThumbnail(e) {

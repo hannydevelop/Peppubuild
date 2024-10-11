@@ -1,23 +1,18 @@
 # Peppubuild
 
-Original             |  Built with Peppubuild
-:-------------------------:|:-------------------------:
-![Haaa](./example/twitter-login.png)  |  ![mm](./example/built-with-peppu.png)
+<div align="center">
+<img src=https://peppubuild.com/logo.png style="width:200px; height=10px">
+</div>
+<h1 align="center">
+Open source no-code web builder. Own your artifacts, no vendor lock-in.
+</h1>
+<h3 align="center">
+We're building something different, the ultimate visual builder for any web application. Plug your own backend into Peppubuild.
+</h3>
 
-Hey, it's still 2023! If you're reading this that means you're interested in what I and some friends are cooking with Peppubuild. The goal of this project is to empower `citizen developers` to create web applications with ease, while also giving `professional developers` the flexibility and speed they need for creating an application. Simply put, anyone can build a web based application and get them running in no time with Peppubuild. 
+If you're reading this that means you're interested in what I and some friends are building with Peppubuild. The goal of this project is to empower `citizen developers` to create web applications with ease, while also giving `professional developers` the flexibility and speed they need for creating an application. Simply put, anyone can build a web based application and get them running in no time with Peppubuild. 
 
 Teams can now build a functional MVP faster, utilising the already available team members. While this looks like a lot of promises, you can checkout the video below to see what a `citizen developer` can build with Peppubuild + Openai.
-
-### Video
-
-If this doesn't blow your mind, you can checkout the video below to see what a `professional developer` can build with Peppubuild using our drag-and-drop feature.
-
-
-https://github.com/hannydevelop/Peppubuild/assets/62933980/d87be2e0-9a52-4321-a77b-737b57a57e11
-
-
-
-Well, we're still in the works for a no-code backend, checkout the [where are we? section](#where-are-we).
 
 ## 🎁 Why Peppubuild?
 
@@ -34,18 +29,10 @@ Here's what Peppubuild offers.
 | Deploy project to any platform of your choice. | Deploy project to tool's platform of choice only. |
 | Flexibility, you have full control of your project, no vendor locked-in. | Deploy project to tool's platform of choice only, posibility of vendor locked-in. |
 
-## 🪜 Structure
+## 🪜 Contributing
 
-This repository contains the NodeJs code for Peppubuild (backend). The desktop application can be found [here](https://github.com/hannydevelop/peppubuild-desktop), you can read the [instructions](https://github.com/hannydevelop/peppubuild-desktop#instructions) and download the package that suits you. The desktop application and plugins are added as a git submodule in the codebase so they're pretty easy to find.
-
-## ✅ Where are we?
-
-- Dec 16 - You can now build a website with HTML and CSS, extract your code and deploy them wherever you like. Checkout this [example](./example/Create_without_AI.md).
-
-- Dec 18 - You can now instruct AI to create a website for you, using the screenshot of your choice. Checkout this [example](./example/Create_with_AI.md) to see how to setup and create your website.
-
-- Dec 20 - You can now receive prompts to update your Peppubuild desktop application whenever there's a new version release.
+Checkout the guide from [contribution.md](./Contribution.md) to contribute.
 
 ## ✨ Quick Start
 
-Please checkout the [Instructions](https://github.com/hannydevelop/peppubuild-desktop#instructions) version of the desktop repository on how to setup and start using Peppubuild. If you need more help, try the [documentation guide](https://docs.peppubuild.com).
+Try out Peppubuild at [peppubuild](https://app.peppubuild.com). If you need more help, try the [documentation guide](https://docs.peppubuild.com).

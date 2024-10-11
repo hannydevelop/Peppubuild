@@ -1,80 +1,155 @@
+/** Peppubuild uses Firebase for authentication and Google Drive (appDataFolder) to store user information.
+ * Since we are only accessing (appDataFolder), we can't access the users files in drive, only information we 
+ * have created. For more information, checkout https://developers.google.com/drive/api/guides/appdata.
+*/
 "use strict";
 exports.__esModule = true;
 exports.startServer = void 0;
 
-var express = require('express')
-var cookieParser = require('cookie-parser')
-var bodyParser = require('body-parser')
-var fs = require('fs');
-var low = require('lowdb');
-var FileSync = require('lowdb/adapters/FileSync.js')
-var createProject = require('./utils/project.js')
-var path = require('path')
-var grapesjs = require('grapesjs')
-var replaceInFile = require('replace-in-file')
+// Modules import
+var express = require('express');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var path = require('path');
+var grapesjs = require('grapesjs');
 var os = require('os');
-var fetch = require('node-fetch')
+var fetch = require('node-fetch');
+const { OAuth2Client } = require('google-auth-library');
+const { google } = require('googleapis');
+require('dotenv').config();
+const { Readable } = require('stream');
 var ftp = require("basic-ftp");
 var cors = require('cors')
 
-const CURR_DIR = os.homedir();
-const cpanelDomain = 'https://premium92.web-hosting.com';
-const cpanelUsername = 'ammytzib';
-const root = 'ammyraj.com';
-const cpanelApiKey = '4TVDQGJA9WSP0OSRFLNTRTK0TASDC22W';
-const adapter = new FileSync(path.join(CURR_DIR, 'db.json'));
-const db = low(adapter);
+// ENV constants for Namecheap
+const CURR_DIR = os.tmpdir();
+const cpanelDomain = process.env.CPANEL_DOMAIN;
+const cpanelUsername = process.env.CPANEL_USER;
+const root = 'peppubuild.com';
+const cpanelApiKey = process.env.CPANEL_SECRET_KEY;
 
-const app = express()
+const app = express();
+
+/**
+ * All of our functions are wrapped around the startServer() function.
+ * At the end of the file, we call this function and listen to port 1404.
+*/
 async function startServer() {
-
-  // app.use(express.static(path.join(__dirname, "public")));
-
-  // parse application/x-www-form-urlencoded
   app.use(bodyParser.urlencoded({ extended: false }))
 
+  app.use(cors())
+  app.use(express.json({ limit: '50mb' }))
   // parse application/json
   app.use(bodyParser.json())
 
   app.use(cookieParser())
 
-  app.use(cors())
-
-
-  app.get('/clientdeploy/:name', (req, res) => {
-
-    async function uploadFiles() {
-      const client = new ftp.Client();
-      const projectname = req.params.name;
-
-      try {
-        // Connect to FTP server
-        await client.access({
-          host: "63.250.38.72",
-          user: "ammytzib",
-          password: "My1stbrainchild!",
-        });
-
-        // Set the remote directory (public_html or another directory)
-        await client.cd(projectname);
-
-        // Upload files
-        await client.uploadFromDir(`${CURR_DIR}/${projectname}`);
-
-        console.log("Files uploaded successfully");
-      } catch (error) {
-        console.error("Error:", error);
-      } finally {
-        // Close the FTP connection
-        client.close();
-      }
+/**
+ * This function retrieves the gjs JSON content, which forms our website page, from Google's Drive (appDataFolder).
+ * @module getContent()
+ * With our fileID, we can easily retrieve file and return its content.
+ * @param {number} Id - FileId
+ * @param {string} accessToken - Oauth Access Token
+*/
+  async function getContent(Id, accessToken) {
+    const service = driveAuth(accessToken);
+    try {
+      const file = await service.files.get({
+        fileId: Id,
+        alt: 'media',
+      });
+      let data = JSON.stringify(file.data);
+      let finaldata = JSON.parse(data)
+      return finaldata.gjsProject.project;
+    } catch (err) {
+      // TODO(developer) - Handle error
+      return err;
     }
+  }
 
-    // Run the function
-    uploadFiles();
+/**
+ * app.post('/clientdeploy/:pname', (req, res) => {})
+ * Route serving deploy, to publish project. 
+ * We use FTP server to upload files.
+ * We also call uploadFrom() with params readablestream and file name.
+ * @name Clientdeploy
+ * @function
+ * @param {string} pname - Project name
+ * @param {callback} page - gjs page data.
+*/
+  app.post('/clientdeploy/:pname', (req, res) => {
+    let pname = req.params.pname;
+    let page = req.body.pages;
+    const pages = JSON.parse(page)
+
+      async function uploadFiles() {
+        const client = new ftp.Client();
+        let pathname = path.parse(pname).name;
+        const projectname = `${pathname}.peppubuild.com`;
+  
+        try {
+          // Connect to FTP server
+          await client.access({
+            host: process.env.HOST,
+            user: cpanelUsername,
+            password: process.env.PASSWORD,
+          });
+  
+          // Set the remote directory (public_html or another directory)
+          await client.cd(projectname);
+  
+          // Upload files
+          let editor = grapesjs.init({
+            headless: true, pageManager: {
+              pages: pages.pages
+            }
+          });
+          for (const e of editor.Pages.getAll()) {
+            const name = e.id
+            const component = e.getMainComponent()
+            const html = editor.getHtml({ component });
+            const css = editor.getCss({ component });
+            let htmlContent = `
+              <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Document</title>
+                    <link rel="stylesheet" type="text/css" href="./css/${name}.css">
+                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+                </head>
+                ${html}
+              </html>`
+            // create directory and add files into directory
+            let htmlstreams = Readable.from([htmlContent]);
+            await client.uploadFrom(htmlstreams, `${name}.html`);
+            let cssstreams = Readable.from(css)
+            await client.uploadFrom(cssstreams, `${name}.css`);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        } finally {
+          // Close the FTP connection
+          client.close();
+          res.send('successfully created project')
+        }
+      }
+  
+      // Run the function
+      uploadFiles();
   })
 
-  // set route for logout
+
+
+
+/**
+ * Create Subdomain
+ * This function creates a subdomain for our user in our Namecheap shared hosting account.
+ * @module createSub()
+ * @param {string} name - Subdomain name
+*/
   function createSub(name) {
     const apiUrl = `${cpanelDomain}:2083/cpsess${cpanelApiKey}/execute/SubDomain/addsubdomain?domain=${name}&rootdomain=${root}&dir=${name}.${root}`;
     let data = fetch(apiUrl, {
@@ -85,13 +160,53 @@ async function startServer() {
     return data;
   }
 
-  // set route for logout
+  function driveAuth(accessToken) {
+    const auth = new OAuth2Client({});
+    auth.setCredentials({ access_token: accessToken })
+    const service = google.drive({ version: 'v3', auth: auth });
+    return service;
+  }
+
+/**
+ * This function lists all projects created with Peppubuild, from Google's Drive (appDataFolder).
+ * @module listFiles()
+ * @param {string} accessToken - Oauth Access Token
+*/
+  async function listFiles(accessToken) {
+    const service = driveAuth(accessToken);
+    try {
+      const res = await service.files.list({
+        spaces: 'appDataFolder',
+        fields: 'nextPageToken, files(id, name)',
+        pageSize: 100,
+      });
+      return res.data.files;
+    } catch (err) {
+      // TODO(developer) - Handle error
+      return err;
+    }
+  }
+
+/**
+ * app.get('/logout', (_req, res) => {})
+ * This route deletes the cookie pepputoken, which contains our Oauth.
+ * @name Logout
+ * @function
+ * @param {string} pepputoken - res.clearCookie
+*/
   app.get('/logout', (_req, res) => {
     res.clearCookie('pepputoken')
     res.send(`Cookie have been deleted successfully ${CURR_DIR}`);
   })
 
-  // set route for user login
+/**
+ * app.get('/logout', (_req, res) => {})
+ * This route retrieves Oauth token after authentication with firebase.
+ * Next, it stores the cookie pepputoken, which contains our Oauth.
+ * @name Login
+ * @function
+ * @param {string} providerToken - Oauth token
+*/
   app.post('/login', (req, res) => {
     // collect token
     let providerToken = req.body.token;
@@ -113,361 +228,193 @@ async function startServer() {
     next()
   })
 
-  // Save Frontend changes.
-  async function createBackend(tempath) {
-    // gen server folder
-    // gen index.js
-    fs.mkdirSync(`${tempath}/server`)
-    let filePath = `${tempath}/server/.env`
-
-    let anon_key = db.get("db.anon_key").value();
-    let url = db.get("db.url").value();
-    let data = `
-    ANON_KEY =${anon_key}
-    URL =${url}
-    `
-    if (!fs.existsSync(filePath)) {
-      fs.writeFileSync(filePath, data, function (err) {
-        if (err) return err;
-      });
+/**
+ * Create File to store application's data on Google Drive (appDataFolder).
+ * @module createFrontend()
+ * @param {string} projectName - Project Name
+ * @param {string} accessToken - Oauth AccessToken
+*/
+  async function createFrontend(projectName, accessToken) {
+    const service = driveAuth(accessToken);
+    const media = {
+      mimeType: 'application/json',
+      // body: fs.createReadStream(`files/${projectName}.json`),
+    };
+    const fileMetadata = {
+      name: `${projectName}.json`,
+      parents: ['appDataFolder'],
+    };
+    try {
+      const file = await service.files.create({
+        resource: fileMetadata,
+        media: media,
+      })
+      // console.log(file.data.id)
+      return file.data.id;
+    } catch (err) {
+      // TODO(developer) - Handle error
+      return err;
     }
-
-    // gen package.json()
-    const package_json = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/package.json');
-    // Get the Blob data
-    const json = await package_json.text();
-    fs.writeFileSync(`${tempath}/server/package.json`, json, function (err) {
-      if (err) return err;
-    });
-
-    // gen outer package.json()
-    const package_json_outer = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/package.json');
-    // Get the Blob data
-    const json_file = await package_json_outer.text();
-    fs.writeFileSync(`${tempath}/package.json`, json_file, function (err) {
-      if (err) return err;
-    });
-
-    // gen gitignore
-    const gitignore_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/.gitignore');
-    // Get the Blob data
-    const gitignore = await gitignore_file.text();
-    fs.writeFileSync(`${tempath}/server/.gitignore`, gitignore, function (err) {
-      if (err) return err;
-    });
-
-    // gen index.js
-    const index_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/index.js');
-    // Get the Blob data
-    const index = await index_file.text();
-    fs.writeFileSync(`${tempath}/server/index.js`, index, function (err) {
-      if (err) return err;
-    });
-
-    // gen index.js
-    fs.mkdirSync(`${tempath}/server/controllers`)
-
-    // Gen welcome controller
-    let welcome_content = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/node/controllers/welcome.js');
-    const welcome = await welcome_content.text();
-    fs.writeFileSync(`${tempath}/server/controllers/welcome.js`, welcome, function (err) {
-      if (err) return err;
-    });
-
   }
 
-  // Save Frontend changes.
-  async function createFrontend(tempath) {
-    // create client folder.
-    // fs.mkdirSync(`${tempath}`)
-    /*
-    // gen package.json()
-    const package_json = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/package.json');
-    // Get the Blob data
-    const json = await package_json.text();
-    fs.writeFileSync(`${tempath}/client/package.json`, json, function (err) {
-      if (err) return err;
-    });
-
-    // gen outer package.json()
-    const package_json_outer = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/package.json');
-    // Get the Blob data
-    const json_file = await package_json_outer.text();
-    fs.writeFileSync(`${tempath}/package.json`, json_file, function (err) {
-      if (err) return err;
-    });
-
-    // gen gitignore
-    const gitignore_file = await fetch('https://raw.githubusercontent.com/hannydevelop/Template/main/webpack/.gitignore');
-    // Get the Blob data
-    const gitignore = await gitignore_file.text();
-    fs.writeFileSync(`${tempath}/client/.gitignore`, gitignore, function (err) {
-      if (err) return err;
-    });
-     */
-    // gen index.js
-    fs.mkdirSync(`${tempath}/css`)
-    // fs.mkdirSync(`${tempath}/js`)
-
-    // let index_content = `
-    // import axios from 'axios';
-    
-    // export default {
-        /*Insert Imports Here*/ 
-
-        // setup() {
-          // return { 
-            /*Insert Data Here*/
-         //  }
-        // },
-        // methods: {
-            /*Insert Methods Here*/
-        // },
-        // async mounted() {
-            /*Insert Mounted Here*/
-        // }
-    // }
-    // `;
-    /* 
-    fs.writeFileSync(`${tempath}/client/js/index.js`, index_content, function (err) {
-      if (err) return err;
-    });
-    */
-
-    let pages = db.get("gjsProject.project.pages").value();
-    // delete the content of db.json
-    let editor = grapesjs.init({
-      headless: true, pageManager: {
-        pages: pages
-      }
-    });
-    // gen html and css files.
-    var myCss = ''
-    editor.Pages.getAll().forEach(e => {
-      const name = e.id
-      const component = e.getMainComponent()
-      const html = editor.getHtml({ component });
-      const css = editor.getCss({ component });
-      let htmlContent = `
-        <!DOCTYPE html>
-          <html lang="en">
-          <head>
-              <meta charset="UTF-8">
-              <meta http-equiv="X-UA-Compatible" content="IE=edge">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>Document</title>
-              <link rel="stylesheet" type="text/css" href="./css/${name}.css">
-          </head>
-          <body>
-          ${html}
-          </body>
-        </html>`
-      fs.writeFileSync(`${tempath}/${name}.html`, htmlContent, function (err) {
-        if (err) return err;
+/**
+ * Update the project file created on Google Drive (appDataFolder), with gjs JSON.
+ * @module updateDB()
+ * @param {string} projectName - Project Name
+ * @param {string} Id - FileId
+ * @param {string} accessToken - Oauth AccessToken
+*/
+  async function updateDB(project, Id, accessToken) {
+    const service = driveAuth(accessToken);
+    const media = {
+      mimeType: 'application/json',
+      body:
+        `{
+        "gjsProject": {
+            "project": ${project}
+        }
+    }`
+    };
+    try {
+      service.files.update({
+        fileId: Id,
+        // resource: fileMetadatad,
+        media: media,
       });
-      fs.writeFileSync(`${tempath}/css/${name}.css`, css, function (err) {
-        if (err) return err;
+    } catch (err) {
+      // TODO(developer) - Handle error
+      return err;
+    }
+  }
+
+/**
+ * Function to delete file and the content of the project.
+ * @module deleteContent()
+ * @param {string} projectName - Project Name
+ * @param {string} Id - FileId
+ * @param {string} accessToken - Oauth AccessToken
+*/
+  async function deleteContent(Id, accessToken) {
+    const service = driveAuth(accessToken);
+    try {
+      await service.files.delete({
+        fileId: Id,
       });
+    } catch (err) {
+      // TODO(developer) - Handle error
+      return err;
+    }
+  }
+
+/**
+ * app.post('/project/:id', (req, res) => {})
+ * Route to retrieve the data of a single project. Useful route for loading editor with pre-saved project.
+ * @memberof getContent()
+ * @name Retrieve_Project
+ * @function
+ * @param {string} Id - File Id
+*/
+  // get project from db in gjsProject format.
+  app.post('/project/:id', (req, res) => {
+    let Id = req.params.id;
+    let accessToken = req.body.accessToken;
+    getContent(Id, accessToken).then((response) => {
+      res.send(response)
     })
-
-    // create ENV
-  }
-
-
-  // get all of the projects from db in gjsProject format.
-  app.get('/projects', (req, res) => {
-    const projects = db.get("gjsProject.project");
-    res.send(projects)
   })
 
+/**
+ * app.post('/pdelete/:id', (req, res) => {})
+ * Route to delete project from Google Drive.
+ * @memberof deleteContent
+ * @name Delete_Project
+ * @function
+ * @param {string} Id - File Id
+*/
+  app.post('/pdelete/:id', (req, res) => {
+    let Id = req.params.id;
+    let accessToken = req.body.accessToken;
+    deleteContent(Id, accessToken).then(() => {
+      res.send('Deleted successfully')
+    })
+  })
+
+/**
+ * app.post('/pdelete/:id', (req, res) => {})
+ * Route to retrieve all of the projects from Drive.
+ * @memberof listFiles()
+ * @name Delete_Project
+ * @function
+ * @param {string} token - Oauth Token
+*/
+  app.get('/projects/:token', (req, res) => {
+    let accessToken = req.params.token;
+    listFiles(accessToken).then((response) => {
+      res.send(response)
+    })
+  })
+/**
+ * app.put('/save/:id', (req, res) => {})
+ * Route to save changes to corresponding file on Drive.
+ * @memberof updateDB()
+ * @name Save_Project
+ * @function
+ * @param {string} token - Oauth Token
+*/
   // save changes to corresponding file on disk
   app.put('/save/:id', (req, res) => {
     let id = req.params.id;
-    let gjsP = req.body.gjsProject;
-    // console.log(gjsP)
-    db.defaults({ gjsProject: {} })
-      .write();
-    db.set('gjsProject.project', JSON.parse(gjsP)).write();
-    // push the changes into webpack project.
-    // where tempath is name of project.
-    let projectName = db.get("project.name").value();
-    if (projectName != null) {
-      let tempath = path.join(CURR_DIR, projectName);
-      let filePath = `${tempath}/client/${id}.html`;
-      let cssPath = `${tempath}/client/css/${id}.css`;
-
-      let pages = db.get("pages").value();
-      let editor = grapesjs.init({
-        headless: true, pageManager: {
-          pages: pages
-        }
-      });
-
-      let htmlContent = `
-    <body>
-    ${req.body.html}
-    `
-      let myCss = req.body.css;
-      let regex = new RegExp('<body>(.|\n)*?<\/body>')
-      const options = {
-        files: filePath,
-        from: regex,
-        to: htmlContent
-      };
-      if (fs.existsSync(filePath)) {
-        replaceInFile(options)
-          .then(result => {
-            console.log("Replacement results: ", result);
-          })
-          .catch(error => {
-            console.log(error);
-          });
-      } else {
-        let content = `
-      <!DOCTYPE html>
-          <html lang="en">
-          <head>
-              <meta charset="UTF-8">
-              <meta http-equiv="X-UA-Compatible" content="IE=edge">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>Document</title>
-              <link rel="stylesheet" type="text/css" href="./css/${id}.css">
-          </head>
-          <body id="app">
-          ${req.body.html}
-          </body>
-        </html>
-      `
-        fs.writeFileSync(filePath, content, function (err) {
-          if (err) return err;
-        });
-      }
-      /* 
-      fs.writeFileSync(filePath, htmlContent, function (err) {
-          if (err) return err;
-      });
-      */
-
-      fs.writeFileSync(cssPath, myCss, function (err) {
-        if (err) return err;
-      });
-    }
-    res.send('Project saved successfully!')
+    let accessToken = req.body.accessToken;
+    let gjsProject = req.body.gjsProject;
+    updateDB(gjsProject, id, accessToken).then(res.send({ success: 'Project saved successfully!' }));
   })
 
+  app.post('/publishcontent', (req, res) => {
+
+  })
+
+/**
+ * app.post('/publishfront/:name', (req, res) => {})
+ * Route to publish file to Namescheap
+ * @function
+ * @memberof updateDB()
+ * @memberof createFrontend()
+ * @memberof createSub()
+ * @name Publish_Project
+*/
   // create frontend project
   /// TODO: Import the necessary functions here like createFrontend etc.
   app.post('/publishfront/:name', (req, res) => {
     let projectName = req.params.name;
     // let projectName = req.body.projectName;
     // let projectType = req.body.projectType;
-    let tartgetPath = path.join(CURR_DIR, projectName);
+    // let tartgetPath = path.join(CURR_DIR, projectName);
 
-    // Call createDirectoryContents
-    // createDirectoryContents(templatePath, projectName);
-    // Call createProject in inquirerPrecss
-    if (!createProject.createProject(tartgetPath)) {
-      return;
-    }
-
-    db.defaults({ project: {} })
-      .write()
-    db.set('project.name', projectName).write()
-    createFrontend(tartgetPath);
-    res.send({success: 'Successfully created project'});
-    /*createSub(projectName).then(async (response) => {
+    let gjsProject = req.body.gjsProject;
+    let accessToken = req.body.accessToken;
+    createSub(projectName).then(async (response) => {
       let text = await response.text();
       let json = JSON.parse(text);
-      if (response.ok && json.errors != null) {
-        // return Error(json.errors[0]);
-        res.status(500).send({error: json.errors[0]});
-        throw new Error(json.errors[0])
+      if (response.ok) {
+        if (json.errors == null) {
+          // Step 2 - Create file in drive
+          createFrontend(projectName, accessToken).then((id) => {
+            // Step 3 - Update with empty project
+            updateDB(gjsProject, id, accessToken);
+            res.send({ id: id });
+          });
+          // Step 4 - Add file name and project data to localstorage.
+        } else {
+          res.status(500).send({ error: json.errors[0] });
+        }
       } else {
-        
+        res.status(500).send({ error: 'Network error' });
       }
-    }).catch(error => {
-      return error;
-    }); */
-    
-    // updateScriptfront(projectName);
-    // res.send('Successfully created Project')
-  })
-
-  // create backend project
-  /// TODO: Import the necessary functions here like createBackend etc.
-  app.post('/publishback/:name', (req, res) => {
-    let projectName = req.params.name;
-    // let projectName = req.body.projectName;
-    // let projectType = req.body.projectType;
-    let tartgetPath = path.join(CURR_DIR, projectName);
-
-    // Call createProject in inquirerPrecss
-    if (!createProject.createProject(tartgetPath)) {
-      return;
-    }
-
-    db.defaults({ project: {} })
-      .write()
-    db.set('project.name', projectName).write()
-
-    // Call createDirectoryContents
-    // createDirectoryContents(templatePath, projectName);
-
-    createBackend(tartgetPath)
-    // updateScriptserver(projectName);
-  })
-
-  // create fullstack project
-  app.post('/publishfull/:name', (req, res) => {
-    let projectName = req.params.name;
-    // store project name to db.
-    // let projectName = req.body.projectName;
-    // let projectType = req.body.projectType;
-    let tartgetPath = path.join(CURR_DIR, projectName);
-
-    // Call createProject in inquirerPrecss
-    if (!createProject.createProject(tartgetPath)) {
-      return;
-    }
-    db.defaults({ project: {} })
-      .write()
-    db.set('project.name', projectName).write()
-    // Call createDirectoryContents         
-    // createDirectoryContents(templatePath, projectName);
-    createFrontend(tartgetPath);
-    createBackend(tartgetPath);
-    // updateScriptfront(projectName);
-    // updateScriptserver(projectName);
-  })
-
-  // retrieve project name from db
-  app.get('/pname', (req, res) => {
-    let projectName = db.get("project.name").value();
-    res.send(projectName);
-  })
-
-  // delete project from db and disk
-  app.delete('/pdelete', (req, res) => {
-    let projectName = db.get("project.name").value();
-    let tartgetPath = path.join(CURR_DIR, projectName);
-    fs.rmdirSync(tartgetPath, { recursive: true, force: true });
-    db.unset('project.name').write();
-  })
-  app.delete('/pagedelete/:id', function (req, res) {
-    let id = req.params.id;
-    let projectName = db.get("project.name").value();
-    let tartgetPath = path.join(CURR_DIR, projectName);
-    let filePath = `${tartgetPath}/client/${id}.html`;
-    fs.unlink(filePath, (err) => {
-      if (err) {
-        console.log(err);
-      }
-    });
+    })
   })
 
   const port = 1404;
   app.listen(port);
   console.log(`started server in ${port}`)
 }
-
-startServer();
+startServer()

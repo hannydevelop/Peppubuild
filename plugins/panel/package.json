@@ -1,6 +1,6 @@
 {
   "name": "peppu-panel",
-  "version": "0.1.6",
+  "version": "0.1.9",
   "description": "peppu-panel",
   "main": "dist/index.js",
   "repository": {
