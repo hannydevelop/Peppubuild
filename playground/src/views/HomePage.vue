@@ -23,8 +23,8 @@
         <div class="">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="style-tab" data-bs-toggle="tab" data-bs-target="#style" type="button"
-                        role="tab" aria-controls="style" aria-selected="false">
+                    <button class="nav-link active" id="style-tab" data-bs-toggle="tab" data-bs-target="#style"
+                        type="button" role="tab" aria-controls="style" aria-selected="false">
                         Properties
                     </button>
                 </li>
@@ -65,6 +65,7 @@
 <script>
 import grapesjs from 'grapesjs'
 import grapesjsIcons from 'grapesjs-icons';
+import { userAuth } from './js/firebase.js';
 
 const options = {
     // see https://icon-sets.iconify.design/
@@ -89,8 +90,8 @@ export default {
     },
     mounted() {
         // initialize grapesjs
-        if (window.innerWidth <= '1050'){
-            alert ('Screen too small for Peppubuild, please use a larger screen.')
+        if (window.innerWidth <= '1050') {
+            alert('Screen too small for Peppubuild, please use a larger screen.')
         }
         const editor = grapesjs.init({
             container: '#editor',
@@ -323,6 +324,9 @@ export default {
                 ],
             }
         });
+        editor.on('block:drag:stop', async () => {
+            await this.checkState();
+        })
         var logoCont = document.querySelector('.gjs-logo-cont');
         document.querySelector('.gjs-logo-version').innerHTML = 'Pages';
         var logoPanel = document.querySelector('.gjs-pn-commands');
@@ -347,18 +351,30 @@ export default {
         }]);
 
         // remove the buttons
-        panelManager.removeButton("views", "open-layers"); 
-        panelManager.removeButton("views", "open-tm");         
+        panelManager.removeButton("views", "open-layers");
+        panelManager.removeButton("views", "open-tm");
         this.edit = editor;
     },
     methods: {
         popen() {
             if (this.edit.Commands.isActive('peppu:open')) {
-                this.edit.Commands.stop('peppu:open'); 
+                this.edit.Commands.stop('peppu:open');
             } else {
-                this.edit.Commands.run('peppu:open'); 
+                this.edit.Commands.run('peppu:open');
             }
-        }
+        },
+        checkState() {
+            return new Promise((resolve, reject) => {
+                userAuth.onAuthStateChanged((user) => {
+                    if (user) {
+                        user.getIdToken(true).then((accessToken) => {
+                            resolve(document.cookie = `pepputoken=${accessToken}; max-age=3300`)
+                        })
+                    }
+                    reject
+                })
+            })
+        },
     }
 }
 

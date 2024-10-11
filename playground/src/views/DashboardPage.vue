@@ -56,6 +56,19 @@
                     </div>
                   </div>
                 </div>
+                <div class="row" v-if="!projects">
+                  <div class="text-center">
+                    <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <!-- Modal for choosing template-->
@@ -72,7 +85,7 @@
                     <div class="container-fluid">
                       <div class="row">
                         <div class="col-md-4" @click="templateProject('photography')" data-bs-dismiss="modal">
-                          <img src="../views/img/photography.png" style="height: 100px;width: 100px;"/>
+                          <img src="../views/img/photography.png" style="height: 100px;width: 100px;" />
                           Photography
                         </div>
                       </div>
@@ -149,7 +162,7 @@ export default {
   },
   data() {
     return {
-      projects: [],
+      projects: null,
       templates: templatesData
     };
   },
