@@ -7,6 +7,10 @@ global styles
     background-color: white;
     color: #333;
 }
+.gjs-btn-prim {
+    background-color: #34A853;
+    font-size: 12px;
+}
 body {
     margin: 0;
     font-family: sans-serif;
