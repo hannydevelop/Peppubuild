@@ -94,10 +94,9 @@ export default {
        async sendEmail(email, token) {
         let userSignInMethods = await fetchSignInMethodsForEmail(userAuth, email)
         if (userSignInMethods.length > 0) {
-            this.sendWelcome(email);
             this.callVerify(token);
         } else {
-            // call verify
+            this.sendWelcome(email);
             this.callVerify(token);
         }
        },
